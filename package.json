@@ -4,7 +4,7 @@
   "description": "CV gamification",
   "main": "server.js",
   "scripts": {
-    "test": "mocha test/test.js",
+    "test": " karma start --browsers PhantomJS --single-run",
     "start": "node server.js",
     "post-install": "bower-install"
   },
