@@ -11,6 +11,8 @@ var Gameboard = function () {
     this.tabElement = []; // tabElement - Global game array
     this.gameboardWidth = 340;
     this.gameboardHeight = 640;
+    this.minBoard = 0; // Min position to draw items
+    this.maxBoard = this.gameboardWidth; // Max position to draw items
 };
 
 /*
@@ -35,7 +37,7 @@ Gameboard.prototype.addElement = function (name, posX, posY, width, height) {
 /*
  * checkGetElement - Check if element is present on gameboard
  * @param {String} name - Name of the element
- * @return {Boolean} - true element exists, false if not
+ * @return {Number} id - The index of the element, present on tabElement array
  */
 Gameboard.prototype.checkGetElement = function (name) {
     for (var i = 0; this.tabElement[i]; i++) {
@@ -49,47 +51,42 @@ Gameboard.prototype.checkGetElement = function (name) {
 /*
  * checkmoveX - Check the move of the element
  * @param {String} name - Name of the tested element
- * @param {Number} posX - X position of the element
+ * @param {String} Direction - Direction of the move
  * @return {Boolean} - true : position clear, false : an element is present
  */
-Gameboard.prototype.checkMoveX = function (name, posx) {
-    var width = 0;
-    var height = 0;
-    var authMove = true;
+Gameboard.prototype.checkMoveX = function (name, direction) {
+    var id = this.checkGetElement(name);
+    var authorizeMove = false;
 
-    if (posx <= 0) {
-        return false;
+    var posX = this.getX(name);
+    var posY = this.getY(name);
+    var width = this.tabElement[id].w;
+
+    if (direction == "right") {
+        // Check if the element is under the canvas
+        if ((posX + width + 1) > this.maxBoard) {
+            return false;
+        }
     }
-
-    // Retreve the width and the height of the moving object
-    for (var i = 0; this.tabElement[i]; i++) {
-        if (this.tabElement[i].name === name) {
-            width = this.tabElement[i].w;
-            height = this.tabElement[i].h;
+    if (direction == "left") {
+        // Check if the element is under the canvas
+        if ((posX - 1) < this.minBoard) {
+            return false;
+        }
+    }
+    if (direction == "top") {
+        // Check if the element is under the canvas
+        if ((posY - 1) < 0 ) {
+            return false;
+        }
+    }
+    if (direction == "bottom") {
+        // Check if the element is under the canvas
+        if ((posY + 1) > this.gameboardHeight ) {
+            return false;
         }
     }
 
-    for (var i = 0; this.tabElement[i]; i++) {
-        if (this.tabElement[i].name !== name) {
-
-            // Check if the new X position is over an existing object
-
-            if (this.tabElement[i].x < posx || posx < (this.tabElement[i].x + this.tabElement[i].w)) {
-                authMove = false;
-            }
-            else if ((this.tabElement[i].x) < posx || posx < this.tabElement[i].x) {
-                //
-            }
-            // } else if (  (posx + width )< this.tabElement[i].x || (posx + width ) > (this.tabElement[i].x + this.tabElement[i].w) ) {
-            //     // The X + width element are over an existing object
-
-            // } 
-            else {
-                authMove = true;
-            }
-        }
-    }
-    return authMove;
 };
 
 /*
@@ -162,26 +159,26 @@ Gameboard.prototype.setY = function (name, posY) {
 };
 
 /*
-* moveX - Move the element on the X axis
-* @param {String} name - Name of the element to move
-* @return {Number} pos - New position of the element
-*/
-Gameboard.prototype.moveX = function (name){
+ * moveX - Move the element on the X axis
+ * @param {String} name - Name of the element to move
+ * @return {Number} pos - New position of the element
+ */
+Gameboard.prototype.moveX = function (name) {
     var id = this.checkGetElement(name);
     if (id != -1) {
-        this.tabElement[id].x -=1;
+        this.tabElement[id].x -= 1;
         return this.getX(name);
     }
 };
 /*
-* moveY - Move the element on the Y axis
-* @param {String} name - Name of the element to move
-* @return {Number} pos - New position of the element
-*/
-Gameboard.prototype.moveY = function (name){
+ * moveY - Move the element on the Y axis
+ * @param {String} name - Name of the element to move
+ * @return {Number} pos - New position of the element
+ */
+Gameboard.prototype.moveY = function (name) {
     var id = this.checkGetElement(name);
     if (id != -1) {
-        this.tabElement[id].y -=1;
+        this.tabElement[id].y -= 1;
         return this.getY(name);
     }
 };
