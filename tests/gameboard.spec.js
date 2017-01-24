@@ -42,13 +42,13 @@ describe('#Gameboard', function () {
                 expect(gameboard.getX("vaisseau")).to.equal(10);
             });
             describe('Change the position', function () {
-                it('should set the new X position', function (){
+                it('should set the new X position', function () {
                     var gameboard = new Gameboard();
                     gameboard.addElement('vaisseau', 10, 15, 50, 50);
                     gameboard.setX("vaisseau", 9);
                     expect(gameboard.getX("vaisseau")).to.equal(9);
                 });
-                it('should set the new Y position', function (){
+                it('should set the new Y position', function () {
                     var gameboard = new Gameboard();
                     gameboard.addElement('vaisseau', 10, 15, 50, 50);
                     gameboard.setY("vaisseau", 14);
@@ -69,22 +69,58 @@ describe('#Gameboard', function () {
             });
 
             describe('Move not available', function () {
-                it('should refused move', function () {
-                    var gameboard = new Gameboard();
-                    gameboard.addElement('vaisseau', 10, 15, 50, 50);
-                    gameboard.addElement('vaisseau2', 65, 15, 50, 50);
-
-                    expect(gameboard.checkMoveX('vaisseau2', 5)).to.equal(false);
-                });
-                describe('Move available', function () {
-                    xit('should autorize move', function () {
-                        var gameboard = new Gameboard();
-                        gameboard.addElement('vaisseau', 10, 15, 50, 50);
-                        gameboard.addElement('vaisseau2', 65, 15, 50, 50);
-
-                        expect(gameboard.checkMoveX('vaisseau2', 65)).to.equal(true);
+                describe('Check the element and its drawing context', function () {
+                    describe('Move to border right of canvas', function () {
+                        it('should refused the move', function () {
+                            var gameboard = new Gameboard();
+                            gameboard.addElement('vaisseau', 340, 15, 50, 50);
+                            expect(gameboard.checkMoveX('vaisseau', "right")).to.equal(false);
+                        });
+                    });
+                    describe('Move to border left of canvas', function () {
+                        it('should refused the move', function () {
+                            var gameboard = new Gameboard();
+                            gameboard.addElement('vaisseau', 0, 15, 50, 50);
+                            expect(gameboard.checkMoveX('vaisseau', "left")).to.equal(false);
+                        });
+                    });
+                    describe('Move to border top of canvas', function () {
+                        it('should refused the move', function () {
+                            var gameboard = new Gameboard();
+                            gameboard.addElement('vaisseau', 15, 0, 50, 50);
+                            expect(gameboard.checkMoveX('vaisseau', "top")).to.equal(false);
+                        });
+                    });
+                    describe('Move to border bottom of canvas', function () {
+                        it('should refused the move', function () {
+                            var gameboard = new Gameboard();
+                            gameboard.addElement('vaisseau', 15, 640, 50, 50);
+                            expect(gameboard.checkMoveX('vaisseau', "bottom")).to.equal(false);
+                        });
                     });
                 });
+
+                describe('Check of the element with other elements', function () {
+                    describe('No elements arround', function () {
+                        it('should authorize the move');
+                    });
+                    describe('Elements present to left', function () {
+                        it('should refused the move');
+                    });
+                    describe('Elements present to right', function () {
+                        it('should refused the move');
+                    });
+                    describe('Elements present to top', function () {
+                        it('should refused the move');
+                    });
+                    describe('Elements present to bottom', function () {
+                        it('should refused the move');
+                    });
+
+
+                });
+
+
 
 
             });
