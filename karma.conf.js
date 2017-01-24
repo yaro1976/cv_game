@@ -1,12 +1,12 @@
 // Karma configuration
 // Generated on Sun Jan 22 2017 17:55:15 GMT+0000 (UTC)
 
-module.exports = function(config) {
+module.exports = function (config) {
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
     basePath: '',
-    
+
     //For C9
     hostname: process.env.IP,
     port: process.env.PORT,
@@ -18,9 +18,13 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'test-main.js',
-      {pattern: 'public/src/js/**/*.js', included: true},
-      {pattern: 'tests/**/*.spec.js', included: false}
+      'test-main.js', {
+        pattern: 'public/src/js/**/*.js',
+        included: true
+      }, {
+        pattern: 'tests/**/*.spec.js',
+        included: false
+      }
     ],
 
 
@@ -41,7 +45,11 @@ module.exports = function(config) {
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
     // reporters: ['progress'],
-    reporters: ['mocha'],
+    // reporters: ['mocha'],
+    reporters: ['dots', 'junit'],
+    junitReporter: {
+      outputFile: 'test-results.xml'
+    },
 
 
     // web server port
@@ -68,7 +76,7 @@ module.exports = function(config) {
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
-    singleRun: false,
+    singleRun: true,
 
     // Concurrency level
     // how many browser should be started simultaneous
