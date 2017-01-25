@@ -165,29 +165,71 @@ describe('#Gameboard', function () {
                                 gameboard.addElement('vaisseau2', 80, 85, 50, 50);
                                 expect(gameboard.checkMoveX('vaisseau', "bottom")).to.equal(true);
                             });
-                            describe('Move to top', function () {
+
+                        });
+                        describe('Move to top', function () {
+                            it('should authorize the move', function () {
+                                var gameboard = new Gameboard();
+                                gameboard.addElement('vaisseau', 10, 15, 50, 50);
+                                gameboard.addElement('vaisseau2', 80, 85, 50, 50);
+                                expect(gameboard.checkMoveX('vaisseau', "top")).to.equal(true);
+                            });
+                        });
+                        describe('Move to left', function () {
+                            it('should authorize the move', function () {
                                 it('should authorize the move', function () {
                                     var gameboard = new Gameboard();
                                     gameboard.addElement('vaisseau', 10, 15, 50, 50);
                                     gameboard.addElement('vaisseau2', 80, 85, 50, 50);
-                                    expect(gameboard.checkMoveX('vaisseau', "top")).to.equal(true);
+                                    expect(gameboard.checkMoveX('vaisseau', "left")).to.equal(true);
                                 });
                             });
-                            describe('Move to left', function () {
-                                it('should authorize the move');
-                            });
-                            describe('Move to right', function () {
-                                it('should authorize the move');
+                        });
+                        describe('Move to right', function () {
+                            it('should authorize the move', function () {
+                                var gameboard = new Gameboard();
+                                gameboard.addElement('vaisseau', 10, 15, 50, 50);
+                                gameboard.addElement('vaisseau2', 80, 85, 50, 50);
+                                expect(gameboard.checkMoveX('vaisseau', "right")).to.equal(true);
                             });
                         });
-
                     });
                     describe('Element present arround', function () {
                         describe('Elements present to left', function () {
-                            it('should refused the move');
+                            describe('Element strict one side to side', function () {
+                                it('should refused the move', function () {
+                                    var gameboard = new Gameboard();
+                                    gameboard.addElement('vaisseau', 61, 15, 50, 50);
+                                    gameboard.addElement('vaisseau2', 10, 15, 50, 50);
+                                    expect(gameboard.checkMoveX('vaisseau', "left")).to.equal(false);
+                                });
+                            });
+                            describe('Element not strictly one upside the other', function () {
+                                it('should refused the move', function () {
+                                    var gameboard = new Gameboard();
+                                    gameboard.addElement('vaisseau', 61, 15, 50, 50);
+                                    gameboard.addElement('vaisseau2', 10, 45, 50, 50);
+                                    expect(gameboard.checkMoveX('vaisseau', "left")).to.equal(false);
+                                });
+                            });
                         });
                         describe('Elements present to right', function () {
-                            it('should refused the move');
+                            describe('Element strict one side to side', function () {
+                                it('should refused the move', function () {
+                                    var gameboard = new Gameboard();
+                                    gameboard.addElement('vaisseau', 10, 15, 50, 50);
+                                    gameboard.addElement('vaisseau2', 61, 15, 50, 50);
+                                    expect(gameboard.checkMoveX('vaisseau', "right")).to.equal(false);
+                                });
+                            });
+                            describe('Element not strictly one upside the other', function () {
+                                it('should refused the move', function () {
+                                    var gameboard = new Gameboard();
+                                    gameboard.addElement('vaisseau', 10, 15, 50, 50);
+                                    gameboard.addElement('vaisseau2', 61, 45, 50, 50);
+                                    expect(gameboard.checkMoveX('vaisseau', "right")).to.equal(false);
+                                });
+                            });
                         });
                         describe('Elements present to top', function () {
                             describe('Element strict one upside the other', function () {
