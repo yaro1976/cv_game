@@ -11,7 +11,7 @@ describe('#Gameboard', function () {
         });
     });
     describe('#Element Creation', function () {
-        var gameboard = new Gameboard();
+        
         beforeEach(function () {
             // var gameboard = new Gameboard();
             // gameboard.addElement('vaisseau', 10, 15, 50, 50);
@@ -269,6 +269,26 @@ describe('#Gameboard', function () {
                         });
                     });
                 });
+            });
+        });
+    });
+    describe('#Score', function () {
+        describe('Score increment', function () {
+            it('Should increment the score', function () {
+                var gameboard = new Gameboard();
+                expect(gameboard.incScore()).to.equal(1);
+            });
+            it('Should expect score after 5 to equal 6', function () {
+                var gameboard = new Gameboard();
+                gameboard.score = 5;
+                expect(gameboard.incScore()).to.equal(6);
+            });
+        });
+        describe('Testing end of the party', function () {
+            it('Should detect the end of the party', function () {
+                var gameboard = new Gameboard();
+                gameboard.score = gameboard.maxScore - 1;
+                expect(gameboard.incScore()).to.equal(-1);
             });
         });
     });
