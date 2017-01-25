@@ -42,10 +42,48 @@ Gameboard.prototype.addElement = function (name, posX, posY, width, height) {
 Gameboard.prototype.checkGetElement = function (name) {
     for (var i = 0; this.tabElement[i]; i++) {
         if (this.tabElement[i].name == name) {
+            // If found => Return the index
             return i;
         }
-    };
+    }
+    // If not 
     return -1;
+};
+
+/*
+* testHorizontalZone - Test Horizontal zone
+* @param {Number} x1 - First Y position to be check
+* @param {Number} x2 - Second Y position
+* @param {Number} w1 - Height of the first element
+* @param {Number} w2 - Height of the second element
+* @return {Boolean} - True elements are present is the zone
+*/
+Gameboard.prototype.testHorizontalZone = function (x1, x2, w1, w2) {
+    if (x1 >= x2 && x1 <=(x2 + w2) ){
+        return true;
+    } else if ((x1 + w1) >= x2 && (x1 + w1) <= (x2 + w2)){
+        return true;
+    } else {
+        return false;
+    }
+};
+
+/*
+* testVerticalZone - Test vertical zone
+* @param {Number} y1 - First Y position to be check
+* @param {Number} y2 - Second Y position
+* @param {Number} h1 - Height of the first element
+* @param {Number} h2 - Height of the second element
+* @return {Boolean} - True elements are present is the zone
+*/
+Gameboard.prototype.testVerticalZone = function (y1, y2, h1, h2) {
+    if (y1 >= y2 && y1 <=(y2+h2) ){
+        return true;
+    } else if ((y1+h1) >= y2 && (y1 + h1) <= (y2+h2)){
+        return true;
+    } else {
+        return false;
+    }
 };
 
 /*
@@ -61,6 +99,7 @@ Gameboard.prototype.checkMoveX = function (name, direction) {
     var posX = this.getX(name);
     var posY = this.getY(name);
     var width = this.tabElement[id].w;
+    var height = this.tabElement[id].h;
 
     if (direction == "right") {
         // Check if the element is under the canvas
@@ -76,17 +115,27 @@ Gameboard.prototype.checkMoveX = function (name, direction) {
     }
     if (direction == "top") {
         // Check if the element is under the canvas
-        if ((posY - 1) < 0 ) {
+        if ((posY - 1) < 0) {
             return false;
         }
     }
     if (direction == "bottom") {
-        // Check if the element is under the canvas
-        if ((posY + 1) > this.gameboardHeight ) {
+        // Check if the element is on the bottom of the canvas
+        if ((posY + 1) >= this.gameboardHeight) {
             return false;
         }
-    }
 
+        for (var i = 0; this.tabElement[i]; i++) {
+            // If it is the calling element, do nothing
+
+            if (i !== id) {
+                if (this.testVerticalZone(posY, this.tabElement[i].y, height, this.tabElement[i].h ) == true && this.testHorizontalZone(posX, this.tabElement[i].x, width, this.tabElement[i].w) == true) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 };
 
 /*
