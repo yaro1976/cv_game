@@ -93,41 +93,65 @@ Gameboard.prototype.testVerticalZone = function (y1, y2, h1, h2) {
  * @return {Boolean} - true : position clear, false : an element is present
  */
 Gameboard.prototype.checkMoveX = function (name, direction) {
-    var id = this.checkGetElement(name);
-    var authorizeMove = false;
-
-    var posX = this.getX(name);
-    var posY = this.getY(name);
-    var width = this.tabElement[id].w;
-    var height = this.tabElement[id].h;
+    var id = this.checkGetElement(name); // Get the index of the moving element
+    var posX = this.getX(name); // Get its X position
+    var posY = this.getY(name); // Get its Y position
+    var width = this.tabElement[id].w; // Get its width
+    var height = this.tabElement[id].h; // Get its height
 
     if (direction == "right") {
         // Check if the element is under the canvas
         if ((posX + width + 1) > this.maxBoard) {
             return false;
         }
+        
+        // Test element with its environment
+        for (var i = 0; this.tabElement[i]; i++) {
+            // If it is the calling element, do nothing
+
+            if (i !== id) {
+                if (this.testVerticalZone(posY, this.tabElement[i].y, height, this.tabElement[i].h ) == true && this.testHorizontalZone(posX + 1, this.tabElement[i].x, width, this.tabElement[i].w) == true) {
+                    return false; // We touch
+                }
+            }
+        }
+        return true; // Nothing around
     }
     if (direction == "left") {
         // Check if the element is under the canvas
         if ((posX - 1) < this.minBoard) {
             return false;
         }
+        
+        // Test element with its environment
+        for (var i = 0; this.tabElement[i]; i++) {
+            // If it is the calling element, do nothing
+
+            if (i !== id) {
+                if (this.testVerticalZone(posY, this.tabElement[i].y, height, this.tabElement[i].h ) == true && this.testHorizontalZone(posX - 1, this.tabElement[i].x, width, this.tabElement[i].w) == true) {
+                    return false; // We touch
+                }
+            }
+        }
+        return true; // Nothing around
     }
     if (direction == "top") {
         // Check if the element is under the canvas
         if ((posY - 1) < 0) {
             return false;
         }
+        
+        // Test element with its environment
         for (var i = 0; this.tabElement[i]; i++) {
             // If it is the calling element, do nothing
 
             if (i !== id) {
-                if (this.testVerticalZone(posY - 1, this.tabElement[i].y, height, this.tabElement[i].h ) == true && this.testHorizontalZone(posX - 1, this.tabElement[i].x, width, this.tabElement[i].w) == true) {
-                    return false;
+                if (this.testVerticalZone(posY - 1, this.tabElement[i].y, height, this.tabElement[i].h ) == true && this.testHorizontalZone(posX, this.tabElement[i].x, width, this.tabElement[i].w) == true) {
+                    return false; // We touch
                 }
             }
         }
-        return true;
+        return true; // Nothing around
         
     }
     if (direction == "bottom") {
@@ -135,17 +159,18 @@ Gameboard.prototype.checkMoveX = function (name, direction) {
         if ((posY + 1) >= this.gameboardHeight) {
             return false;
         }
-
+    
+        // Test element with its environment
         for (var i = 0; this.tabElement[i]; i++) {
             // If it is the calling element, do nothing
 
             if (i !== id) {
-                if (this.testVerticalZone(posY + 1, this.tabElement[i].y, height, this.tabElement[i].h ) == true && this.testHorizontalZone(posX + 1, this.tabElement[i].x, width, this.tabElement[i].w) == true) {
-                    return false;
+                if (this.testVerticalZone(posY + 1, this.tabElement[i].y, height, this.tabElement[i].h ) == true && this.testHorizontalZone(posX, this.tabElement[i].x, width, this.tabElement[i].w) == true) {
+                    return false; // We touch
                 }
             }
         }
-        return true;
+        return true; // Nothing around
     }
 };
 
