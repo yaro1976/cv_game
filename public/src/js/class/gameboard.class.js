@@ -118,6 +118,17 @@ Gameboard.prototype.checkMoveX = function (name, direction) {
         if ((posY - 1) < 0) {
             return false;
         }
+        for (var i = 0; this.tabElement[i]; i++) {
+            // If it is the calling element, do nothing
+
+            if (i !== id) {
+                if (this.testVerticalZone(posY - 1, this.tabElement[i].y, height, this.tabElement[i].h ) == true && this.testHorizontalZone(posX - 1, this.tabElement[i].x, width, this.tabElement[i].w) == true) {
+                    return false;
+                }
+            }
+        }
+        return true;
+        
     }
     if (direction == "bottom") {
         // Check if the element is on the bottom of the canvas
@@ -129,7 +140,7 @@ Gameboard.prototype.checkMoveX = function (name, direction) {
             // If it is the calling element, do nothing
 
             if (i !== id) {
-                if (this.testVerticalZone(posY, this.tabElement[i].y, height, this.tabElement[i].h ) == true && this.testHorizontalZone(posX, this.tabElement[i].x, width, this.tabElement[i].w) == true) {
+                if (this.testVerticalZone(posY + 1, this.tabElement[i].y, height, this.tabElement[i].h ) == true && this.testHorizontalZone(posX + 1, this.tabElement[i].x, width, this.tabElement[i].w) == true) {
                     return false;
                 }
             }
