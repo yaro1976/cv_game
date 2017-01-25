@@ -1,4 +1,4 @@
 node_modules
-dist/*
+public/dist/*
 superpower
 public/dist/

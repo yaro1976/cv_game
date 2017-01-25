@@ -166,7 +166,12 @@ describe('#Gameboard', function () {
                                 expect(gameboard.checkMoveX('vaisseau', "bottom")).to.equal(true);
                             });
                             describe('Move to top', function () {
-                                it('should authorize the move');
+                                it('should authorize the move', function () {
+                                    var gameboard = new Gameboard();
+                                    gameboard.addElement('vaisseau', 10, 15, 50, 50);
+                                    gameboard.addElement('vaisseau2', 80, 85, 50, 50);
+                                    expect(gameboard.checkMoveX('vaisseau', "top")).to.equal(true);
+                                });
                             });
                             describe('Move to left', function () {
                                 it('should authorize the move');
@@ -185,7 +190,22 @@ describe('#Gameboard', function () {
                             it('should refused the move');
                         });
                         describe('Elements present to top', function () {
-                            it('should refused the move');
+                            describe('Element strict one upside the other', function () {
+                                it('should refused the move', function () {
+                                    var gameboard = new Gameboard();
+                                    gameboard.addElement('vaisseau', 10, 15, 50, 50);
+                                    gameboard.addElement('vaisseau2', 10, 64, 50, 50);
+                                    expect(gameboard.checkMoveX('vaisseau', "top")).to.equal(false);
+                                });
+                            });
+                            describe('Element not strictly one upside the other', function () {
+                                it('should refused the move', function () {
+                                    var gameboard = new Gameboard();
+                                    gameboard.addElement('vaisseau', 15, 15, 50, 50);
+                                    gameboard.addElement('vaisseau2', 10, 64, 50, 50);
+                                    expect(gameboard.checkMoveX('vaisseau', "top")).to.equal(false);
+                                });
+                            });
                         });
                         describe('Elements present to bottom', function () {
                             describe('Element strict one upside the other', function () {
