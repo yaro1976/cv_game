@@ -5,7 +5,7 @@ var expect = chai.expect;
 
 describe("#main function", function () {
     describe('Initialization of the gamezone', function () {
-        it('Should create a game object', function () {
+        xit('Should create a game object', function () {
             var gb = new Gameboard();
             var g = new Game(gb);
             

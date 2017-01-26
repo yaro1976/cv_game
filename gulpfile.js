@@ -57,8 +57,10 @@ gulp.task('serve', ['sass', 'js'], function () {
 
     browserSync.init({
         server: './public',
-        browser: "google chrome",
-        open: false
+        // browser: "google chrome",
+        browser: "chrome.exe",
+        // open: false
+        open: true
     });
 
     gulp.watch('public/src/scss/**/*.scss', ['sass']);
