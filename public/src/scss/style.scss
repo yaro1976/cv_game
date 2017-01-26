@@ -2,16 +2,20 @@
     Style of the application
 
 */
-$border-color: #000;
 
-body {
-    
-}
+$border-color: #000;
+body {}
 
 #gameZone {
     border: 1px solid $border-color;
 }
 
-.Game {
+canvas {
     border: 1px solid $border-color;
+    display: inline-block;
+}
+
+.game {
+    border: 1px solid $border-color;
+    display: inline-block;
 }

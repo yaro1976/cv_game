@@ -6,18 +6,20 @@
     <title>CV Gamification</title>
     <!--<link type="stylesheet" href="css/style.css" />-->
     <link type="stylesheet" href="dist/css/style.min.css" />
+
 </head>
 
 <body>
     <header>
-
+        <!--Header part-->
     </header>
+    
     <div class="container">
         <!--Partie Jeu-->
-        <div class="game" id="Game">
+        <div class="game" id="game">
             <!--<canvas width="800" height="600" id="gameZone">-->
             <!--<p>Votre navigateur ne prend pas en charge la balise canvas</p>-->
-        </canvas>
+            <!--</canvas>-->
         </div>
         <!--Fin de la partie jeu-->
     </div>
@@ -25,10 +27,13 @@
     <footer>
         <p>Copyright &copy 2017 Thierry ARONOFF</p>
     </footer>
-    <script src="dist/js/app.min.js"></script>
-    <!--<script src="src/js/core/space.engine.class.js"></script>-->
-    <!--<script src="src/js/core/gameboard.class.js"></script>-->
-    <!--<script src="src/js/main.js"></script>-->
+    
+    <img src="dist/img/background/1.png"  alt="" id="back" style="display:none;">
+    <!--<script src="dist/js/app.min.js"></script>-->
+    <script src="src/js/core/space-engine/space-engine.class.js"></script>
+    <script src="src/js/core/gameboard/gameboard.class.js"></script>
+    <script src="src/js/core/main-app/main.js"></script>
+    <script type="text/javascript" src="src/js/app.js"></script>
 </body>
 
 </html>

@@ -8,10 +8,10 @@
  * @return {null}
  */
 
-var Gameboard = function () {
+var Gameboard = function (width, height) {
     this.tabElement = []; // tabElement - Global game array
-    this.gameboardWidth = 340;
-    this.gameboardHeight = 640;
+    this.gameboardWidth = width || 340;
+    this.gameboardHeight = height || 640;
     this.minBoard = 0; // Min position to draw items
     this.maxBoard = this.gameboardWidth; // Max position to draw items
     this.score = 0; // to Save the score

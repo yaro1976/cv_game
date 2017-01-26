@@ -32,12 +32,14 @@ gulp.task('test', function () {
         //     // }
         // }));
         // .src('test/runner.html')
-        .pipe(mochaPhantomJS({reporter: 'spec'}));
+        .pipe(mochaPhantomJS({
+            reporter: 'spec'
+        }));
 });
 
 // Jslint
 gulp.task('lint', function () {
-    gulp.src('public/src/js/**/*.js')
+    gulp.src(['public/src/js/**/*class.js', 'public/src/js/**/app.js'])
         .pipe(jslint.run({
             // project-wide JSLint options
             node: true,
@@ -79,7 +81,12 @@ gulp.task('sass', function () {
 
 // Configure JS.
 gulp.task('js', function () {
-    return gulp.src('public/src/js/**/*.js')
+    // return gulp.src('public/src/js/**/*.js')
+    return gulp.src(['public/src/js/**/*class.js', 'public/src/js/**/app.js'])
+    // return gulp.src(['public/src/js/core/space-engine/space-engine.class.js',
+    //         'public/src/js/core/gameboard/gameboard.class.js',
+    //         'public/src/js/main.js'
+    //     ])
         .pipe(uglify())
         .pipe(concat('app.js'))
         .pipe(rename({
@@ -96,6 +103,13 @@ gulp.task('images', function () {
         .pipe(gulp.dest('public/dist/img'));
 });
 
+// Configure image stuff.
+gulp.task('test-images', function () {
+    return gulp.src('public/src/img/**/*.+(png|jpg|gif|svg)')
+        .pipe(imagemin())
+        .pipe(gulp.dest('tests/dist/img'));
+});
+
 gulp.task('watch', function () {
     gulp.watch('public/src/scss/**/*.scss', ['sass']);
     gulp.watch('public/src/js/**/*.js', ['js']);
@@ -104,7 +118,7 @@ gulp.task('watch', function () {
 });
 
 gulp.task('jslint', function () {
-    gulp.watch('public/src/js/**/*.js', ['lint']);
+    gulp.watch('public/src/js/**/*.class.js', ['lint']);
 });
 
 gulp.task('mocha', function () {
@@ -112,3 +126,4 @@ gulp.task('mocha', function () {
 });
 
 gulp.task('default', ['sass', 'lint', 'js', 'images', 'serve']);
+gulp.task('all', ['sass', 'lint','mocha', 'js', 'images','test-images', 'serve']);
