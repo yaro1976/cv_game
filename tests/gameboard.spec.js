@@ -292,4 +292,7 @@ describe('#Gameboard', function () {
             });
         });
     });
+    describe('Fill the gameboard', function () {
+       it('Should store the element');
+    });
 });

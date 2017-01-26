@@ -8,9 +8,32 @@ var gulp = require('gulp'),
     uglify = require('gulp-uglify'),
     concat = require('gulp-concat'),
     imagemin = require('gulp-imagemin'),
-    browserSync = require('browser-sync').create();
-var jslint = require('gulp-jslint-simple');
+    browserSync = require('browser-sync').create(),
+    jslint = require('gulp-jslint-simple'),
+    gulp = require('gulp'),
+    mochaPhantomJS = require('gulp-mocha-phantomjs');
 
+
+// Mocha Test
+gulp.task('test', function () {
+    return gulp
+        .src('tests/index.html')
+        // .pipe(mochaPhantomJS({
+        //     reporter: 'tap',
+        //     // mocha: {
+        //     //     grep: 'pattern'
+        //     // },
+        //     // phantomjs: {
+        //     //     viewportSize: {
+        //     //         width: 1024,
+        //     //         height: 768
+        //     //     },
+        //     //     useColors: true
+        //     // }
+        // }));
+        // .src('test/runner.html')
+        .pipe(mochaPhantomJS({reporter: 'spec'}));
+});
 
 // Jslint
 gulp.task('lint', function () {
@@ -28,7 +51,7 @@ gulp.task('lint', function () {
 
 
 // Static Server + watching scss/html files
-gulp.task('serve', ['sass', 'js'], function() {
+gulp.task('serve', ['sass', 'js'], function () {
 
     browserSync.init({
         server: './public',
@@ -42,7 +65,7 @@ gulp.task('serve', ['sass', 'js'], function() {
 });
 
 // Configure CSS tasks.
-gulp.task('sass', function() {
+gulp.task('sass', function () {
     return gulp.src('public/src/scss/**/*.scss')
         .pipe(sass.sync().on('error', sass.logError))
         .pipe(prefix('last 2 versions'))
@@ -55,7 +78,7 @@ gulp.task('sass', function() {
 });
 
 // Configure JS.
-gulp.task('js', function() {
+gulp.task('js', function () {
     return gulp.src('public/src/js/**/*.js')
         .pipe(uglify())
         .pipe(concat('app.js'))
@@ -67,16 +90,25 @@ gulp.task('js', function() {
 });
 
 // Configure image stuff.
-gulp.task('images', function() {
+gulp.task('images', function () {
     return gulp.src('public/src/img/**/*.+(png|jpg|gif|svg)')
         .pipe(imagemin())
         .pipe(gulp.dest('public/dist/img'));
 });
 
-gulp.task('watch', function() {
+gulp.task('watch', function () {
     gulp.watch('public/src/scss/**/*.scss', ['sass']);
     gulp.watch('public/src/js/**/*.js', ['js']);
+    // gulp.watch('public/src/js/**/*.js', ['lint']);
     gulp.watch('./public/*.html').on('change', browserSync.reload);
 });
 
-gulp.task('default', ['sass', 'lint','js', 'images', 'serve']);
+gulp.task('jslint', function () {
+    gulp.watch('public/src/js/**/*.js', ['lint']);
+});
+
+gulp.task('mocha', function () {
+    gulp.watch('public/src/js/**/*.js', ['test']);
+});
+
+gulp.task('default', ['sass', 'lint', 'js', 'images', 'serve']);

@@ -7,15 +7,19 @@
     <link rel="stylesheet" href="mocha.css" />
   </head>
   <body>
+    <div id="Game" style="display:none;"></div>
     <div id="mocha"></div>
     <script src="mocha.js"></script>
     <script>mocha.setup('bdd');</script>
     <!--<script src="../public/dist/js/app.min.js"></script>-->
     <script src="../node_modules/chai/chai.js"></script>
-    <script src="../public/src/js/class/space.engine.class.js"></script>
-    <script src="../public/src/js/class/gameboard.class.js"></script>
+    <script src="../public/src/js/core/space.engine.class.js"></script>
+    <script src="../public/src/js/core/gameboard.class.js"></script>
+    <script src="../public/src/js/main.js"></script>
+    <!-- Test Scripts -->
     <script src="space.engine.spec.js"></script>
     <script type="text/javascript" src="gameboard.spec.js"></script>
+    <script type="text/javascript" src="main.spec.js"></script>
     <script>
       mocha.run();
     </script>
