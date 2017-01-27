@@ -121,11 +121,14 @@ gulp.task('watch', function () {
 
 gulp.task('jslint', function () {
     gulp.watch('public/src/js/**/*.class.js', ['lint']);
+    gulp.watch('public/src/js/app.js', ['lint']);
 });
 
 gulp.task('mocha', function () {
     gulp.watch('public/src/js/**/*.js', ['test']);
+    gulp.watch('public/src/js/app.js', ['test']);
 });
 
-gulp.task('default', ['sass', 'lint', 'js', 'images', 'serve']);
+gulp.task('default', ['sass', 'js', 'images', 'serve']);
+// gulp.task('default', ['sass', 'lint','mocha', 'js', 'images','test-images', 'serve']);
 gulp.task('all', ['sass', 'lint','mocha', 'js', 'images','test-images', 'serve']);
