@@ -58,7 +58,8 @@ gulp.task('serve', ['sass', 'js'], function () {
     browserSync.init({
         server: './public',
         // browser: "google chrome",
-        browser: "chrome.exe",
+        // browser: "chrome.exe",
+        browser: "firefox.exe",
         // open: false
         open: true
     });

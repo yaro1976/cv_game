@@ -10,11 +10,8 @@ window.addEventListener('load', function () {
     var width = 600,
         height = 800;
 
-
-    // Initialize Game
-    var gameboard = new Gameboard(width, height);
-    var g = new Game(gameboard, width, height);
-
+    // Initialize Game    
+    var g = new Game(width, height);
     g.init();
 
     // Generate Enemy ship
@@ -30,10 +27,9 @@ window.addEventListener('load', function () {
         }
         var progress = timestamp - start;
 
-        if (progress < 2000) {
+        if (progress < 2) {
             window.requestAnimationFrame(step);
-        }
-        if ((progress % 2) === 0 ) {
+        } else {
             start = null;
             g.enemyDirection();
             g.checkDirection();

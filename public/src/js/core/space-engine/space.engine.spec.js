@@ -2,7 +2,8 @@ var expect = chai.expect;
 
 var vaisseau;
 beforeEach(function () {
-    vaisseau = new SpaceElement("monElement",  15, 50);
+    vaisseau = new SpaceElement();
+    vaisseau.initialize("monElement",  15, 50);
 });
 
 describe('#SpaceGenerator', function () {

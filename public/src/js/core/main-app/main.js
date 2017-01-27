@@ -1,12 +1,13 @@
 'use strict';
 var SpaceElement;
 
-var Game = function (gameboard, width, height) {
+var Game = function (width, height) {
     // this.ctx = false;
     this.width = width || 340;
     this.height = height || 500;
     // this.gameboard = new GameBoard();
-    this.gameboard = gameboard;
+    // this.gameboard = gameboard;
+    Gameboard.call(this, width, height);
 
     // List of the items
     this.items = {
@@ -111,6 +112,9 @@ var Game = function (gameboard, width, height) {
     };
 
 };
+
+Game.prototype = Object.create(Gameboard.prototype);
+
 /*
  * random - Generate a random number
  * @param {Number} maxval - Max value generated
@@ -228,7 +232,7 @@ Game.prototype.genObject = function () {
     item = this.items.ships.coord[this.random(this.items.ships.coord.length)];
     x = this.random(this.width);
     y = this.random(this.height / 3);
-    this.gameboard.addElement(item, x, y, item.width, item.height);
+    this.addElement(item, x, y, item.width, item.height);
 };
 
 /*
@@ -239,7 +243,7 @@ Game.prototype.showScore = function () {
     // Add score
     this.ctx.font = '48px serif';
     this.ctx.fillStyle = "rgba(236, 240, 241,1.0)";
-    this.ctx.fillText(this.gameboard.score, (this.width - 50), 50);
+    this.ctx.fillText(this.score, (this.width - 50), 50);
 }
 
 /*
@@ -255,51 +259,99 @@ Game.prototype.draw = function (el, id, dx, dy, dw, dh) {
         w,
         h;
     var img = document.getElementById(el.id);
+
     this.ctx.drawImage(img, el.coord[id].posX, el.coord[id].posY, el.coord[id].width, el.coord[id].height, dx, dy, dw, dh);
     // this.ctx.drawImage(el, el.x, y);
 
 };
 
 /*
+ * Move the gamer ship
+ * @param {String} Direction - direction where to move
+ */
+Game.prototype.moveGamer = function (direction) {
+    var index;
+    index = this.checkGetElement("gamer");
+    switch (direction) {
+        case "left":
+            if (this.checkMove("gamer", "left") === true) { // If move is authorized
+                // Set new position, and draw items
+                // console.log(vm.gameboard.tabElement);
+                this.drawGamer((vm.tabElement[index].x - 1), this.gameboard.tabElement[index].y);
+            }
+            break;
+        case "right":
+            break;
+        case "up":
+            break;
+        case "down":
+            break;
+    }
+};
+/*
  * checkDirection - Read keyboard
  */
 Game.prototype.checkDirection = function () {
+    // Save the context
     var vm = this;
+
+    var intervalID;
     window.onkeydown = function (event) {
         var code = event.keyCode;
-        var index;
-
-console.log("gameboard=",vm.gameboard);
-        index = vm.gameboard.checkGetElement("gamer");
-        console.log("index", index)
 
         switch (code) {
-        case 37:
-            //*instructions*
-            if (vm.gameboard.checkMove("gamer", "left") === true) { // If move is authorized
-                // Set new position, and draw items
-                // console.log(vm.gameboard.tabElement);
-                vm.drawGamer((vm.gameboard.tabElement[index].x - 1), vm.gameboard.tabElement[index].y);
-            }
-            // alert('gauche');
-            break;
-        case 38:
-            //instructions
-            vm.gameboard.checkMove("gamer", "up");
-            alert('haut');
-            break;
-        case 39:
-            //instructions
-            vm.gameboard.checkMove("gamer", "right");
-            alert('droite');
-            break;
-        case 40:
-            //instructions
-            vm.gameboard.checkMove("gamer", "down");
-            alert('bas');
-            break;
+            case 37:
+                //*instructions*
+                // intervalID = window.setInterval(function () {
+                    console.log("vm=",vm);                    
+                    wm1.moveGamer("left");
+                // }, 100);
+
+                alert('gauche');
+                break;
+            case 38:
+                //instructions
+                vm.checkMove("gamer", "up");
+                alert('haut');
+                break;
+            case 39:
+                //instructions
+                vm.checkMove("gamer", "right");
+                alert('droite');
+                break;
+            case 40:
+                //instructions
+                vm.checkMove("gamer", "down");
+                alert('bas');
+                break;
         }
 
+    };
+    window.onkeyup = function (event) {
+        var code = event.keyCode;
+        switch (code) {
+            case 37:
+                //*instructions*
+                clearInterval(intervalID);
+
+                // alert('gauche');
+                break;
+            case 38:
+                //instructions
+                vm.gameboard.checkMove("gamer", "up");
+                alert('haut');
+                break;
+            case 39:
+                //instructions
+                vm.gameboard.checkMove("gamer", "right");
+                alert('droite');
+                break;
+            case 40:
+                //instructions
+                vm.gameboard.checkMove("gamer", "down");
+                alert('bas');
+                break;
+        }
     };
 };
 /*
@@ -324,11 +376,13 @@ Game.prototype.drawGamer = function (gamerX, gamerY) {
     var gamer;
 
     // Create the gamer Space Ship element
-    gamer = new SpaceElement("gamer", this.items.ships.coord[1].width, this.items.ships.coord[1].height);
+    // gamer = new SpaceElement("gamer", this.items.ships.coord[1].width, this.items.ships.coord[1].height);
+    this.initialize("gamer", this.items.ships.coord[1].width, this.items.ships.coord[1].height);
     // Add the spaceship onto the table
-    this.gameboard.addElement("gamer", gamerX, gamerY, this.items.ships.coord[1].width, this.items.ships.coord[1].height);
+    this.addElement("gamer", gamerX, gamerY, this.items.ships.coord[1].width, this.items.ships.coord[1].height);
 
     // draw the ship on the canvas
+
     this.draw(this.items.ships, 1, gamerX, gamerY, this.items.ships.coord[1].width, this.items.ships.coord[1].height);
 
     // console.log(gamer);

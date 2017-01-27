@@ -1,5 +1,6 @@
 'use strict';
 
+var SpaceElement;
 /*
  * Gameboard - Create the gameboard
  * @constructor
@@ -8,6 +9,7 @@
  */
 
 var Gameboard = function (width, height) {
+    SpaceElement.call(this);
     this.tabElement = []; // tabElement - Global game array
     this.gameboardWidth = width || 340;
     this.gameboardHeight = height || 640;
@@ -16,6 +18,7 @@ var Gameboard = function (width, height) {
     this.score = 0; // to Save the score
     this.maxScore = 9; // Score Maximum
 };
+Gameboard.prototype = Object.create(SpaceElement.prototype);
 
 /*
  * addElement - addElement onto the gameboard
@@ -303,3 +306,4 @@ Gameboard.prototype.incScore = function () {
     return -1; // The game is finished
 
 };
+
