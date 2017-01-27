@@ -1,57 +1,44 @@
-/* global Image */
-/*jslint browser: true*/
 'use strict';
+var Image;
 
 /*
- * SpaceEngine - Create the Fly object
+ * SpaceElement - Create the FlyElement object
  * @constructor
  * @param {string} name - name of the object 
  * @param {number} W - Width of the object
  * @param {number} H - Height of the object
- * @return {Object} flyElement - a flyElement Object
  */
-var spaceEngine = function (name, w, h) {
+var SpaceElement = function (name, w, h) {
+    // Common object property 
+    this.name = name; // Name of the element
+    this.width = w; // Width of the object
+    this.height = h; // Width of the object
+    // ==> To add width, height, tabElement (= Array prototype)
+    this.life = 100; // Initial Life
+    this.dead = false; // Set death or not status
+    this.speed = 1; // Speed in pixels
+    this.haveLazer = false; // If got lazer
 
     /*
-     * SpaceElement - Create the FlyElement object
-     * @constructor
-     * @param {string} name - name of the object 
-     * @param {number} W - Width of the object
-     * @param {number} H - Height of the object
+     * decrementLife - Decrease the life level if touch
+     * @param {Null}
+     * @return {null}
      */
-    var SpaceElement = function (name, w, h) {
-        // Common object property 
-        this.name = name; // Name of the element
-        this.width = w; // Width of the object
-        this.height = h; // Width of the object
-        // ==> To add width, height, tabElement (= Array prototype)
-        this.life = 100; // Initial Life
-        this.dead = false; // Set death or not status
-        this.speed = 1; // Speed in pixels
-        this.haveLazer = false; // If got lazer
-
-        /*
-         * decrementLife - Decrease the life level if touch
-         * @param {Null}
-         * @return {null}
-         */
-        SpaceElement.prototype.decrementLife = function () {
-            this.life -= 1;
-            if (this.life <= 0) {
-                this.dead = true;
-            }
-        };
-
-        /*
-         * setImage - Set Images of the element
-         * @param {String} url - Url of the element
-         * @return {null}
-         */
-        SpaceElement.prototype.setImage = function (url) {
-            this.img = new Image();
-            this.img.src = url;
-            this.img.alt = this.name;
-        };
+    SpaceElement.prototype.decrementLife = function () {
+        this.life -= 1;
+        if (this.life <= 0) {
+            this.dead = true;
+        }
     };
-    return new SpaceElement(name, w, h);
+
+    /*
+     * setImage - Set Images of the element
+     * @param {String} url - Url of the element
+     * @return {null}
+     */
+    SpaceElement.prototype.setImage = function (url) {
+        this.img = new Image();
+        this.img.src = url;
+        this.img.alt = this.name;
+    };
 };
