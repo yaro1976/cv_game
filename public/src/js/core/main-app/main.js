@@ -1,9 +1,4 @@
 'use strict';
-/* global document, Image, GameBoard */
-/*jslint browser: true*/
-
-// var game = (function (Game) {
-// Main function
 
 var Game = function (gameboard, width, height) {
     // this.ctx = false;
@@ -92,15 +87,14 @@ Game.prototype.random = function (maxval) {
  * setBackground - Position the background Image
  * @param {String} name - name of the Image
  */
-Game.prototype.setBackground = function (name) {
-    // var backImg = new Image(),
+Game.prototype.setBackground = function (name) {    
     var backImg,
         w,
         h;
 
     w = this.items.background.width;
     h = this.items.background.height;
-    
+
     backImg = document.getElementById("back");
     this.ctx.drawImage(backImg, this.items.background.posX, this.items.background.posY, w, h, 0, 0, this.width, this.height);
 };
@@ -158,7 +152,6 @@ Game.prototype.init = function () {
             for (i = 0; i < maxEnemy; i += 1) {
                 this.genObject();
             }
-for (i = 15; i <= 250 ; i += 1) {
             // Clear the screen
             this.clearScreen();
 
@@ -167,17 +160,25 @@ for (i = 15; i <= 250 ; i += 1) {
 
             // Write the score to the screen
             this.showScore();
-
-            // Test            
-            // this.draw(this.items.ships,0, 15, 15, 50 ,50);
-            // for (i = 15; i <= 250 ; i += 1) {
-                this.draw(this.items.ships,0, i, 15, 50 ,50);               
-
-            }
         }
     }
 };
 
+Game.prototype.drawEnemy = function () {
+    var newX,
+    newY,
+    objDirec;
+    // Test            
+    
+    
+    // TODO si pas ennemy
+
+    // TODO enemy existant
+    objDirec = this.enemyDirection();
+    newX = objDirec.newPosX;
+    newY = objDirec.newPosY;
+    this.draw(this.items.ships, 0, i, 15, 50, 50);
+};
 /*
  * genObject - generate Ennemy
  * 
@@ -215,8 +216,8 @@ Game.prototype.draw = function (el, id, dx, dy, dw, dh) {
         y,
         w,
         h;
-var img = document.getElementById(el.id);
-this.ctx.drawImage(img, el.coord[id].posX, el.coord[id].posY, el.coord[id].width, el.coord[id].height, dx, dy, dw, dh);
+    var img = document.getElementById(el.id);
+    this.ctx.drawImage(img, el.coord[id].posX, el.coord[id].posY, el.coord[id].width, el.coord[id].height, dx, dy, dw, dh);
     // this.ctx.drawImage(el, el.x, y);
 
 };
@@ -248,5 +249,15 @@ Game.prototype.checkDirection = function () {
 
     };
 };
-//     return new Game();
-// })(Game || {});
+/*
+ * Generate the new direction for the enemy ship
+ * @return {Object} New direction of the ship
+ */
+Game.prototype.enemyDirection = function () {
+    var newPosX,
+        newPosY;
+    return {
+        newPosX: 1 - this.random(2),
+        newPosY: 1 - this.random(2)
+    };
+};

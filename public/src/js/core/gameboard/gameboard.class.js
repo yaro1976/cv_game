@@ -1,4 +1,4 @@
-/*jslint browser: true*/
+
 'use strict';
 
 /*
@@ -290,13 +290,3 @@ Gameboard.prototype.incScore = function () {
     return -1; // The game is finished
 
 };
-
-/*
- * generatePosition - Generate a position for a new element
- * @param {String} Name - name of the new element
- * @param {Array} token - List of tokens available
- * @param {
- */
-// Gameboard.prototype.generatePosition = function () {
-
-// };
