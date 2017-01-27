@@ -1,8 +1,7 @@
-
 'use strict';
 
 /*
- * Gameboard - Create the gameboard 
+ * Gameboard - Create the gameboard
  * @constructor
  * @param {Null}
  * @return {null}
@@ -28,14 +27,28 @@ var Gameboard = function (width, height) {
  * @return {null}
  */
 Gameboard.prototype.addElement = function (name, posX, posY, width, height) {
-    this.tabElement.push({
-        "name": name,
-        "x": posX,
-        "y": posY,
-        "w": width,
-        "h": height,
-        "inlife": 1
-    });
+    var index;
+    index = this.checkGetElement(name);
+    if (index === -1) { // If does not exists, Add the element
+        this.tabElement.push({
+            "name": name,
+            "x": posX,
+            "y": posY,
+            "w": width,
+            "h": height,
+            "inlife": 1
+        });
+    } else { // update the value of the element
+        this.tabElement[index] = {
+            "name": name,
+            "x": posX,
+            "y": posY,
+            "w": width,
+            "h": height,
+            "inlife": 1
+        };
+    }
+    // console.log("Gameboard.prototype.addElement=",this.tabElement);
 };
 
 /*
@@ -51,7 +64,7 @@ Gameboard.prototype.checkGetElement = function (name) {
             return i;
         }
     }
-    // If not 
+    // If not
     return -1;
 };
 
@@ -94,12 +107,12 @@ Gameboard.prototype.testVerticalZone = function (y1, y2, h1, h2) {
 };
 
 /*
- * checkmoveX - Check the move of the element
+ * checkMove - Check the move of the element
  * @param {String} name - Name of the tested element
  * @param {String} Direction - Direction of the move
  * @return {Boolean} - true : position clear, false : an element is present
  */
-Gameboard.prototype.checkMoveX = function (name, direction) {
+Gameboard.prototype.checkMove = function (name, direction) {
     var id = this.checkGetElement(name); // Get the index of the moving element
     var posX = this.getX(name); // Get its X position
     var posY = this.getY(name); // Get its Y position
@@ -143,7 +156,7 @@ Gameboard.prototype.checkMoveX = function (name, direction) {
         }
         return true; // Nothing around
     }
-    if (direction === "top") {
+    if (direction === "up") {
         // Check if the element touch the top of the canvas
         if ((posY - 1) < 0) {
             return false;
@@ -162,7 +175,7 @@ Gameboard.prototype.checkMoveX = function (name, direction) {
         return true; // Nothing around
 
     }
-    if (direction === "bottom") {
+    if (direction === "down") {
         // Check if the element touch the bottom of the canvas
         if ((posY + 1) >= this.gameboardHeight) {
             return false;

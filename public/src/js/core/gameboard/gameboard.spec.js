@@ -11,7 +11,7 @@ describe('#Gameboard', function () {
         });
     });
     describe('#Element Creation', function () {
-        
+
         beforeEach(function () {
             // var gameboard = new Gameboard();
             // gameboard.addElement('vaisseau', 10, 15, 50, 50);
@@ -130,28 +130,28 @@ describe('#Gameboard', function () {
                         it('should refused the move', function () {
                             var gameboard = new Gameboard();
                             gameboard.addElement('vaisseau', 340, 15, 50, 50);
-                            expect(gameboard.checkMoveX('vaisseau', "right")).to.equal(false);
+                            expect(gameboard.checkMove('vaisseau', "right")).to.equal(false);
                         });
                     });
                     describe('Move to border left of canvas', function () {
                         it('should refused the move', function () {
                             var gameboard = new Gameboard();
                             gameboard.addElement('vaisseau', 0, 15, 50, 50);
-                            expect(gameboard.checkMoveX('vaisseau', "left")).to.equal(false);
+                            expect(gameboard.checkMove('vaisseau', "left")).to.equal(false);
                         });
                     });
                     describe('Move to border top of canvas', function () {
                         it('should refused the move', function () {
                             var gameboard = new Gameboard();
                             gameboard.addElement('vaisseau', 15, 0, 50, 50);
-                            expect(gameboard.checkMoveX('vaisseau', "top")).to.equal(false);
+                            expect(gameboard.checkMove('vaisseau', "up")).to.equal(false);
                         });
                     });
                     describe('Move to border bottom of canvas', function () {
                         it('should refused the move', function () {
                             var gameboard = new Gameboard();
                             gameboard.addElement('vaisseau', 15, 640, 50, 50);
-                            expect(gameboard.checkMoveX('vaisseau', "bottom")).to.equal(false);
+                            expect(gameboard.checkMove('vaisseau', "down")).to.equal(false);
                         });
                     });
                 });
@@ -163,7 +163,7 @@ describe('#Gameboard', function () {
                                 var gameboard = new Gameboard();
                                 gameboard.addElement('vaisseau', 10, 15, 50, 50);
                                 gameboard.addElement('vaisseau2', 80, 85, 50, 50);
-                                expect(gameboard.checkMoveX('vaisseau', "bottom")).to.equal(true);
+                                expect(gameboard.checkMove('vaisseau', "down")).to.equal(true);
                             });
 
                         });
@@ -172,7 +172,7 @@ describe('#Gameboard', function () {
                                 var gameboard = new Gameboard();
                                 gameboard.addElement('vaisseau', 10, 15, 50, 50);
                                 gameboard.addElement('vaisseau2', 80, 85, 50, 50);
-                                expect(gameboard.checkMoveX('vaisseau', "top")).to.equal(true);
+                                expect(gameboard.checkMove('vaisseau', "up")).to.equal(true);
                             });
                         });
                         describe('Move to left', function () {
@@ -181,7 +181,7 @@ describe('#Gameboard', function () {
                                     var gameboard = new Gameboard();
                                     gameboard.addElement('vaisseau', 10, 15, 50, 50);
                                     gameboard.addElement('vaisseau2', 80, 85, 50, 50);
-                                    expect(gameboard.checkMoveX('vaisseau', "left")).to.equal(true);
+                                    expect(gameboard.checkMove('vaisseau', "left")).to.equal(true);
                                 });
                             });
                         });
@@ -190,7 +190,7 @@ describe('#Gameboard', function () {
                                 var gameboard = new Gameboard();
                                 gameboard.addElement('vaisseau', 10, 15, 50, 50);
                                 gameboard.addElement('vaisseau2', 80, 85, 50, 50);
-                                expect(gameboard.checkMoveX('vaisseau', "right")).to.equal(true);
+                                expect(gameboard.checkMove('vaisseau', "right")).to.equal(true);
                             });
                         });
                     });
@@ -201,7 +201,7 @@ describe('#Gameboard', function () {
                                     var gameboard = new Gameboard();
                                     gameboard.addElement('vaisseau', 61, 15, 50, 50);
                                     gameboard.addElement('vaisseau2', 10, 15, 50, 50);
-                                    expect(gameboard.checkMoveX('vaisseau', "left")).to.equal(false);
+                                    expect(gameboard.checkMove('vaisseau', "left")).to.equal(false);
                                 });
                             });
                             describe('Element not strictly one upside the other', function () {
@@ -209,7 +209,7 @@ describe('#Gameboard', function () {
                                     var gameboard = new Gameboard();
                                     gameboard.addElement('vaisseau', 61, 15, 50, 50);
                                     gameboard.addElement('vaisseau2', 10, 45, 50, 50);
-                                    expect(gameboard.checkMoveX('vaisseau', "left")).to.equal(false);
+                                    expect(gameboard.checkMove('vaisseau', "left")).to.equal(false);
                                 });
                             });
                         });
@@ -219,7 +219,7 @@ describe('#Gameboard', function () {
                                     var gameboard = new Gameboard();
                                     gameboard.addElement('vaisseau', 10, 15, 50, 50);
                                     gameboard.addElement('vaisseau2', 61, 15, 50, 50);
-                                    expect(gameboard.checkMoveX('vaisseau', "right")).to.equal(false);
+                                    expect(gameboard.checkMove('vaisseau', "right")).to.equal(false);
                                 });
                             });
                             describe('Element not strictly one upside the other', function () {
@@ -227,7 +227,7 @@ describe('#Gameboard', function () {
                                     var gameboard = new Gameboard();
                                     gameboard.addElement('vaisseau', 10, 15, 50, 50);
                                     gameboard.addElement('vaisseau2', 61, 45, 50, 50);
-                                    expect(gameboard.checkMoveX('vaisseau', "right")).to.equal(false);
+                                    expect(gameboard.checkMove('vaisseau', "right")).to.equal(false);
                                 });
                             });
                         });
@@ -237,7 +237,7 @@ describe('#Gameboard', function () {
                                     var gameboard = new Gameboard();
                                     gameboard.addElement('vaisseau', 10, 15, 50, 50);
                                     gameboard.addElement('vaisseau2', 10, 64, 50, 50);
-                                    expect(gameboard.checkMoveX('vaisseau', "top")).to.equal(false);
+                                    expect(gameboard.checkMove('vaisseau', "up")).to.equal(false);
                                 });
                             });
                             describe('Element not strictly one upside the other', function () {
@@ -245,7 +245,7 @@ describe('#Gameboard', function () {
                                     var gameboard = new Gameboard();
                                     gameboard.addElement('vaisseau', 15, 15, 50, 50);
                                     gameboard.addElement('vaisseau2', 10, 64, 50, 50);
-                                    expect(gameboard.checkMoveX('vaisseau', "top")).to.equal(false);
+                                    expect(gameboard.checkMove('vaisseau', "up")).to.equal(false);
                                 });
                             });
                         });
@@ -255,7 +255,7 @@ describe('#Gameboard', function () {
                                     var gameboard = new Gameboard();
                                     gameboard.addElement('vaisseau', 10, 15, 50, 50);
                                     gameboard.addElement('vaisseau2', 10, 64, 50, 50);
-                                    expect(gameboard.checkMoveX('vaisseau', "bottom")).to.equal(false);
+                                    expect(gameboard.checkMove('vaisseau', "down")).to.equal(false);
                                 });
                             });
                             describe('Element not strictly one upside the other', function () {
@@ -263,7 +263,7 @@ describe('#Gameboard', function () {
                                     var gameboard = new Gameboard();
                                     gameboard.addElement('vaisseau', 15, 15, 50, 50);
                                     gameboard.addElement('vaisseau2', 10, 64, 50, 50);
-                                    expect(gameboard.checkMoveX('vaisseau', "bottom")).to.equal(false);
+                                    expect(gameboard.checkMove('vaisseau', "down")).to.equal(false);
                                 });
                             });
                         });

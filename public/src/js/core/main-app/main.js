@@ -1,4 +1,5 @@
 'use strict';
+var SpaceElement;
 
 var Game = function (gameboard, width, height) {
     // this.ctx = false;
@@ -11,21 +12,56 @@ var Game = function (gameboard, width, height) {
     this.items = {
         "ships": {
             "id": "ships",
-            "coord": [{
+            "coord": [{ // Gros vaisseau ligne 1
                 "posX": 15,
                 "posY": 0,
                 "width": 64,
                 "height": 53
-            }, {
-                "posX": 0,
-                "posY": 0,
-                "width": 0,
-                "height": 0
-            }, {
-                "posX": 0,
-                "posY": 0,
-                "width": 0,
-                "height": 0
+            }, { // Vaisseau rouge ligne 2
+                "posX": 26,
+                "posY": 57,
+                "width": 45,
+                "height": 31
+            }, { // Vaisseau orange ligne 3
+                "posX": 24,
+                "posY": 88,
+                "width": 48,
+                "height": 45
+            }, { // Vaisseau vert ligne 4
+                "posX": 16,
+                "posY": 131,
+                "width": 64,
+                "height": 49
+            }, { // Vaisseau rose ligne 5
+                "posX": 24,
+                "posY": 181,
+                "width": 48,
+                "height": 35
+            }, { // Pieuvre petite ligne 6
+                "posX": 31,
+                "posY": 218,
+                "width": 32,
+                "height": 26
+            }, { // Spacionnaute ligne 7
+                "posX": 37,
+                "posY": 248,
+                "width": 27,
+                "height": 30
+            }, { // Pieuvre grande ligne 8
+                "posX": 19,
+                "posY": 284,
+                "width": 59,
+                "height": 52
+            }, { // Grand vaisseau ligne 9
+                "posX": 3,
+                "posY": 347,
+                "width": 93,
+                "height": 75
+            }, { // Grand vaisseau ligne 10
+                "posX": 3,
+                "posY": 428,
+                "width": 93,
+                "height": 74
             }]
         },
         "planet": {
@@ -85,9 +121,8 @@ Game.prototype.random = function (maxval) {
 };
 /*
  * setBackground - Position the background Image
- * @param {String} name - name of the Image
  */
-Game.prototype.setBackground = function (name) {    
+Game.prototype.setBackground = function () {
     var backImg,
         w,
         h;
@@ -134,7 +169,7 @@ Game.prototype.createGameZone = function () {
  * @return {void}
  */
 Game.prototype.clearScreen = function () {
-    // Clearing elements    
+    // Clearing elements
     this.ctx.clearRect(0, 0, this.width, this.height);
 };
 
@@ -166,22 +201,25 @@ Game.prototype.init = function () {
 
 Game.prototype.drawEnemy = function () {
     var newX,
-    newY,
-    objDirec;
-    // Test            
-    
-    
+        newY,
+        objDirec;
+    // Test
+
+
     // TODO si pas ennemy
 
     // TODO enemy existant
     objDirec = this.enemyDirection();
     newX = objDirec.newPosX;
     newY = objDirec.newPosY;
-    this.draw(this.items.ships, 0, i, 15, 50, 50);
+    for (var i = 0; i < this.items.ships.coord.length; i += 1) {
+        this.draw(this.items.ships, i, 15, (15 + i * 60), 50, 50);
+    }
+    // this.draw(this.items.ships, 9, 15, 15, 50, 50);
 };
 /*
  * genObject - generate Ennemy
- * 
+ *
  */
 Game.prototype.genObject = function () {
     //
@@ -226,25 +264,40 @@ Game.prototype.draw = function (el, id, dx, dy, dw, dh) {
  * checkDirection - Read keyboard
  */
 Game.prototype.checkDirection = function () {
+    var vm = this;
     window.onkeydown = function (event) {
         var code = event.keyCode;
+        var index;
+
+console.log("gameboard=",vm.gameboard);
+        index = vm.gameboard.checkGetElement("gamer");
+        console.log("index", index)
+
         switch (code) {
-            case 37:
-                //*instructions*
-                alert('gauche');
-                break;
-            case 38:
-                //instructions
-                alert('haut');
-                break;
-            case 39:
-                //instructions
-                alert('droite');
-                break;
-            case 40:
-                //instructions
-                alert('bas');
-                break;
+        case 37:
+            //*instructions*
+            if (vm.gameboard.checkMove("gamer", "left") === true) { // If move is authorized
+                // Set new position, and draw items
+                // console.log(vm.gameboard.tabElement);
+                vm.drawGamer((vm.gameboard.tabElement[index].x - 1), vm.gameboard.tabElement[index].y);
+            }
+            // alert('gauche');
+            break;
+        case 38:
+            //instructions
+            vm.gameboard.checkMove("gamer", "up");
+            alert('haut');
+            break;
+        case 39:
+            //instructions
+            vm.gameboard.checkMove("gamer", "right");
+            alert('droite');
+            break;
+        case 40:
+            //instructions
+            vm.gameboard.checkMove("gamer", "down");
+            alert('bas');
+            break;
         }
 
     };
@@ -260,4 +313,23 @@ Game.prototype.enemyDirection = function () {
         newPosX: 1 - this.random(2),
         newPosY: 1 - this.random(2)
     };
+};
+
+/*
+ * Draw the gamer ship
+ * @param {Number}  gamerX - X position of the gamer
+ * @param {Number}  gamerY - Y position of the gamer
+ */
+Game.prototype.drawGamer = function (gamerX, gamerY) {
+    var gamer;
+
+    // Create the gamer Space Ship element
+    gamer = new SpaceElement("gamer", this.items.ships.coord[1].width, this.items.ships.coord[1].height);
+    // Add the spaceship onto the table
+    this.gameboard.addElement("gamer", gamerX, gamerY, this.items.ships.coord[1].width, this.items.ships.coord[1].height);
+
+    // draw the ship on the canvas
+    this.draw(this.items.ships, 1, gamerX, gamerY, this.items.ships.coord[1].width, this.items.ships.coord[1].height);
+
+    // console.log(gamer);
 };

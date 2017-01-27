@@ -4,23 +4,26 @@ var Gameboard,
     Game,
     window;
 
+var start = null;
+
 window.addEventListener('load', function () {
     var width = 600,
         height = 800;
 
-    // var gameboard = new Gameboard(480, 640);
+
+    // Initialize Game
     var gameboard = new Gameboard(width, height);
-    // console.log(gameboard);
-    // var g = new Game(gameboard, 480, 640);
     var g = new Game(gameboard, width, height);
-    // console.log(g);
-    // g.createGameZone();
 
     g.init();
-    // console.log(g.enemyDirection());
 
-    var start = null;
+    // Generate Enemy ship
+    g.drawEnemy();
 
+    // Generate own ship
+    g.drawGamer(width / 2, height - 100); // Set the initial position of the ship
+
+    // Main step
     var step = function (timestamp) {
         if (!start) {
             start = timestamp;
@@ -29,11 +32,11 @@ window.addEventListener('load', function () {
 
         if (progress < 2000) {
             window.requestAnimationFrame(step);
-        } else {
-            console.log("reset");
+        }
+        if ((progress % 2) === 0 ) {
             start = null;
             g.enemyDirection();
-            console.log(g.enemyDirection());
+            g.checkDirection();
             window.requestAnimationFrame(step);
         }
     };

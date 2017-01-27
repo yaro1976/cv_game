@@ -2,14 +2,16 @@
 'use strict';
 
 var expect = chai.expect;
+var Gameboard;
 
 describe("#main function", function () {
     describe('Initialization of the gamezone', function () {
-        xit('Should create a game object', function () {
-            var gb = new Gameboard();
-            var g = new Game(gb);
-            
-            g.init();
+        it('Should create a game object', function () {
+            var gb = new Gameboard(640, 480);
+            var g = new Game(gb, 640, 480);
+
+            // g.init();
+            console.log("items=",g.items);
             expect(g.items).to.exist;
         });
     });
