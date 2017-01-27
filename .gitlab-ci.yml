@@ -1,4 +1,4 @@
-image: node:argon
+image: node:latest
 
   before_script:
     - apt-get -qq update
