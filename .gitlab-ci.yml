@@ -14,14 +14,14 @@ run_tests:
   script:    
     - npm i -g karma-cli
     - npm i -g gulp
-    - npm i -g phamtomjs
+    - npm -g install phantomjs-prebuilt
     - npm install
     - npm test
 
 build_and_deploy_prod:
   stage: build
   script:
-    - npm run build
+    - rm -rf node_modules
 
 clean_up_job:
   stage: clean_up
