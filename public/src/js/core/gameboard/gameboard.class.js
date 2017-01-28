@@ -29,12 +29,17 @@ Gameboard.prototype = Object.create(SpaceElement.prototype);
  * @param {Number} height - Height of the element
  * @return {null}
  */
-Gameboard.prototype.addElement = function (name, posX, posY, width, height) {
+Gameboard.prototype.addElement = function (name, img, dx, dy, dw, dh, posX, posY, width, height) {
     var index;
     index = this.checkGetElement(name);
     if (index === -1) { // If does not exists, Add the element
         this.tabElement.push({
             "name": name,
+            "img": img,
+            "dx": dx,
+            "dy": dy,
+            "dw": dw,
+            "dh": dh,
             "x": posX,
             "y": posY,
             "w": width,
@@ -44,6 +49,11 @@ Gameboard.prototype.addElement = function (name, posX, posY, width, height) {
     } else { // update the value of the element
         this.tabElement[index] = {
             "name": name,
+            "img": img,
+            "dx": dx,
+            "dy": dy,
+            "dw": dw,
+            "dh": dh,
             "x": posX,
             "y": posY,
             "w": width,
@@ -51,7 +61,6 @@ Gameboard.prototype.addElement = function (name, posX, posY, width, height) {
             "inlife": 1
         };
     }
-    // console.log("Gameboard.prototype.addElement=",this.tabElement);
 };
 
 /*
@@ -80,10 +89,10 @@ Gameboard.prototype.checkGetElement = function (name) {
  * @return {Boolean} - True elements are present is the zone
  */
 Gameboard.prototype.testHorizontalZone = function (x1, x2, w1, w2) {
-    if (x1 >= x2 && x1 <= (x2 + w2)) {
+    if ((x1 >= x2) && (x1 <= (x2 + w2))) {
         return true;
     }
-    if ((x1 + w1) >= x2 && (x1 + w1) <= (x2 + w2)) {
+    if (((x1 + w1) >= x2) && ((x1 + w1) <= (x2 + w2))) {
         return true;
     }
     return false;
@@ -98,15 +107,13 @@ Gameboard.prototype.testHorizontalZone = function (x1, x2, w1, w2) {
  * @return {Boolean} - True elements are present is the zone
  */
 Gameboard.prototype.testVerticalZone = function (y1, y2, h1, h2) {
-    if (y1 >= y2 && y1 <= (y2 + h2)) {
+    if ((y1 >= y2) && (y1 <= (y2 + h2))) {
         return true;
     }
-    if ((y1 + h1) >= y2 && (y1 + h1) <= (y2 + h2)) {
+    if (((y1 + h1) >= y2) && ((y1 + h1) <= (y2 + h2))) {
         return true;
     }
-
     return false;
-
 };
 
 /*
@@ -120,7 +127,7 @@ Gameboard.prototype.checkMove = function (name, direction) {
     var posX = this.getX(name); // Get its X position
     var posY = this.getY(name); // Get its Y position
     var width = this.tabElement[id].w; // Get its width
-    var height = this.tabElement[id].h; // Get its height
+    var height = this.tabElement[id].h; // Get its height    
     var i;
 
     if (direction === "right") {
@@ -130,11 +137,11 @@ Gameboard.prototype.checkMove = function (name, direction) {
         }
 
         // Test element with its environment
-        for (i = 0; this.tabElement[i]; i += 1) {
-            // If it is the calling element, do nothing
+        for (i = 1; this.tabElement[i]; i += 1) {
+            // If it is the calling element, do nothing            
 
             if (i !== id) {
-                if (this.testVerticalZone(posY, this.tabElement[i].y, height, this.tabElement[i].h) === true && this.testHorizontalZone(posX + 1, this.tabElement[i].x, width, this.tabElement[i].w) === true) {
+                if (this.testVerticalZone(posY, this.tabElement[i].y, height, this.tabElement[i].h) && this.testHorizontalZone(posX + 1, this.tabElement[i].x, width, this.tabElement[i].w)) {
                     return false; // We touch
                 }
             }
@@ -148,9 +155,8 @@ Gameboard.prototype.checkMove = function (name, direction) {
         }
 
         // Test element with its environment
-        for (i = 0; this.tabElement[i]; i += 1) {
+        for (i = 1; this.tabElement[i]; i += 1) {
             // If it is the calling element, do nothing
-
             if (i !== id) {
                 if (this.testVerticalZone(posY, this.tabElement[i].y, height, this.tabElement[i].h) === true && this.testHorizontalZone(posX - 1, this.tabElement[i].x, width, this.tabElement[i].w) === true) {
                     return false; // We touch
@@ -166,7 +172,7 @@ Gameboard.prototype.checkMove = function (name, direction) {
         }
 
         // Test element with its environment
-        for (i = 0; this.tabElement[i]; i += 1) {
+        for (i = 1; this.tabElement[i]; i += 1) {
             // If it is the calling element, do nothing
 
             if (i !== id) {
@@ -180,12 +186,12 @@ Gameboard.prototype.checkMove = function (name, direction) {
     }
     if (direction === "down") {
         // Check if the element touch the bottom of the canvas
-        if ((posY + 1) >= this.gameboardHeight) {
+        if ((posY + height + 1) >= this.gameboardHeight) {
             return false;
         }
 
         // Test element with its environment
-        for (i = 0; this.tabElement[i]; i += 1) {
+        for (i = 1; this.tabElement[i]; i += 1) {
             // If it is the calling element, do nothing
 
             if (i !== id) {
@@ -306,4 +312,3 @@ Gameboard.prototype.incScore = function () {
     return -1; // The game is finished
 
 };
-
