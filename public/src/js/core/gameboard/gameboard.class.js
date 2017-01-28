@@ -152,7 +152,7 @@ Gameboard.prototype.checkMove = function (name, direction) {
     var height = this.tabElement[id].h; // Get its height    
     var i; // Index of the element
 
-    if (name !== "gamer") {
+    if (name !== "gamer" && name !== "spaceTest" && name !== "spaceTest2" ) {
 
         // If we go to rigth
         if (direction === "creation") {

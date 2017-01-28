@@ -14,24 +14,24 @@ describe('#Gameboard', function () {
 
         beforeEach(function () {
             // var gameboard = new Gameboard();
-            // gameboard.addElement('vaisseau', 10, 15, 50, 50);
+            // gameboard.addElement('spaceTest', 10, 15, 50, 50);
         });
         describe('add element to game', function () {
             it('should add an element on gameboard', function () {
                 var gameboard = new Gameboard();
-                gameboard.addElement('vaisseau', " ", " ", 10, 15, 50, 50);
+                gameboard.addElement('spaceTest', " ", " ", 10, 15, 50, 50);
                 expect(gameboard.tabElement[0].x).to.equal(10);
             });
         });
         it('should retreive the X position', function () {
             var gameboard = new Gameboard();
-            gameboard.addElement('vaisseau', " ", " ", 10, 15, 50, 50);
-            expect(gameboard.getX("vaisseau")).to.equal(10);
+            gameboard.addElement('spaceTest', " ", " ", 10, 15, 50, 50);
+            expect(gameboard.getX("spaceTest")).to.equal(10);
         });
         it('should retreive the Y position', function () {
             var gameboard = new Gameboard();
-            gameboard.addElement('vaisseau', " ", " ", 10, 15, 50, 50);
-            expect(gameboard.getY("vaisseau")).to.equal(15);
+            gameboard.addElement('spaceTest', " ", " ", 10, 15, 50, 50);
+            expect(gameboard.getY("spaceTest")).to.equal(15);
         });
 
     });
@@ -40,33 +40,33 @@ describe('#Gameboard', function () {
         describe('Position of the element', function () {
             it('should return the position of an element', function () {
                 var gameboard = new Gameboard();
-                gameboard.addElement('vaisseau', " ", " ", 10, 15, 50, 50);
-                expect(gameboard.getX("vaisseau")).to.equal(10);
+                gameboard.addElement('spaceTest', " ", " ", 10, 15, 50, 50);
+                expect(gameboard.getX("spaceTest")).to.equal(10);
             });
             describe('Change the position', function () {
                 it('should set the new X position', function () {
                     var gameboard = new Gameboard();
-                    gameboard.addElement('vaisseau', " ", " ", 10, 15, 50, 50);
-                    gameboard.setX("vaisseau", 9);
-                    expect(gameboard.getX("vaisseau")).to.equal(9);
+                    gameboard.addElement('spaceTest', " ", " ", 10, 15, 50, 50);
+                    gameboard.setX("spaceTest", 9);
+                    expect(gameboard.getX("spaceTest")).to.equal(9);
                 });
                 it('should set the new Y position', function () {
                     var gameboard = new Gameboard();
-                    gameboard.addElement('vaisseau', " ", " ", 10, 15, 50, 50);
-                    gameboard.setY("vaisseau", 14);
-                    expect(gameboard.getY("vaisseau")).to.equal(14);
+                    gameboard.addElement('spaceTest', " ", " ", 10, 15, 50, 50);
+                    gameboard.setY("spaceTest", 14);
+                    expect(gameboard.getY("spaceTest")).to.equal(14);
                 });
             });
             describe('Move the point', function () {
                 it('Should change the X position', function () {
                     var gameboard = new Gameboard();
-                    gameboard.addElement('vaisseau', " ", " ", 10, 15, 50, 50);
-                    expect(gameboard.moveX('vaisseau', -1)).to.equal(9);
+                    gameboard.addElement('spaceTest', " ", " ", 10, 15, 50, 50);
+                    expect(gameboard.moveX('spaceTest', -1)).to.equal(9);
                 });
                 it('Should change the Y position', function () {
                     var gameboard = new Gameboard();
-                    gameboard.addElement('vaisseau', " ", " ", 10, 15, 50, 50);
-                    expect(gameboard.moveY('vaisseau', -1)).to.equal(14);
+                    gameboard.addElement('spaceTest', " ", " ", 10, 15, 50, 50);
+                    expect(gameboard.moveY('spaceTest', -1)).to.equal(14);
                 });
                 describe('Test if points are in the same zone', function () {
                     describe('Vertical alignement', function () {
@@ -129,29 +129,29 @@ describe('#Gameboard', function () {
                     describe('Move to border right of canvas', function () {
                         it('should refused the move', function () {
                             var gameboard = new Gameboard();
-                            gameboard.addElement('vaisseau', "", "", 601, 15, 50, 50);
-                            expect(gameboard.checkMove('vaisseau', "right")).to.equal(false);
+                            gameboard.addElement('spaceTest', "", "", 601, 15, 50, 50);
+                            expect(gameboard.checkMove('spaceTest', "right")).to.equal(false);
                         });
                     });
                     describe('Move to border left of canvas', function () {
                         it('should refused the move', function () {
                             var gameboard = new Gameboard();
-                            gameboard.addElement('vaisseau', "", "", 0, 15, 50, 50);
-                            expect(gameboard.checkMove('vaisseau', "left")).to.equal(false);
+                            gameboard.addElement('spaceTest', "", "", 0, 15, 50, 50);
+                            expect(gameboard.checkMove('spaceTest', "left")).to.equal(false);
                         });
                     });
                     describe('Move to border top of canvas', function () {
                         it('should refused the move', function () {
                             var gameboard = new Gameboard();
-                            gameboard.addElement('vaisseau', "", "", 15, 0, 50, 50);
-                            expect(gameboard.checkMove('vaisseau', "up")).to.equal(false);
+                            gameboard.addElement('spaceTest', "", "", 15, 0, 50, 50);
+                            expect(gameboard.checkMove('spaceTest', "up")).to.equal(false);
                         });
                     });
                     describe('Move to border bottom of canvas', function () {
                         it('should refused the move', function () {
                             var gameboard = new Gameboard();
-                            gameboard.addElement('vaisseau', "", "", 15, 640, 50, 50);
-                            expect(gameboard.checkMove('vaisseau', "down")).to.equal(false);
+                            gameboard.addElement('spaceTest', "", "", 15, 640, 50, 50);
+                            expect(gameboard.checkMove('spaceTest', "down")).to.equal(false);
                         });
                     });
                 });
@@ -161,36 +161,36 @@ describe('#Gameboard', function () {
                         describe('Move to bottom', function () {
                             it('should authorize the move', function () {
                                 var gameboard = new Gameboard();
-                                gameboard.addElement('vaisseau', "", "", 10, 15, 50, 50);
-                                gameboard.addElement('vaisseau2', "", "", 80, 85, 50, 50);
-                                expect(gameboard.checkMove('vaisseau', "down")).to.equal(true);
+                                gameboard.addElement('spaceTest', "", "", 10, 15, 50, 50);
+                                gameboard.addElement('spaceTest2', "", "", 80, 85, 50, 50);
+                                expect(gameboard.checkMove('spaceTest', "down")).to.equal(true);
                             });
 
                         });
                         describe('Move to top', function () {
                             it('should authorize the move', function () {
                                 var gameboard = new Gameboard();
-                                gameboard.addElement('vaisseau', "", "", 10, 15, 50, 50);
-                                gameboard.addElement('vaisseau2', "", "", 80, 85, 50, 50);
-                                expect(gameboard.checkMove('vaisseau', "up")).to.equal(true);
+                                gameboard.addElement('spaceTest', "", "", 10, 15, 50, 50);
+                                gameboard.addElement('spaceTest2', "", "", 80, 85, 50, 50);
+                                expect(gameboard.checkMove('spaceTest', "up")).to.equal(true);
                             });
                         });
                         describe('Move to left', function () {
                             it('should authorize the move', function () {
                                 it('should authorize the move', function () {
                                     var gameboard = new Gameboard();
-                                    gameboard.addElement('vaisseau', "", "", 10, 15, 50, 50);
-                                    gameboard.addElement('vaisseau2', "", "", 80, 85, 50, 50);
-                                    expect(gameboard.checkMove('vaisseau', "left")).to.equal(true);
+                                    gameboard.addElement('spaceTest', "", "", 10, 15, 50, 50);
+                                    gameboard.addElement('spaceTest2', "", "", 80, 85, 50, 50);
+                                    expect(gameboard.checkMove('spaceTest', "left")).to.equal(true);
                                 });
                             });
                         });
                         describe('Move to right', function () {
                             it('should authorize the move', function () {
                                 var gameboard = new Gameboard();
-                                gameboard.addElement('vaisseau', "", "", 10, 15, 50, 50);
-                                gameboard.addElement('vaisseau2', "", "", 80, 85, 50, 50);
-                                expect(gameboard.checkMove('vaisseau', "right")).to.equal(true);
+                                gameboard.addElement('spaceTest', "", "", 10, 15, 50, 50);
+                                gameboard.addElement('spaceTest2', "", "", 80, 85, 50, 50);
+                                expect(gameboard.checkMove('spaceTest', "right")).to.equal(true);
                             });
                         });
                     });
@@ -199,17 +199,17 @@ describe('#Gameboard', function () {
                             describe('Element strict one side to side', function () {
                                 it('should refused the move', function () {
                                     var gameboard = new Gameboard();
-                                    gameboard.addElement('vaisseau', "", "", 61, 15, 50, 50);
-                                    gameboard.addElement('vaisseau2', "", "", 10, 15, 50, 50);
-                                    expect(gameboard.checkMove('vaisseau', "left")).to.equal(false);
+                                    gameboard.addElement('spaceTest', "", "", 61, 15, 50, 50);
+                                    gameboard.addElement('spaceTest2', "", "", 10, 15, 50, 50);
+                                    expect(gameboard.checkMove('spaceTest', "left")).to.equal(false);
                                 });
                             });
                             describe('Element not strictly one upside the other', function () {
                                 it('should refused the move', function () {
                                     var gameboard = new Gameboard();
-                                    gameboard.addElement('vaisseau', "", "", 61, 15, 50, 50);
-                                    gameboard.addElement('vaisseau2', "", "", 10, 45, 50, 50);
-                                    expect(gameboard.checkMove('vaisseau', "left")).to.equal(false);
+                                    gameboard.addElement('spaceTest', "", "", 61, 15, 50, 50);
+                                    gameboard.addElement('spaceTest2', "", "", 10, 45, 50, 50);
+                                    expect(gameboard.checkMove('spaceTest', "left")).to.equal(false);
                                 });
                             });
                         });
@@ -217,17 +217,17 @@ describe('#Gameboard', function () {
                             describe('Element strict one side to side', function () {
                                 it('should refused the move', function () {
                                     var gameboard = new Gameboard();
-                                    gameboard.addElement('vaisseau', "", "", 10, 15, 50, 50);
-                                    gameboard.addElement('vaisseau2', "", "", 61, 15, 50, 50);
-                                    expect(gameboard.checkMove('vaisseau', "right")).to.equal(false);
+                                    gameboard.addElement('spaceTest', "", "", 10, 15, 50, 50);
+                                    gameboard.addElement('spaceTest2', "", "", 61, 15, 50, 50);
+                                    expect(gameboard.checkMove('spaceTest', "right")).to.equal(false);
                                 });
                             });
                             describe('Element not strictly one upside the other', function () {
                                 it('should refused the move', function () {
                                     var gameboard = new Gameboard();
-                                    gameboard.addElement('vaisseau', "", "", 10, 15, 50, 50);
-                                    gameboard.addElement('vaisseau2', "", "", 61, 45, 50, 50);
-                                    expect(gameboard.checkMove('vaisseau', "right")).to.equal(false);
+                                    gameboard.addElement('spaceTest', "", "", 10, 15, 50, 50);
+                                    gameboard.addElement('spaceTest2', "", "", 61, 45, 50, 50);
+                                    expect(gameboard.checkMove('spaceTest', "right")).to.equal(false);
                                 });
                             });
                         });
@@ -235,17 +235,17 @@ describe('#Gameboard', function () {
                             describe('Element strict one upside the other', function () {
                                 it('should refused the move', function () {
                                     var gameboard = new Gameboard();
-                                    gameboard.addElement('vaisseau', "", "", 10, 15, 50, 50);
-                                    gameboard.addElement('vaisseau2', "", "", 10, 64, 50, 50);
-                                    expect(gameboard.checkMove('vaisseau', "up")).to.equal(false);
+                                    gameboard.addElement('spaceTest', "", "", 10, 15, 50, 50);
+                                    gameboard.addElement('spaceTest2', "", "", 10, 64, 50, 50);
+                                    expect(gameboard.checkMove('spaceTest', "up")).to.equal(false);
                                 });
                             });
                             describe('Element not strictly one upside the other', function () {
                                 it('should refused the move', function () {
                                     var gameboard = new Gameboard();
-                                    gameboard.addElement('vaisseau', "", "", 15, 15, 50, 50);
-                                    gameboard.addElement('vaisseau2', "", "", 10, 64, 50, 50);
-                                    expect(gameboard.checkMove('vaisseau', "up")).to.equal(false);
+                                    gameboard.addElement('spaceTest', "", "", 15, 15, 50, 50);
+                                    gameboard.addElement('spaceTest2', "", "", 10, 64, 50, 50);
+                                    expect(gameboard.checkMove('spaceTest', "up")).to.equal(false);
                                 });
                             });
                         });
@@ -253,17 +253,17 @@ describe('#Gameboard', function () {
                             describe('Element strict one upside the other', function () {
                                 it('should refused the move', function () {
                                     var gameboard = new Gameboard();
-                                    gameboard.addElement('vaisseau', "", "", 10, 15, 50, 50);
-                                    gameboard.addElement('vaisseau2', "", "", 10, 64, 50, 50);
-                                    expect(gameboard.checkMove('vaisseau', "down")).to.equal(false);
+                                    gameboard.addElement('spaceTest', "", "", 10, 15, 50, 50);
+                                    gameboard.addElement('spaceTest2', "", "", 10, 64, 50, 50);
+                                    expect(gameboard.checkMove('spaceTest', "down")).to.equal(false);
                                 });
                             });
                             describe('Element not strictly one upside the other', function () {
                                 it('should refused the move', function () {
                                     var gameboard = new Gameboard();
-                                    gameboard.addElement('vaisseau', "", "", 15, 15, 50, 50);
-                                    gameboard.addElement('vaisseau2', "", "", 10, 64, 50, 50);
-                                    expect(gameboard.checkMove('vaisseau', "down")).to.equal(false);
+                                    gameboard.addElement('spaceTest', "", "", 15, 15, 50, 50);
+                                    gameboard.addElement('spaceTest2', "", "", 10, 64, 50, 50);
+                                    expect(gameboard.checkMove('spaceTest', "down")).to.equal(false);
                                 });
                             });
                         });
@@ -271,28 +271,28 @@ describe('#Gameboard', function () {
                     describe('We pass on a zone where the element was killed', function () {
                         it('should accept the move', function () {
                             var gameboard = new Gameboard();
-                            gameboard.addElement('vaisseau', "", "", 15, 15, 50, 50);
-                            gameboard.addElement('vaisseau2', "", "", 10, 64, 50, 50);
+                            gameboard.addElement('spaceTest', "", "", 15, 15, 50, 50);
+                            gameboard.addElement('spaceTest2', "", "", 10, 64, 50, 50);
                             gameboard.tabElement[1].dead = true;
-                            expect(gameboard.checkMove('vaisseau', "down")).to.equal(true);
+                            expect(gameboard.checkMove('spaceTest', "down")).to.equal(true);
                         })
                         describe('Elements present to left', function () {
                             describe('Element strict one side to side', function () {
                                 it('should accept the move', function () {
                                     var gameboard = new Gameboard();
-                                    gameboard.addElement('vaisseau', "", "", 61, 15, 50, 50);
-                                    gameboard.addElement('vaisseau2', "", "", 10, 15, 50, 50);
+                                    gameboard.addElement('spaceTest', "", "", 61, 15, 50, 50);
+                                    gameboard.addElement('spaceTest2', "", "", 10, 15, 50, 50);
                                     gameboard.tabElement[1].dead = true;
-                                    expect(gameboard.checkMove('vaisseau', "left")).to.equal(true);
+                                    expect(gameboard.checkMove('spaceTest', "left")).to.equal(true);
                                 });
                             });
                             describe('Element not strictly one upside the other', function () {
                                 it('should accept the move', function () {
                                     var gameboard = new Gameboard();
-                                    gameboard.addElement('vaisseau', "", "", 61, 15, 50, 50);
-                                    gameboard.addElement('vaisseau2', "", "", 10, 45, 50, 50);
+                                    gameboard.addElement('spaceTest', "", "", 61, 15, 50, 50);
+                                    gameboard.addElement('spaceTest2', "", "", 10, 45, 50, 50);
                                     gameboard.tabElement[1].dead = true;
-                                    expect(gameboard.checkMove('vaisseau', "left")).to.equal(true);
+                                    expect(gameboard.checkMove('spaceTest', "left")).to.equal(true);
                                 });
                             });
                         });
@@ -300,19 +300,19 @@ describe('#Gameboard', function () {
                             describe('Element strict one side to side', function () {
                                 it('should accept the move', function () {
                                     var gameboard = new Gameboard();
-                                    gameboard.addElement('vaisseau', "", "", 10, 15, 50, 50);
-                                    gameboard.addElement('vaisseau2', "", "", 61, 15, 50, 50);
+                                    gameboard.addElement('spaceTest', "", "", 10, 15, 50, 50);
+                                    gameboard.addElement('spaceTest2', "", "", 61, 15, 50, 50);
                                     gameboard.tabElement[1].dead = true;
-                                    expect(gameboard.checkMove('vaisseau', "right")).to.equal(true);
+                                    expect(gameboard.checkMove('spaceTest', "right")).to.equal(true);
                                 });
                             });
                             describe('Element not strictly one upside the other', function () {
                                 it('should accept the move', function () {
                                     var gameboard = new Gameboard();
-                                    gameboard.addElement('vaisseau', "", "", 10, 15, 50, 50);
-                                    gameboard.addElement('vaisseau2', "", "", 61, 45, 50, 50);
+                                    gameboard.addElement('spaceTest', "", "", 10, 15, 50, 50);
+                                    gameboard.addElement('spaceTest2', "", "", 61, 45, 50, 50);
                                     gameboard.tabElement[1].dead = true;
-                                    expect(gameboard.checkMove('vaisseau', "right")).to.equal(true);
+                                    expect(gameboard.checkMove('spaceTest', "right")).to.equal(true);
                                 });
                             });
                         });
@@ -320,19 +320,19 @@ describe('#Gameboard', function () {
                             describe('Element strict one upside the other', function () {
                                 it('should accept the move', function () {
                                     var gameboard = new Gameboard();
-                                    gameboard.addElement('vaisseau', "", "", 10, 15, 50, 50);
-                                    gameboard.addElement('vaisseau2', "", "", 10, 64, 50, 50);
+                                    gameboard.addElement('spaceTest', "", "", 10, 15, 50, 50);
+                                    gameboard.addElement('spaceTest2', "", "", 10, 64, 50, 50);
                                     gameboard.tabElement[1].dead = true;
-                                    expect(gameboard.checkMove('vaisseau', "up")).to.equal(true);
+                                    expect(gameboard.checkMove('spaceTest', "up")).to.equal(true);
                                 });
                             });
                             describe('Element not strictly one upside the other', function () {
                                 it('should accept the move', function () {
                                     var gameboard = new Gameboard();
-                                    gameboard.addElement('vaisseau', "", "", 15, 15, 50, 50);
-                                    gameboard.addElement('vaisseau2', "", "", 10, 64, 50, 50);
+                                    gameboard.addElement('spaceTest', "", "", 15, 15, 50, 50);
+                                    gameboard.addElement('spaceTest2', "", "", 10, 64, 50, 50);
                                     gameboard.tabElement[1].dead = true;
-                                    expect(gameboard.checkMove('vaisseau', "up")).to.equal(true);
+                                    expect(gameboard.checkMove('spaceTest', "up")).to.equal(true);
                                 });
                             });
                         });
@@ -340,19 +340,19 @@ describe('#Gameboard', function () {
                             describe('Element strict one upside the other', function () {
                                 it('should accept the move', function () {
                                     var gameboard = new Gameboard();
-                                    gameboard.addElement('vaisseau', "", "", 10, 15, 50, 50);
-                                    gameboard.addElement('vaisseau2', "", "", 10, 64, 50, 50);
+                                    gameboard.addElement('spaceTest', "", "", 10, 15, 50, 50);
+                                    gameboard.addElement('spaceTest2', "", "", 10, 64, 50, 50);
                                     gameboard.tabElement[1].dead = true;
-                                    expect(gameboard.checkMove('vaisseau', "down")).to.equal(true);
+                                    expect(gameboard.checkMove('spaceTest', "down")).to.equal(true);
                                 });
                             });
                             describe('Element not strictly one upside the other', function () {
                                 it('should accept the move', function () {
                                     var gameboard = new Gameboard();
-                                    gameboard.addElement('vaisseau', "", "", 15, 15, 50, 50);
-                                    gameboard.addElement('vaisseau2', "", "", 10, 64, 50, 50);
+                                    gameboard.addElement('spaceTest', "", "", 15, 15, 50, 50);
+                                    gameboard.addElement('spaceTest2', "", "", 10, 64, 50, 50);
                                     gameboard.tabElement[1].dead = true;
-                                    expect(gameboard.checkMove('vaisseau', "down")).to.equal(true);
+                                    expect(gameboard.checkMove('spaceTest', "down")).to.equal(true);
                                 });
                             });
                         });
