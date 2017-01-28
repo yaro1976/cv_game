@@ -1,18 +1,31 @@
 'use strict';
 var SpaceElement;
 
+/*
+ * Create the main game Object
+ * @constructor
+ * @param {Number} width - Width of the canvas
+ * @ param {Number} Height - height of the canvas
+ */
 var Game = function (width, height) {
-    // this.ctx = false;
-    this.width = width || 340;
-    this.height = height || 500;
-    // this.gameboard = new GameBoard();
-    // this.gameboard = gameboard;
-    Gameboard.call(this, width, height);
+    this.width = width || 600; // Set the main width
+    this.height = height || 800; // Set the main height
+    Gameboard.call(this, width, height); // Call the Gameboard constructor
+
+    // Save key press status ( up, down, right, left, space)
+    this.keyStatus = {
+        "up": false,
+        "down": false,
+        "right": false,
+        "left": false,
+        "space": false
+    };
 
     // List of the items
     this.items = {
-        "ships": {
+        "ships": { // All Ships
             "id": "ships",
+            "url": "dist/img/ships.png",
             "coord": [{ // Gros vaisseau ligne 1
                 "posX": 15,
                 "posY": 0,
@@ -65,8 +78,9 @@ var Game = function (width, height) {
                 "height": 74
             }]
         },
-        "planet": {
+        "planet": { // All planets
             "img": "",
+            "url": "",
             "coord": [{
                 "posX": 0,
                 "posY": 0,
@@ -84,14 +98,18 @@ var Game = function (width, height) {
                 "height": 0
             }]
         },
-        "background": {
-            "posX": 0,
-            "posY": 0,
-            "width": 640,
-            "height": 480
+        "background": { // background images
+            "id": "backImg",
+            "url": "dist/img/background/1.png",
+            "coord": [{
+                "posX": 0,
+                "posY": 0,
+                "width": 640,
+                "height": 480
+            }]
         },
-        "shots": {
-            "img": "",
+        "shots": { // Shotting animation
+            "img": "backImg",
             "coord": [{
                 "posX": 0,
                 "posY": 0,
@@ -113,6 +131,7 @@ var Game = function (width, height) {
 
 };
 
+// Define the parent Object
 Game.prototype = Object.create(Gameboard.prototype);
 
 /*
@@ -130,20 +149,28 @@ Game.prototype.setBackground = function () {
     var backImg,
         w,
         h;
+    // Create a new Image object    
+    backImg = new Image();
+    // Get the width and the height of the object
+    w = this.items.background.coord[0].width;
+    h = this.items.background.coord[0].height;
 
-    w = this.items.background.width;
-    h = this.items.background.height;
+    // Set the backgound image
+    backImg.src = this.items.background.url;
 
-    backImg = document.getElementById("back");
-    this.ctx.drawImage(backImg, this.items.background.posX, this.items.background.posY, w, h, 0, 0, this.width, this.height);
+    // Position the image
+    this.addElement("backImg", backImg, 0, 0, w, h, 0, 0, this.width, this.height);
 };
 
 /*
  * getContext - Store the drawing context of the canvas zone
  */
 Game.prototype.getContext = function () {
-    var canvas = document.getElementById("gameZone");
+    var canvas;
+    // Get the canvas element
+    canvas = document.getElementById("gameZone");
 
+    // Get the canvas context
     if (canvas.getContext) {
         this.ctx = canvas.getContext('2d');
     }
@@ -154,18 +181,24 @@ Game.prototype.getContext = function () {
  * @return {Boolean} - True: The zone is created | False : the zone is not created
  */
 Game.prototype.createGameZone = function () {
-    var newCanvas = document.createElement('canvas');
-    var idGame = document.getElementById("game");
+    var newCanvas,
+        idGame;
+
+    // Create a canvas element
+    newCanvas = document.createElement('canvas');
     newCanvas.setAttribute("width", this.width);
     newCanvas.setAttribute("height", this.height);
     newCanvas.setAttribute("id", "gameZone");
 
+    // Add the canvas element to the web page
+    idGame = document.getElementById("game");
     idGame.appendChild(newCanvas);
 
+    // If the canvas is created
     if (document.getElementById("gameZone")) {
-        return true;
+        return true; // Created
     }
-    return false;
+    return false; // Error
 };
 
 /*
@@ -181,21 +214,25 @@ Game.prototype.clearScreen = function () {
  * init - Initialize the Game.
  *        Position the elements
  */
-Game.prototype.init = function () {
-    var i;
-    var maxEnemy = 5;
+Game.prototype.init = function (w, h) {
+    var i,
+        maxEnemy = 5;
+
     if (this.createGameZone()) {
+        // Get the canvas context
         this.getContext();
         if (this.ctx) {
-            // Generate the ennemy
-            for (i = 0; i < maxEnemy; i += 1) {
-                this.genObject();
-            }
-            // Clear the screen
+            // Clear the canvas
             this.clearScreen();
 
             // Position the background element
             this.setBackground();
+
+            // The draw the gamers ship
+            this.drawGamer(w, h);
+
+            // Draw items
+            this.draw();
 
             // Write the score to the screen
             this.showScore();
@@ -203,12 +240,15 @@ Game.prototype.init = function () {
     }
 };
 
+/*
+ * Drw the enemy ship
+ * @return {void}
+ */
 Game.prototype.drawEnemy = function () {
     var newX,
         newY,
         objDirec;
     // Test
-
 
     // TODO si pas ennemy
 
@@ -221,17 +261,24 @@ Game.prototype.drawEnemy = function () {
     }
     // this.draw(this.items.ships, 9, 15, 15, 50, 50);
 };
+
 /*
  * genObject - generate Ennemy
  *
  */
 Game.prototype.genObject = function () {
-    //
-    var x, y, item;
+    var x,
+        y,
+        item;
 
+    // Select the enemy ship
     item = this.items.ships.coord[this.random(this.items.ships.coord.length)];
+
+    // Set X and Y position
     x = this.random(this.width);
     y = this.random(this.height / 3);
+
+    // Add element item
     this.addElement(item, x, y, item.width, item.height);
 };
 
@@ -240,120 +287,166 @@ Game.prototype.genObject = function () {
  * @return {void}
  */
 Game.prototype.showScore = function () {
+    var textPosX, // X position
+        textPosY; // y position
+
+    // Set position of the text element
+    textPosX = this.width - 50;
+    textPosY = 50;
     // Add score
     this.ctx.font = '48px serif';
+    // Set color
     this.ctx.fillStyle = "rgba(236, 240, 241,1.0)";
-    this.ctx.fillText(this.score, (this.width - 50), 50);
+    // Get the score item, and write it to the canvas
+    this.ctx.fillText(this.score, textPosX, textPosY);
 }
 
 /*
- * Draw - Draw all elements on the canvas
- * @param {String} el - element to draw
- * @param {Number} id - Index of the element
+ * Draw - Draw all elements on the canvas  
  * @return {void}
  */
-Game.prototype.draw = function (el, id, dx, dy, dw, dh) {
+Game.prototype.draw = function () {
     // TODO Draw an item to the context
     var x,
         y,
         w,
-        h;
-    var img = document.getElementById(el.id);
+        h,
+        i,
+        img;
 
-    this.ctx.drawImage(img, el.coord[id].posX, el.coord[id].posY, el.coord[id].width, el.coord[id].height, dx, dy, dw, dh);
-    // this.ctx.drawImage(el, el.x, y);
+    // Clear the canvas element
+    this.clearScreen();
 
+    for (i = 0; this.tabElement[i]; i += 1) {
+        // Select all element present
+        // draw each element
+        this.ctx.drawImage(this.tabElement[i].img, this.tabElement[i].dx, this.tabElement[i].dy, this.tabElement[i].dw, this.tabElement[i].dh, this.tabElement[i].x, this.tabElement[i].y, this.tabElement[i].w, this.tabElement[i].h);
+    }
+
+    // Add the score element
+    this.showScore();
 };
 
 /*
  * Move the gamer ship
- * @param {String} Direction - direction where to move
+ * @param {String} movestatus - Check if the element moving
  */
-Game.prototype.moveGamer = function (direction) {
-    var index;
+Game.prototype.moveGamer = function (moveStatus) {
+    var index,
+        intervalID, // Save the Interval ID
+        vm;
+
+    // Retreive the index element
     index = this.checkGetElement("gamer");
-    switch (direction) {
-        case "left":
-            if (this.checkMove("gamer", "left") === true) { // If move is authorized
-                // Set new position, and draw items
-                // console.log(vm.gameboard.tabElement);
-                this.drawGamer((vm.tabElement[index].x - 1), this.gameboard.tabElement[index].y);
-            }
-            break;
-        case "right":
-            break;
-        case "up":
-            break;
-        case "down":
-            break;
-    }
+    vm = this;
+
+    intervalID = window.setInterval(function () {
+        if (vm.keyStatus.up && moveStatus) {
+            // Key up pressed
+            if (vm.checkMove("gamer", "up") === true) { // If move is authorized
+                // Set new position, and draw items                
+                vm.drawGamer((vm.tabElement[index].x), vm.tabElement[index].y - 1);
+            };
+        }
+
+        if (vm.keyStatus.down && moveStatus) {
+            // Key up pressed                    
+            if (vm.checkMove("gamer", "down") === true) { // If move is authorized
+                // Set new position, and draw items                
+                vm.drawGamer((vm.tabElement[index].x), vm.tabElement[index].y + 1);
+            };
+        }
+
+        if (vm.keyStatus.left && moveStatus) {
+            // Key left pressed                    
+            if (vm.checkMove("gamer", "left") === true) { // If move is authorized
+                // Set new position, and draw items                
+                vm.drawGamer((vm.tabElement[index].x - 1), vm.tabElement[index].y);
+            };
+        }
+
+        if (vm.keyStatus.right && moveStatus) {
+            // Key right pressed
+            if (vm.checkMove("gamer", "right") === true) { // If move is authorized
+                // Set new position, and draw items                
+                vm.drawGamer((vm.tabElement[index].x + 1), vm.tabElement[index].y);
+            };
+        }
+    }, 1);
 };
 /*
- * checkDirection - Read keyboard
+ * checkDirection - Read keyboard and move the user ship
  */
 Game.prototype.checkDirection = function () {
     // Save the context
     var vm = this;
+    var moveOn = false;
 
     var intervalID;
+
+    // If the key is pressed
     window.onkeydown = function (event) {
         var code = event.keyCode;
 
         switch (code) {
-            case 37:
-                //*instructions*
-                // intervalID = window.setInterval(function () {
-                    console.log("vm=",vm);                    
-                    wm1.moveGamer("left");
-                // }, 100);
-
-                alert('gauche');
+            case 37: // Left key is pressed
+                if (!moveOn) {
+                    moveOn = true;
+                    vm.keyStatus.left = true;
+                    intervalID = vm.moveGamer(moveOn);
+                }
                 break;
             case 38:
-                //instructions
-                vm.checkMove("gamer", "up");
-                alert('haut');
+                // Up key is pressed
+                if (!moveOn) {
+                    moveOn = true;
+                    vm.keyStatus.up = true;
+                    intervalID = vm.moveGamer(moveOn);
+                }
                 break;
             case 39:
-                //instructions
-                vm.checkMove("gamer", "right");
-                alert('droite');
+                // Right key is pressed
+                if (!moveOn) {
+                    moveOn = true;
+                    vm.keyStatus.right = true;
+                    intervalID = vm.moveGamer(moveOn);
+                }
                 break;
             case 40:
-                //instructions
-                vm.checkMove("gamer", "down");
-                alert('bas');
+                // Down key is pressed
+                if (!moveOn) {
+                    moveOn = true;
+                    vm.keyStatus.down = true;
+                    intervalID = vm.moveGamer(moveOn);
+                }
                 break;
+            default:
+                console.log(code);
         }
-
     };
+
+    // if the key is release
     window.onkeyup = function (event) {
+        clearInterval(intervalID);
+        moveOn = false;
         var code = event.keyCode;
         switch (code) {
-            case 37:
-                //*instructions*
-                clearInterval(intervalID);
-
-                // alert('gauche');
+            case 37: // Left key is released                
+                vm.keyStatus.left = false;
                 break;
-            case 38:
-                //instructions
-                vm.gameboard.checkMove("gamer", "up");
-                alert('haut');
+            case 38: // Up key is released                
+                vm.keyStatus.up = false;
                 break;
-            case 39:
-                //instructions
-                vm.gameboard.checkMove("gamer", "right");
-                alert('droite');
+            case 39: // Right key is released                     
+                vm.keyStatus.right = false;
                 break;
-            case 40:
-                //instructions
-                vm.gameboard.checkMove("gamer", "down");
-                alert('bas');
+            case 40: // Down key is released                
+                vm.keyStatus.down = false;
                 break;
         }
     };
 };
+
 /*
  * Generate the new direction for the enemy ship
  * @return {Object} New direction of the ship
@@ -373,17 +466,28 @@ Game.prototype.enemyDirection = function () {
  * @param {Number}  gamerY - Y position of the gamer
  */
 Game.prototype.drawGamer = function (gamerX, gamerY) {
-    var gamer;
+    var gamer,
+        img,
+        numShip,
+        dx,
+        dy,
+        dh,
+        dw;
 
     // Create the gamer Space Ship element
-    // gamer = new SpaceElement("gamer", this.items.ships.coord[1].width, this.items.ships.coord[1].height);
-    this.initialize("gamer", this.items.ships.coord[1].width, this.items.ships.coord[1].height);
-    // Add the spaceship onto the table
-    this.addElement("gamer", gamerX, gamerY, this.items.ships.coord[1].width, this.items.ships.coord[1].height);
+    // Define the ship element
+    numShip = 1; // Ship element
 
-    // draw the ship on the canvas
+    // Select the object zone
+    dx = this.items.ships.coord[numShip].posX;
+    dy = this.items.ships.coord[numShip].posY;
+    dh = this.items.ships.coord[numShip].height;
+    dw = this.items.ships.coord[numShip].width;
 
-    this.draw(this.items.ships, 1, gamerX, gamerY, this.items.ships.coord[1].width, this.items.ships.coord[1].height);
+    // Select the image
+    img = new Image();
+    img.src = this.items.ships.url;
 
-    // console.log(gamer);
+    // Add the spaceship onto the table    
+    this.addElement("gamer", img, dx, dy, dw, dh, gamerX, gamerY, dw, dh);
 };

@@ -20,9 +20,9 @@ var SpaceElement = function () {
  * @param {number} W - Width of the object
  * @param {number} H - Height of the object
  */
-SpaceElement.prototype.initialize = function (name, w, h) {
+SpaceElement.prototype.initialize = function (name,  w, h) {
     // Common object property 
-    this.name = name; // Name of the element
+    this.name = name; // Name of the element    
     this.width = w; // Width of the object
     this.height = h; // Width of the object    
 };
