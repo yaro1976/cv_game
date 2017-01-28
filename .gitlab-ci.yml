@@ -25,5 +25,5 @@ clean_up_job:
   stage: clean_up
   script:
     - rm -rf node_modules
-   when: on_failure
+  when: on_failure
     
