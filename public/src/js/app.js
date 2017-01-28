@@ -19,7 +19,7 @@ window.addEventListener('load', function () {
     // g.drawEnemy();
 
     // Generate own ship
-    g.drawGamer((width / 2 - 40), (height - 100)); // Set the initial position of the ship
+    // g.drawGamer((width / 2 - 40), (height - 100)); // Set the initial position of the ship
 
     // Main step
     var step = function (timestamp) {
@@ -43,7 +43,7 @@ window.addEventListener('load', function () {
         window.requestAnimationFrame(step);
     };
     startFunct();
-    window.setInterval(function () {
-        g.generateEnemy();
-    }, 500);
+    // window.setInterval(function () {
+    //     g.generateEnemy();
+    // }, 500);
 });

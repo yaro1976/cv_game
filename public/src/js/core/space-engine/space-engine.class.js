@@ -9,10 +9,12 @@ var Image;
  * @param {number} H - Height of the object
  */
 var SpaceElement = function () {
+    this.tabElement = {};
     this.life = 100; // Initial Life
     this.dead = false; // Set death or not status
     this.speed = 1; // Speed in pixels
-    this.haveLazer = false; // If got lazer    
+    this.haveLazer = false; // If got lazer
+
 };
 /*
  * initialize - Create the FlyElement object 

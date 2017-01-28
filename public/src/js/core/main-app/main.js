@@ -12,8 +12,8 @@ var Game = function (width, height) {
     this.height = height || 800; // Set the main height
     Gameboard.call(this, width, height); // Call the Gameboard constructor
 
-    // Items number for user ship 
-    this.userShip = 1;
+    // spaceItems number for user ship 
+    this.userShip = "red";
 
     // Save key press status ( up, down, right, left, space)
     this.keyStatus = {
@@ -24,62 +24,74 @@ var Game = function (width, height) {
         "space": false
     };
 
-    // List of the items
-    this.items = {
+    // List of the spaceItems
+    this.spaceItems = {
         "ships": { // All Ships
             "id": "ships",
             "url": "dist/img/ships.png",
-            "coord": [{ // Gros vaisseau ligne 1
-                "posX": 15,
-                "posY": 0,
-                "width": 64,
-                "height": 53
-            }, { // Vaisseau rouge ligne 2
-                "posX": 26,
-                "posY": 57,
-                "width": 45,
-                "height": 31
-            }, { // Vaisseau orange ligne 3
-                "posX": 24,
-                "posY": 88,
-                "width": 48,
-                "height": 45
-            }, { // Vaisseau vert ligne 4
-                "posX": 16,
-                "posY": 131,
-                "width": 64,
-                "height": 49
-            }, { // Vaisseau rose ligne 5
-                "posX": 24,
-                "posY": 181,
-                "width": 48,
-                "height": 35
-            }, { // Pieuvre petite ligne 6
-                "posX": 31,
-                "posY": 218,
-                "width": 32,
-                "height": 26
-            }, { // Spacionnaute ligne 7
-                "posX": 37,
-                "posY": 248,
-                "width": 27,
-                "height": 30
-            }, { // Pieuvre grande ligne 8
-                "posX": 19,
-                "posY": 284,
-                "width": 59,
-                "height": 52
-            }, { // Grand vaisseau ligne 9
-                "posX": 3,
-                "posY": 347,
-                "width": 93,
-                "height": 75
-            }, { // Grand vaisseau ligne 10
-                "posX": 3,
-                "posY": 428,
-                "width": 93,
-                "height": 74
-            }]
+            "shipList": ["blue", "red", "orange", "green", "pink", "small", "spaceMan", "big", "bigBlueShip", "bigOrangeShip"],
+            "spaceShips": {
+                "blue": { // Gros vaisseau ligne 1
+                    "srcX": 15,
+                    "srcY": 0,
+                    "srcWidth": 64,
+                    "srcHeight": 53
+                },
+                "red": { // Vaisseau rouge ligne 2
+                    "srcX": 26,
+                    "srcY": 57,
+                    "srcWidth": 45,
+                    "srcHeight": 31
+                },
+                "orange": { // Vaisseau orange ligne 3
+                    "srcX": 24,
+                    "srcY": 88,
+                    "srcWidth": 48,
+                    "srcHeight": 45
+                },
+                "green": { // Vaisseau vert ligne 4
+                    "srcX": 16,
+                    "srcY": 131,
+                    "srcWidth": 64,
+                    "srcHeight": 49
+                },
+                "pink": { // Vaisseau rose ligne 5
+                    "srcX": 24,
+                    "srcY": 181,
+                    "srcWidth": 48,
+                    "srcHeight": 35
+                },
+                "small": { // Pieuvre petite ligne 6
+                    "srcX": 31,
+                    "srcY": 218,
+                    "srcWidth": 32,
+                    "srcHeight": 26
+                },
+                "spaceMan": { // Spacionnaute ligne 7
+                    "srcX": 37,
+                    "srcY": 248,
+                    "srcWidth": 27,
+                    "srcHeight": 30
+                },
+                "big": { // Pieuvre grande ligne 8
+                    "srcX": 19,
+                    "srcY": 284,
+                    "srcHidth": 59,
+                    "srcHeight": 52
+                },
+                "bigBlueShip": { // Grand vaisseau ligne 9
+                    "srcX": 3,
+                    "srcY": 347,
+                    "srcWidth": 93,
+                    "srcHeight": 75
+                },
+                "bigOrangeShip": { // Grand vaisseau ligne 10
+                    "srcX": 3,
+                    "srcY": 428,
+                    "srcWidth": 93,
+                    "srcHeight": 74
+                }
+            },
         },
         "planet": { // All planets
             "img": "",
@@ -104,15 +116,20 @@ var Game = function (width, height) {
         "background": { // background images
             "id": "backImg",
             "url": "dist/img/background/1.png",
-            "coord": [{
-                "posX": 0,
-                "posY": 0,
-                "width": 640,
-                "height": 480
-            }]
+            "backList": ["violet"],
+            "backImage": {
+                "violet": {
+                    "srcX": 0,
+                    "srcY": 0,
+                    "srcWidth": 640,
+                    "srcHeight": 480
+                }
+            }
         },
-        "shots": { // Shotting animation
+        "shoots": { // Shotting animation
             "img": "backImg",
+            "id": "",
+            "shootLists": [],
             "coord": [{
                 "posX": 0,
                 "posY": 0,
@@ -155,14 +172,14 @@ Game.prototype.setBackground = function () {
     // Create a new Image object    
     backImg = new Image();
     // Get the width and the height of the object
-    w = this.items.background.coord[0].width;
-    h = this.items.background.coord[0].height;
+    w = this.spaceItems.background.backImage.violet.width;
+    h = this.spaceItems.background.backImage.violet.height;
 
     // Set the backgound image
-    backImg.src = this.items.background.url;
+    backImg.src = this.spaceItems.background.url;
 
-    // Position the image
-    this.addElement("backImg", backImg, 0, 0, w, h, 0, 0, this.width, this.height);
+    // Position the image    
+    this.addElement("backimage", this.spaceItems.background.backImage.violet, backImg, 0, 0, this.width, this.height);
 };
 
 /*
@@ -234,28 +251,52 @@ Game.prototype.init = function (w, h) {
             // The draw the gamers ship
             this.drawGamer(w, h);
 
-            // Draw items
+            // Draw spaceItems
             this.draw();
 
             // Write the score to the screen
             this.showScore();
         }
-    }
+    }    
 };
 
 /*
  * Generate ennemy
  */
 Game.prototype.generateEnemy = function () {
-    var itemNum;
-
-    itemNum = 0;
-    console.log("length", this.items.ships.coord.length);
+    var itemNum,
+        index,
+        regenerate;
 
     do {
-        itemNum = this.random(this.items.ships.coord.length - 1);
-        console.log('while / item=', itemNum);
-    } while (itemNum == this.userShip)
+        regenerate = false;
+        // generate the ennemy number
+        do {
+            itemNum = this.random(this.spaceItems.ships.coord.length - 1);
+            console.log('while / item=', itemNum);
+        } while (itemNum == this.userShip) //If it is not the same ship as the user has
+
+        index = this.checkGetElement(itemNum); // Check if the ship is already present        
+        if (index === -1) {
+            // Ship exists
+            if (!this.tabElement[index].inlife) {
+                // Ship exists but was killed
+                this.tabElement[index].inlife = true;
+                regenerate = false;
+            }
+            if (this.tabElement[index].inlife) {
+                // Ship exists and it is not killed
+                regenerate = true;
+            }
+        } else {
+            // Ship doesn't not exists
+
+        }
+
+    }
+    while (!regenerate)
+
+
     console.log('Outside while / item=', itemNum);
 };
 
@@ -296,8 +337,8 @@ Game.prototype.draw = function () {
 
     for (i = 0; this.tabElement[i]; i += 1) {
         // Select all element present
-        // draw each element
-        this.ctx.drawImage(this.tabElement[i].img, this.tabElement[i].dx, this.tabElement[i].dy, this.tabElement[i].dw, this.tabElement[i].dh, this.tabElement[i].x, this.tabElement[i].y, this.tabElement[i].w, this.tabElement[i].h);
+        // draw each element        
+        this.ctx.drawImage(this.tabElement[i].img, this.tabElement[i].item.srcX, this.tabElement[i].item.srcY, this.tabElement[i].item.srcWidth, this.tabElement[i].item.srcHeight, this.tabElement[i].x, this.tabElement[i].y, this.tabElement[i].w, this.tabElement[i].h);
     }
 
     // Add the score element
@@ -323,32 +364,36 @@ Game.prototype.moveGamer = function (name, moveStatus) {
             if (vm.keyStatus.up && moveStatus) {
                 // Key up pressed
                 if (vm.checkMove("gamer", "up") === true) { // If move is authorized
-                    // Set new position, and draw items                
-                    vm.drawGamer((vm.tabElement[index].x), vm.tabElement[index].y - 1);
+                    // Set new position, and draw spaceItems                
+                    // vm.drawGamer((vm.tabElement[index].x), vm.tabElement[index].y - 1);
+                    vm.moveY("gamer", -1);
                 };
             }
 
             if (vm.keyStatus.down && moveStatus) {
                 // Key up pressed                    
                 if (vm.checkMove("gamer", "down") === true) { // If move is authorized
-                    // Set new position, and draw items                
-                    vm.drawGamer((vm.tabElement[index].x), vm.tabElement[index].y + 1);
+                    // Set new position, and draw spaceItems                
+                    // vm.drawGamer((vm.tabElement[index].x), vm.tabElement[index].y + 1);
+                    vm.moveY("gamer", +1);
                 };
             }
 
             if (vm.keyStatus.left && moveStatus) {
                 // Key left pressed                    
                 if (vm.checkMove("gamer", "left") === true) { // If move is authorized
-                    // Set new position, and draw items                
-                    vm.drawGamer((vm.tabElement[index].x - 1), vm.tabElement[index].y);
+                    // Set new position, and draw spaceItems                
+                    // vm.drawGamer((vm.tabElement[index].x - 1), vm.tabElement[index].y);
+                    vm.moveX("gamer", -1);
                 };
             }
 
             if (vm.keyStatus.right && moveStatus) {
                 // Key right pressed
                 if (vm.checkMove("gamer", "right") === true) { // If move is authorized
-                    // Set new position, and draw items                
-                    vm.drawGamer((vm.tabElement[index].x + 1), vm.tabElement[index].y);
+                    // Set new position, and draw spaceItems                
+                    // vm.drawGamer((vm.tabElement[index].x + 1), vm.tabElement[index].y);
+                    vm.moveX("gamer", +1);
                 };
             }
         }, 500);
@@ -356,7 +401,7 @@ Game.prototype.moveGamer = function (name, moveStatus) {
         if (vm.tabElement[index].direction.up) {
             // Key up pressed
             if (vm.checkMove(name, "up") === true) { // If move is authorized
-                // Set new position, and draw items                
+                // Set new position, and draw spaceItems                
                 vm.drawGamer((vm.tabElement[index].x), vm.tabElement[index].y - 1);
                 vm.tabElement[index].direction.up = false;
             };
@@ -365,7 +410,7 @@ Game.prototype.moveGamer = function (name, moveStatus) {
         if (vm.tabElement[index].direction.down) {
             // Key up pressed                    
             if (vm.checkMove(name, "down") === true) { // If move is authorized
-                // Set new position, and draw items                
+                // Set new position, and draw spaceItems                
                 vm.drawGamer((vm.tabElement[index].x), vm.tabElement[index].y + 1);
                 vm.tabElement[index].direction.down = false;
             };
@@ -374,7 +419,7 @@ Game.prototype.moveGamer = function (name, moveStatus) {
         if (vm.tabElement[index].direction.left) {
             // Key left pressed                    
             if (vm.checkMove(name, "left") === true) { // If move is authorized
-                // Set new position, and draw items                
+                // Set new position, and draw spaceItems                
                 vm.drawGamer((vm.tabElement[index].x - 1), vm.tabElement[index].y);
                 vm.tabElement[index].direction.left = false;
             };
@@ -383,7 +428,7 @@ Game.prototype.moveGamer = function (name, moveStatus) {
         if (vm.tabElement[index].direction.right) {
             // Key right pressed
             if (vm.checkMove(name, "right") === true) { // If move is authorized
-                // Set new position, and draw items                
+                // Set new position, and draw spaceItems                
                 vm.drawGamer((vm.tabElement[index].x + 1), vm.tabElement[index].y);
                 vm.tabElement[index].direction.up = right;
             };
@@ -492,15 +537,26 @@ Game.prototype.drawGamer = function (gamerX, gamerY) {
     // Create the gamer Space Ship element
 
     // Select the object zone
-    dx = this.items.ships.coord[this.userShip].posX;
-    dy = this.items.ships.coord[this.userShip].posY;
-    dh = this.items.ships.coord[this.userShip].height;
-    dw = this.items.ships.coord[this.userShip].width;
+    dx = this.spaceItems.ships.spaceShips[this.userShip].srcX;
+    dy = this.spaceItems.ships.spaceShips[this.userShip].srcY;
+    dh = this.spaceItems.ships.spaceShips[this.userShip].srcHeight;
+    dw = this.spaceItems.ships.spaceShips[this.userShip].srcWidth;
 
+    // if (!this.spaceItems.ships.spaceShips[this.userShip].img) {
+    //     // Select the image
+    //     img = new Image();
+    //     img.src = this.spaceItems.ships.url;    
+    // } else {
+    //     img = this.spaceItems.ships.spaceShips[this.userShip].img;
+    // }
     // Select the image
     img = new Image();
-    img.src = this.items.ships.url;
+    img.src = this.spaceItems.ships.url;
+    // img = document.getElementById("ships");
+
+    console.log("drawGamer",this.spaceItems.ships.spaceShips[this.userShip].img)
 
     // Add the spaceship onto the table    
-    this.addElement("gamer", img, dx, dy, dw, dh, gamerX, gamerY, dw, dh);
+    this.addElement("gamer", this.spaceItems.ships.spaceShips[this.userShip], img, gamerX, gamerY, dw, dh);
+    console.log("drawGamer", this.tabElement);
 };

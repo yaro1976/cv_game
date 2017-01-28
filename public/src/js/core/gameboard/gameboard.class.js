@@ -22,35 +22,31 @@ Gameboard.prototype = Object.create(SpaceElement.prototype);
 
 /*
  * addElement - addElement onto the gameboard
- * @param {String} name - Name of the element
+ * @param {String} name - Item Object
+ * @param {String} item - Item Object
  * @param {Object} img - image url of the initial image
- * @param {Number} dx - Drawing X position
- * @param {Number} dy - Drawing Y position
- * @param {Number} dw - Drawing width position
- * @param {Number} dh - Drawing height position
  * @param {Number} posX - X position of the element
  * @param {Number} posY - Y position of the element
  * @param {Number} width - Width of the element
  * @param {Number} height - Height of the element
  * @return {null}
  */
-Gameboard.prototype.addElement = function (name, img, dx, dy, dw, dh, posX, posY, width, height) {
+
+Gameboard.prototype.addElement = function (name, item, img, posX, posY, width, height) {
     var index;
+
     index = this.checkGetElement(name);
     if (index === -1) { // If does not exists, Add the element
         this.tabElement.push({
             "name": name, // Name of the object
-            "img": img,  // Image object property
-            "dx": dx,   // Drawing destination X position
-            "dy": dy,   // Drawing destination Y position
-            "dw": dw,   // Drawing destination width
-            "dh": dh,   // Drawing destination heigth
-            "x": posX,  // Source X position
-            "y": posY,  // Source Y position
-            "w": width,  // Source width
-            "h": height,  // Source height
+            "item": item, // item Object
+            "img": img, // Image object property
+            "x": posX, // Source X position
+            "y": posY, // Source Y position
+            "w": width, // Source width
+            "h": height, // Source height
             "inlife": true, // is inlife ?
-            "direction": {  // Store the direction of the move
+            "direction": { // Store the direction of the move
                 "up": false,
                 "down": false,
                 "right": false,
@@ -61,17 +57,13 @@ Gameboard.prototype.addElement = function (name, img, dx, dy, dw, dh, posX, posY
     } else { // update the value of the element
         this.tabElement[index] = {
             "name": name, // Name of the object
-            "img": img,  // Image object property
-            "dx": dx,   // Drawing destination X position
-            "dy": dy,   // Drawing destination Y position
-            "dw": dw,   // Drawing destination width
-            "dh": dh,   // Drawing destination heigth
-            "x": posX,  // Source X position
-            "y": posY,  // Source Y position
-            "w": width,  // Source width
-            "h": height,  // Source height
+            "item": item, // item Object
+            "x": posX, // Source X position
+            "y": posY, // Source Y position
+            "w": width, // Source width
+            "h": height, // Source height
             "inlife": true, // is inlife ?
-            "direction": {  // Store the direction of the move
+            "direction": { // Store the direction of the move
                 "up": false,
                 "down": false,
                 "right": false,
@@ -89,6 +81,7 @@ Gameboard.prototype.addElement = function (name, img, dx, dy, dw, dh, posX, posY
  */
 Gameboard.prototype.checkGetElement = function (name) {
     var i;
+
     for (i = 0; this.tabElement[i]; i += 1) {
         if (this.tabElement[i].name === name) {
             // If found => Return the index
@@ -314,24 +307,26 @@ Gameboard.prototype.setY = function (name, posY) {
 /*
  * moveX - Move the element on the X axis
  * @param {String} name - Name of the element to move
+ * @param {String} step - Step of the move
  * @return {Number} pos - New position of the element
  */
-Gameboard.prototype.moveX = function (name) {
+Gameboard.prototype.moveX = function (name, step) {    
     var id = this.checkGetElement(name);
     if (id !== -1) { // If the element is found
-        this.tabElement[id].x -= 1; // Change its X value
+        this.tabElement[id].x += step; // Change its X value
         return this.getX(name);
     }
 };
 /*
  * moveY - Move the element on the Y axis
  * @param {String} name - Name of the element to move
+ * * @param {String} step - Step of the move
  * @return {Number} pos - New position of the element
  */
-Gameboard.prototype.moveY = function (name) {
+Gameboard.prototype.moveY = function (name, step) {
     var id = this.checkGetElement(name);
     if (id !== -1) { // If the element is found
-        this.tabElement[id].y -= 1; // Change its Y value
+        this.tabElement[id].y += step; // Change its Y value
         return this.getY(name);
     }
 };
