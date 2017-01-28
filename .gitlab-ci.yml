@@ -1,8 +1,8 @@
 image: node:latest
 before_script:
   - apt-get -qq update
-  - apt-get -qq install -y python2.7 python2.7-dev build-essential make gcc g++ libicu-dev
-  - npm -g install npm node --silent  
+  - apt-get -qq install -y python2.7 python2.7-dev build-essential make gcc g++ libicu-dev  
+  - npm -g install npm --silent  
   - npm install --silent
 
 stages:
