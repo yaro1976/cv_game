@@ -21,10 +21,9 @@ build_and_deploy_prod:
   script:
     - npm run build
 
-  clean_up_job:
-    stage: clean_up
-    script:
-      - rm -rf node_modules
-
-    when: on_failure
+clean_up_job:
+  stage: clean_up
+  script:
+    - rm -rf node_modules
+   when: on_failure
     
