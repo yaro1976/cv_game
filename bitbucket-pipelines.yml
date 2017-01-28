@@ -10,7 +10,7 @@ pipelines:
     - step:
         script: # Modify the commands below to build your repository.
           - npm install
-          - sudo npm i -g gulp-cli
+          - npm i -g gulp-cli
           - gulp images
           - npm test
           
