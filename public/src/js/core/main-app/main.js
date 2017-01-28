@@ -12,6 +12,9 @@ var Game = function (width, height) {
     this.height = height || 800; // Set the main height
     Gameboard.call(this, width, height); // Call the Gameboard constructor
 
+    // Items number for user ship 
+    this.userShip = 1;
+
     // Save key press status ( up, down, right, left, space)
     this.keyStatus = {
         "up": false,
@@ -241,45 +244,19 @@ Game.prototype.init = function (w, h) {
 };
 
 /*
- * Drw the enemy ship
- * @return {void}
+ * Generate ennemy
  */
-Game.prototype.drawEnemy = function () {
-    var newX,
-        newY,
-        objDirec;
-    // Test
+Game.prototype.generateEnemy = function () {
+    var itemNum;
 
-    // TODO si pas ennemy
+    itemNum = 0;
+    console.log("length", this.items.ships.coord.length);
 
-    // TODO enemy existant
-    objDirec = this.enemyDirection();
-    newX = objDirec.newPosX;
-    newY = objDirec.newPosY;
-    for (var i = 0; i < this.items.ships.coord.length; i += 1) {
-        this.draw(this.items.ships, i, 15, (15 + i * 60), 50, 50);
-    }
-    // this.draw(this.items.ships, 9, 15, 15, 50, 50);
-};
-
-/*
- * genObject - generate Ennemy
- *
- */
-Game.prototype.genObject = function () {
-    var x,
-        y,
-        item;
-
-    // Select the enemy ship
-    item = this.items.ships.coord[this.random(this.items.ships.coord.length)];
-
-    // Set X and Y position
-    x = this.random(this.width);
-    y = this.random(this.height / 3);
-
-    // Add element item
-    this.addElement(item, x, y, item.width, item.height);
+    do {
+        itemNum = this.random(this.items.ships.coord.length - 1);
+        console.log('while / item=', itemNum);
+    } while (itemNum == this.userShip)
+    console.log('Outside while / item=', itemNum);
 };
 
 /*
@@ -329,50 +306,89 @@ Game.prototype.draw = function () {
 
 /*
  * Move the gamer ship
+ * @param {String} name - name of the element to move
  * @param {String} movestatus - Check if the element moving
  */
-Game.prototype.moveGamer = function (moveStatus) {
+Game.prototype.moveGamer = function (name, moveStatus) {
     var index,
         intervalID, // Save the Interval ID
         vm;
 
     // Retreive the index element
-    index = this.checkGetElement("gamer");
+    index = this.checkGetElement(name);
     vm = this;
 
-    intervalID = window.setInterval(function () {
-        if (vm.keyStatus.up && moveStatus) {
+    if (name === "gamer") {
+        intervalID = window.setInterval(function () {
+            if (vm.keyStatus.up && moveStatus) {
+                // Key up pressed
+                if (vm.checkMove("gamer", "up") === true) { // If move is authorized
+                    // Set new position, and draw items                
+                    vm.drawGamer((vm.tabElement[index].x), vm.tabElement[index].y - 1);
+                };
+            }
+
+            if (vm.keyStatus.down && moveStatus) {
+                // Key up pressed                    
+                if (vm.checkMove("gamer", "down") === true) { // If move is authorized
+                    // Set new position, and draw items                
+                    vm.drawGamer((vm.tabElement[index].x), vm.tabElement[index].y + 1);
+                };
+            }
+
+            if (vm.keyStatus.left && moveStatus) {
+                // Key left pressed                    
+                if (vm.checkMove("gamer", "left") === true) { // If move is authorized
+                    // Set new position, and draw items                
+                    vm.drawGamer((vm.tabElement[index].x - 1), vm.tabElement[index].y);
+                };
+            }
+
+            if (vm.keyStatus.right && moveStatus) {
+                // Key right pressed
+                if (vm.checkMove("gamer", "right") === true) { // If move is authorized
+                    // Set new position, and draw items                
+                    vm.drawGamer((vm.tabElement[index].x + 1), vm.tabElement[index].y);
+                };
+            }
+        }, 500);
+    } else {
+        if (vm.tabElement[index].direction.up) {
             // Key up pressed
-            if (vm.checkMove("gamer", "up") === true) { // If move is authorized
+            if (vm.checkMove(name, "up") === true) { // If move is authorized
                 // Set new position, and draw items                
                 vm.drawGamer((vm.tabElement[index].x), vm.tabElement[index].y - 1);
+                vm.tabElement[index].direction.up = false;
             };
         }
 
-        if (vm.keyStatus.down && moveStatus) {
+        if (vm.tabElement[index].direction.down) {
             // Key up pressed                    
-            if (vm.checkMove("gamer", "down") === true) { // If move is authorized
+            if (vm.checkMove(name, "down") === true) { // If move is authorized
                 // Set new position, and draw items                
                 vm.drawGamer((vm.tabElement[index].x), vm.tabElement[index].y + 1);
+                vm.tabElement[index].direction.down = false;
             };
         }
 
-        if (vm.keyStatus.left && moveStatus) {
+        if (vm.tabElement[index].direction.left) {
             // Key left pressed                    
-            if (vm.checkMove("gamer", "left") === true) { // If move is authorized
+            if (vm.checkMove(name, "left") === true) { // If move is authorized
                 // Set new position, and draw items                
                 vm.drawGamer((vm.tabElement[index].x - 1), vm.tabElement[index].y);
+                vm.tabElement[index].direction.left = false;
             };
         }
 
-        if (vm.keyStatus.right && moveStatus) {
+        if (vm.tabElement[index].direction.right) {
             // Key right pressed
-            if (vm.checkMove("gamer", "right") === true) { // If move is authorized
+            if (vm.checkMove(name, "right") === true) { // If move is authorized
                 // Set new position, and draw items                
                 vm.drawGamer((vm.tabElement[index].x + 1), vm.tabElement[index].y);
+                vm.tabElement[index].direction.up = right;
             };
         }
-    }, 1);
+    }
 };
 /*
  * checkDirection - Read keyboard and move the user ship
@@ -393,7 +409,7 @@ Game.prototype.checkDirection = function () {
                 if (!moveOn) {
                     moveOn = true;
                     vm.keyStatus.left = true;
-                    intervalID = vm.moveGamer(moveOn);
+                    intervalID = vm.moveGamer("gamer", moveOn);
                 }
                 break;
             case 38:
@@ -401,7 +417,7 @@ Game.prototype.checkDirection = function () {
                 if (!moveOn) {
                     moveOn = true;
                     vm.keyStatus.up = true;
-                    intervalID = vm.moveGamer(moveOn);
+                    intervalID = vm.moveGamer("gamer", moveOn);
                 }
                 break;
             case 39:
@@ -409,7 +425,7 @@ Game.prototype.checkDirection = function () {
                 if (!moveOn) {
                     moveOn = true;
                     vm.keyStatus.right = true;
-                    intervalID = vm.moveGamer(moveOn);
+                    intervalID = vm.moveGamer("gamer", moveOn);
                 }
                 break;
             case 40:
@@ -417,7 +433,7 @@ Game.prototype.checkDirection = function () {
                 if (!moveOn) {
                     moveOn = true;
                     vm.keyStatus.down = true;
-                    intervalID = vm.moveGamer(moveOn);
+                    intervalID = vm.moveGamer("gamer", moveOn);
                 }
                 break;
             default:
@@ -468,21 +484,18 @@ Game.prototype.enemyDirection = function () {
 Game.prototype.drawGamer = function (gamerX, gamerY) {
     var gamer,
         img,
-        numShip,
         dx,
         dy,
         dh,
         dw;
 
     // Create the gamer Space Ship element
-    // Define the ship element
-    numShip = 1; // Ship element
 
     // Select the object zone
-    dx = this.items.ships.coord[numShip].posX;
-    dy = this.items.ships.coord[numShip].posY;
-    dh = this.items.ships.coord[numShip].height;
-    dw = this.items.ships.coord[numShip].width;
+    dx = this.items.ships.coord[this.userShip].posX;
+    dy = this.items.ships.coord[this.userShip].posY;
+    dh = this.items.ships.coord[this.userShip].height;
+    dw = this.items.ships.coord[this.userShip].width;
 
     // Select the image
     img = new Image();

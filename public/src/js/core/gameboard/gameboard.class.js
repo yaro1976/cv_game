@@ -39,31 +39,45 @@ Gameboard.prototype.addElement = function (name, img, dx, dy, dw, dh, posX, posY
     index = this.checkGetElement(name);
     if (index === -1) { // If does not exists, Add the element
         this.tabElement.push({
-            "name": name,
-            "img": img,
-            "dx": dx,
-            "dy": dy,
-            "dw": dw,
-            "dh": dh,
-            "x": posX,
-            "y": posY,
-            "w": width,
-            "h": height,
-            "inlife": 1
+            "name": name, // Name of the object
+            "img": img,  // Image object property
+            "dx": dx,   // Drawing destination X position
+            "dy": dy,   // Drawing destination Y position
+            "dw": dw,   // Drawing destination width
+            "dh": dh,   // Drawing destination heigth
+            "x": posX,  // Source X position
+            "y": posY,  // Source Y position
+            "w": width,  // Source width
+            "h": height,  // Source height
+            "inlife": true, // is inlife ?
+            "direction": {  // Store the direction of the move
+                "up": false,
+                "down": false,
+                "right": false,
+                "left": false,
+                "space": false
+            }
         });
     } else { // update the value of the element
         this.tabElement[index] = {
-            "name": name,
-            "img": img,
-            "dx": dx,
-            "dy": dy,
-            "dw": dw,
-            "dh": dh,
-            "x": posX,
-            "y": posY,
-            "w": width,
-            "h": height,
-            "inlife": 1
+            "name": name, // Name of the object
+            "img": img,  // Image object property
+            "dx": dx,   // Drawing destination X position
+            "dy": dy,   // Drawing destination Y position
+            "dw": dw,   // Drawing destination width
+            "dh": dh,   // Drawing destination heigth
+            "x": posX,  // Source X position
+            "y": posY,  // Source Y position
+            "w": width,  // Source width
+            "h": height,  // Source height
+            "inlife": true, // is inlife ?
+            "direction": {  // Store the direction of the move
+                "up": false,
+                "down": false,
+                "right": false,
+                "left": false,
+                "space": false
+            }
         };
     }
 };

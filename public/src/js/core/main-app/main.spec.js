@@ -11,7 +11,7 @@ describe("#main function", function () {
         });
     });
     describe('Initialization part', function () {
-        it('should create a canvas element', function () {
+        xit('should create a canvas element', function () {
             var g = new Game();
             g.createGameZone();
             expect(document.getElementById("gameZone")).to.exist;

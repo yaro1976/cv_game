@@ -43,4 +43,7 @@ window.addEventListener('load', function () {
         window.requestAnimationFrame(step);
     };
     startFunct();
+    window.setInterval(function () {
+        g.generateEnemy();
+    }, 500);
 });

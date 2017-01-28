@@ -2,3 +2,6 @@ node_modules
 public/dist/*
 superpower
 public/dist/
+.vscode/
+PhantomJS_2.1.1_(Windows_8_0.0.0)/
+public/dist/js/app.min.js

@@ -18,11 +18,21 @@ module.exports = function (config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'test-main.js', {
-        pattern: 'public/src/js/**/*.js',
+      'test-main.js', 
+      // {
+      //   pattern: 'public/src/js/**/*.js',
+      //   included: true
+      // }, 
+       { pattern: 'public/src/js/core/space-engine/space-engine.class.js',
         included: true
-      }, {
-        pattern: 'tests/**/*.spec.js',
+      }, 
+    { pattern: "public/src/js/core/gameboard/gameboard.class.js",
+        included: true
+      }, 
+    { pattern: "public/src/js/core/main-app/main.js",
+        included: true
+      },{
+        pattern: 'public/src/js/**/*.spec.js',
         included: false
       }
     ],
