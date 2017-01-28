@@ -69,7 +69,8 @@ Gameboard.prototype.addElement = function (name, item, img, posX, posY, width, h
                 "right": false,
                 "left": false,
                 "space": false
-            }
+            },
+            "speed": 0
         };
     }
 };
@@ -140,7 +141,7 @@ Gameboard.prototype.testVerticalZone = function (y1, y2, h1, h2) {
 /*
  * checkMove - Check the move of the element
  * @param {String} name - Name of the tested element
- * @param {String} Direction - Direction of the move
+ * @param {String} Direction - Direction of the move 
  * @return {Boolean} - true : position clear, false : an element is present
  */
 Gameboard.prototype.checkMove = function (name, direction) {
@@ -151,88 +152,114 @@ Gameboard.prototype.checkMove = function (name, direction) {
     var height = this.tabElement[id].h; // Get its height    
     var i; // Index of the element
 
-    // If we go to rigth
-    if (direction === "right") {
-        // Check if the element touch the right of the canvas
-        if ((posX + width + 1) > this.maxBoard) {
-            return false;
-        }
+    if (name !== "gamer") {
 
-        // Test element with its environment
-        for (i = 1; this.tabElement[i]; i += 1) {
-            // If it is the calling element, do nothing            
+        // If we go to rigth
+        if (direction === "creation") {
+            // Check if the element touch the right of the canvas
+            if ((posX + width + 1) > this.maxBoard) {
+                return false;
+            }
 
-            if (i !== id && !this.tabElement[i].dead) { // It is the initial testing object called
-                // We test the X and Y position
-                if (this.testVerticalZone(posY, this.tabElement[i].y, height, this.tabElement[i].h) && this.testHorizontalZone(posX + 1, this.tabElement[i].x, width, this.tabElement[i].w)) {
-                    return false; // We touch
+            // Test element with its environment
+            for (i = 1; this.tabElement[i]; i += 1) {
+                // If it is the calling element, do nothing            
+
+                if (i !== id && !this.tabElement[i].dead) { // It is the initial testing object called
+                    // We test the X and Y position
+                    if (this.testVerticalZone(posY, this.tabElement[i].y, height, this.tabElement[i].h) && this.testHorizontalZone(posX, this.tabElement[i].x, width, this.tabElement[i].w)) {
+                        return false; // We touch
+                    }
                 }
             }
+            return true; // Nothing around
         }
-        return true; // Nothing around
-    }
+        return true;
+    } else {
+        // If we go to rigth
+        if (direction === "right") {
+            // Check if the element touch the right of the canvas
+            if ((posX + width + 1) > this.maxBoard) {
+                return false;
+            }
 
-    // If we go to left
-    if (direction === "left") {
-        // Check if the element touch the left of the canvas
-        if ((posX - 1) < this.minBoard) {
-            return false;
-        }
+            // Test element with its environment
+            for (i = 1; this.tabElement[i]; i += 1) {
+                // If it is the calling element, do nothing            
 
-        // Test element with its environment
-        for (i = 1; this.tabElement[i]; i += 1) {
-            // If it is the calling element, do nothing
-            if (i !== id && !this.tabElement[i].dead) { // It is the initial testing object called
-                // We test the X and Y position
-                if (this.testVerticalZone(posY, this.tabElement[i].y, height, this.tabElement[i].h) && this.testHorizontalZone(posX - 1, this.tabElement[i].x, width, this.tabElement[i].w)) {
-                    return false; // We touch
+                if (i !== id && !this.tabElement[i].dead) { // It is the initial testing object called
+                    // We test the X and Y position
+                    if (this.testVerticalZone(posY, this.tabElement[i].y, height, this.tabElement[i].h) && this.testHorizontalZone(posX + 1, this.tabElement[i].x, width, this.tabElement[i].w)) {
+                        return false; // We touch
+                    }
                 }
             }
-        }
-        return true; // Nothing around
-    }
-
-    // if we go to up direction
-    if (direction === "up") {
-        // Check if the element touch the top of the canvas
-        if ((posY - 1) < 0) {
-            return false;
+            return true; // Nothing around
         }
 
-        // Test element with its environment
-        for (i = 1; this.tabElement[i]; i += 1) {
-            // If it is the calling element, do nothing
+        // If we go to left 
+        if (direction === "left") {
+            // Check if the element touch the left of the canvas
+            if ((posX - 1) < this.minBoard) {
+                return false;
+            }
 
-            if (i !== id && !this.tabElement[i].dead) { // It is the initial testing object called
-                // We test the X and Y position
-                if (this.testVerticalZone(posY - 1, this.tabElement[i].y, height, this.tabElement[i].h) && this.testHorizontalZone(posX, this.tabElement[i].x, width, this.tabElement[i].w)) {
-                    return false; // We touch
+            // Test element with its environment
+            for (i = 1; this.tabElement[i]; i += 1) {
+                // If it is the calling element, do nothing
+                if (i !== id && !this.tabElement[i].dead) { // It is the initial testing object called
+                    // We test the X and Y position
+                    if (this.testVerticalZone(posY, this.tabElement[i].y, height, this.tabElement[i].h) && this.testHorizontalZone(posX - 1, this.tabElement[i].x, width, this.tabElement[i].w)) {
+                        return false; // We touch
+                    }
                 }
             }
-        }
-        return true; // Nothing around
-    }
-
-    // if we go to down direction
-    if (direction === "down") {
-        // Check if the element touch the bottom of the canvas
-        if ((posY + height + 1) >= this.gameboardHeight) {
-            return false;
+            return true; // Nothing around
         }
 
-        // Test element with its environment
-        for (i = 1; this.tabElement[i]; i += 1) {
-            // If it is the calling element, do nothing
+        // if we go to up direction
+        if (direction === "up") {
+            // Check if the element touch the top of the canvas
+            if ((posY - 1) < 0) {
+                return false;
+            }
 
-            if (i !== id && !this.tabElement[i].dead) { // It is the initial testing object called
-                // We test the X and Y position
-                if (this.testVerticalZone(posY + 1, this.tabElement[i].y, height, this.tabElement[i].h) && this.testHorizontalZone(posX, this.tabElement[i].x, width, this.tabElement[i].w)) {
-                    return false; // We touch
+            // Test element with its environment
+            for (i = 1; this.tabElement[i]; i += 1) {
+                // If it is the calling element, do nothing
+
+                if (i !== id && !this.tabElement[i].dead) { // It is the initial testing object called
+                    // We test the X and Y position
+                    if (this.testVerticalZone(posY - 1, this.tabElement[i].y, height, this.tabElement[i].h) && this.testHorizontalZone(posX, this.tabElement[i].x, width, this.tabElement[i].w)) {
+                        return false; // We touch
+                    }
                 }
             }
+            return true; // Nothing around
         }
-        return true; // Nothing around
+
+        // if we go to down direction
+        if (direction === "down") {
+            // Check if the element touch the bottom of the canvas
+            if ((posY + height + 1) >= this.gameboardHeight) {
+                return false;
+            }
+
+            // Test element with its environment
+            for (i = 1; this.tabElement[i]; i += 1) {
+                // If it is the calling element, do nothing
+
+                if (i !== id && !this.tabElement[i].dead) { // It is the initial testing object called
+                    // We test the X and Y position
+                    if (this.testVerticalZone(posY + 1, this.tabElement[i].y, height, this.tabElement[i].h) && this.testHorizontalZone(posX, this.tabElement[i].x, width, this.tabElement[i].w)) {
+                        return false; // We touch
+                    }
+                }
+            }
+            return true; // Nothing around
+        }
     }
+
 };
 
 /*
@@ -310,7 +337,7 @@ Gameboard.prototype.setY = function (name, posY) {
  * @param {String} step - Step of the move
  * @return {Number} pos - New position of the element
  */
-Gameboard.prototype.moveX = function (name, step) {    
+Gameboard.prototype.moveX = function (name, step) {
     var id = this.checkGetElement(name);
     if (id !== -1) { // If the element is found
         this.tabElement[id].x += step; // Change its X value

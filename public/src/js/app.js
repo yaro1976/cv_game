@@ -9,7 +9,7 @@ var start = null;
 window.addEventListener('load', function () {
     var width = 600,
         height = 800,
-        g;
+        g, start;
 
     // Initialize Game    
     g = new Game(width, height);
@@ -21,20 +21,22 @@ window.addEventListener('load', function () {
     // Generate own ship
     // g.drawGamer((width / 2 - 40), (height - 100)); // Set the initial position of the ship
 
+    start = null;
     // Main step
     var step = function (timestamp) {
         if (!start) {
             start = timestamp;
         }
-        // var progress = timestamp - start;
+        var progress = timestamp - start;
 
         // if (progress < 2) {
-        // window.requestAnimationFrame(step);
+        //     window.requestAnimationFrame(step);
         // }
         // else {
         // start = null;
-        // g.enemyDirection();
+        g.enemyDirection();
         g.checkDirection();
+        g.generateEnemy();
         g.draw();
         window.requestAnimationFrame(step);
         // }
@@ -44,6 +46,8 @@ window.addEventListener('load', function () {
     };
     startFunct();
     // window.setInterval(function () {
+    //     g.checkDirection();
     //     g.generateEnemy();
-    // }, 500);
+    //     g.draw();
+    // }, 20);
 });
