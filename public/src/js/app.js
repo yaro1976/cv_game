@@ -9,7 +9,8 @@ var start = null;
 window.addEventListener('load', function () {
     var width = 600,
         height = 800,
-        g, start;
+        g,
+        start;
 
     // Initialize Game    
     g = new Game(width, height);
@@ -27,7 +28,7 @@ window.addEventListener('load', function () {
         if (!start) {
             start = timestamp;
         }
-        var progress = timestamp - start;
+        // var progress = timestamp - start;
 
         // if (progress < 2) {
         //     window.requestAnimationFrame(step);
@@ -45,9 +46,4 @@ window.addEventListener('load', function () {
         window.requestAnimationFrame(step);
     };
     startFunct();
-    // window.setInterval(function () {
-    //     g.checkDirection();
-    //     g.generateEnemy();
-    //     g.draw();
-    // }, 20);
 });

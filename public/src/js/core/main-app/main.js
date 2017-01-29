@@ -13,7 +13,11 @@ var Game = function (width, height) {
     Gameboard.call(this, width, height); // Call the Gameboard constructor
 
     // spaceItems number for user ship 
-    this.userShip = "red";
+    this.userShip = "orange";
+
+    // Time beetwen new spawn
+    this.minSpawnTime = 1500;
+    this.lastSpawnTime = false;
 
     // Save key press status ( up, down, right, left, space)
     this.keyStatus = {
@@ -29,66 +33,67 @@ var Game = function (width, height) {
         "ships": { // All Ships
             "id": "ships",
             "url": "dist/img/ships.png",
+            // "url": "dist/img/space_items.png",
             "shipList": ["blue", "red", "orange", "green", "pink", "small", "spaceMan", "big", "bigBlueShip", "bigOrangeShip"],
             "spaceShips": {
                 "blue": { // Gros vaisseau ligne 1
-                    "srcX": 15,
-                    "srcY": 0,
-                    "srcWidth": 64,
-                    "srcHeight": 53
+                    "srcX": 17,
+                    "srcY": 2,
+                    "srcWidth": 63,
+                    "srcHeight": 51
                 },
                 "red": { // Vaisseau rouge ligne 2
-                    "srcX": 26,
-                    "srcY": 57,
-                    "srcWidth": 45,
-                    "srcHeight": 31
+                    "srcX": 29,
+                    "srcY": 53,
+                    "srcWidth": 38,
+                    "srcHeight": 34
                 },
                 "orange": { // Vaisseau orange ligne 3
-                    "srcX": 24,
+                    "srcX": 25,
                     "srcY": 88,
-                    "srcWidth": 48,
+                    "srcWidth": 46,
                     "srcHeight": 45
                 },
                 "green": { // Vaisseau vert ligne 4
                     "srcX": 16,
-                    "srcY": 131,
+                    "srcY": 133,
                     "srcWidth": 64,
-                    "srcHeight": 49
+                    "srcHeight": 47
                 },
                 "pink": { // Vaisseau rose ligne 5
-                    "srcX": 24,
+                    "srcX": 27,
                     "srcY": 181,
-                    "srcWidth": 48,
-                    "srcHeight": 35
+                    "srcWidth": 44,
+                    "srcHeight": 36
                 },
                 "small": { // Pieuvre petite ligne 6
-                    "srcX": 31,
+                    "srcX": 35,
                     "srcY": 218,
-                    "srcWidth": 32,
-                    "srcHeight": 26
+                    "srcWidth": 27,
+                    "srcHeight": 25
                 },
                 "spaceMan": { // Spacionnaute ligne 7
-                    "srcX": 37,
-                    "srcY": 248,
-                    "srcWidth": 27,
-                    "srcHeight": 30
+                    "srcX": 39,
+                    "srcY": 249,
+                    "srcWidth": 22,
+                    "srcHeight": 29
                 },
                 "big": { // Pieuvre grande ligne 8
-                    "srcX": 19,
+                    "srcX": 21,
                     "srcY": 284,
-                    "srcHidth": 59,
-                    "srcHeight": 52
+                    "srcHidth": 56,
+                    "srcHeight": 51
                 },
                 "bigBlueShip": { // Grand vaisseau ligne 9
-                    "srcX": 3,
-                    "srcY": 347,
-                    "srcWidth": 93,
-                    "srcHeight": 75
+                    "srcX": 0,
+                    "srcY": 338,
+                    "srcWidth": 98,
+                    "srcHeight": 87
                 },
                 "bigOrangeShip": { // Grand vaisseau ligne 10
-                    "srcX": 3,
+                    "srcX": 4,
                     "srcY": 428,
-                    "srcWidth": 93,
+                    "srcWidth": 90,
                     "srcHeight": 74
                 }
             },
@@ -270,67 +275,106 @@ Game.prototype.generateEnemy = function () {
         direcList, direc;
 
     // List of the possible actions
-    // direcList = ["up", "down", "right", "left", "space"];
-    direcList = ["down", "right", "left", "space"];
+    // direcList = ["up", "down", "right", "left", "shoot"];
+    direcList = ["up", "up-right", "right", "down-right", "down", "down-left", "left", "up-left", "shoot"];
+    // direcList = ["down", "right", "left", "shoot"];
+    // direcList = ["down", "shoot"];
 
     // generate the ennemy number
 
     itemNum = this.random(this.spaceItems.ships.shipList.length - 1);
 
+
     index = this.checkGetElement(this.spaceItems.ships.shipList[itemNum]); // Check if the ship is already present        
 
-    if (index !== -1) {
+    if (index !== -1 && itemNum !== this.spaceItems.ships.shipList.indexOf(this.userShip)) {
         // Ship exists        
         if (!this.tabElement[index].inlife) {
             // Ship exists but was killed
             this.tabElement[index].inlife = true;
-            //Generate a new direction for the move
-            direc = direcList[this.random(direcList.length)];
-            // add the direction to the Element array
-            this.tabElement[index].direction[direc] = true;
-
-            // Move the element
-            this.moveGamer(this.spaceItems.ships.shipList[itemNum], direc);
-
-            // If the ship go over the max size of the canvas
-            // We reset its y position, to place it 
-            // To the upper side
-            if (this.tabElement[index].y > this.height) {
-                this.tabElement[index].y = -1;
-            }
         }
-        if (this.tabElement[index].inlife) {
-            // Ship exists and it is not killed 
-            //Generate a new direction for the move
-            direc = direcList[this.random(direcList.length)];
-            // add the direction to the Element array
-            this.tabElement[index].direction[direc] = true;
+        //Generate a new direction for the move
+        direc = direcList[this.random(direcList.length)];
 
-            // Move the element
-            this.moveGamer(this.spaceItems.ships.shipList[itemNum], direc);
-
-            // If the ship go over the max size of the canvas
-            // We reset its y position, to place it 
-            // To the upper side
-            if (this.tabElement[index].y > this.height) {
-                this.tabElement[index].y = -1;
-            }
+        // add the direction to the Element array
+        switch (direc) {
+            // case "up":
+            //     this.tabElement[index].direction[direc] = true;
+            //     break;
+            // case "up-right":
+            //     this.tabElement[index].direction.right = true;
+            //     this.tabElement[index].direction.up = true;
+            //     break;
+            case "right":
+                this.tabElement[index].direction.right = true;
+                break;
+            case "down-right":
+                this.tabElement[index].direction.down = true;
+                this.tabElement[index].direction.right = true;
+                break;
+            case "down":
+                this.tabElement[index].direction.down = true;
+                break;
+            case "down-left":
+                this.tabElement[index].direction.down = true;
+                this.tabElement[index].direction.left = true;
+                break;
+            case "left":
+                this.tabElement[index].direction.left = true;
+                break;
+            // case "up-left":
+            //     this.tabElement[index].direction.left = true;
+            //     this.tabElement[index].direction.up = true;
+            //     break;
+            case "shoot":
+                this.tabElement[index].direction.shoot = true;
+                break;
+            default:
+                this.tabElement[index].direction.down = true;
         }
+        
+        // Move the element
+        this.movePlayer(this.spaceItems.ships.shipList[itemNum], direc);
+
+        // If the ship go over the max size of the canvas
+        // We reset its y position, to place it 
+        // To the upper side
+        if (this.tabElement[index].y > this.height) {
+            this.tabElement[index].y = -1;
+            x = this.random(this.width);
+            // if ((x + this.spaceItems.ships.spaceShips[itemNum].srcWidth) > this.width) {
+                
+            //     x = this.width - this.spaceItems.ships.spaceShips[itemNum].srcWidth;
+            // }
+            this.tabElement[index].x = x;
+        }
+
     } else {
-        // Ship doesn't not exists
-        // Define all acarateristics of the ship
-        // It size, image, etc.
-        name = this.spaceItems.ships.shipList[itemNum];
-        img = new Image();
-        img.src = this.spaceItems.ships.url;
-        objName = this.spaceItems.ships.spaceShips[name];
-        x = this.random(this.width);
-        y = this.random(this.height / 5);
-        h = this.spaceItems.ships.spaceShips[name].srcHeight;
-        w = this.spaceItems.ships.spaceShips[name].srcWidth;
+        if (itemNum !== this.spaceItems.ships.shipList.indexOf(this.userShip)) {
+            if ((!this.lastSpawnTime) || ((Date.now() - this.lastSpawnTime) > this.minSpawnTime)) {
+                this.lastSpawnTime = Date.now();
+                // Ship doesn't not exists
+                // Define all acarateristics of the ship
+                // It size, image, etc.
+                name = this.spaceItems.ships.shipList[itemNum];
+                img = new Image();
+                img.src = this.spaceItems.ships.url;
+                objName = this.spaceItems.ships.spaceShips[name];
+                x = this.random(this.width);
+                if ((x + this.spaceItems.ships.spaceShips[name].srcWidth) > this.width) {
+                    x = this.width - this.spaceItems.ships.spaceShips[name].srcWidth;
+                }
+                // y = this.random(this.height / 5);
+                y = -.1 * (this.spaceItems.ships.spaceShips[name].srcHeight);
+                h = this.spaceItems.ships.spaceShips[name].srcHeight;
+                w = this.spaceItems.ships.spaceShips[name].srcWidth;
 
-        // add it to the active Element array
-        this.addElement(name, objName, img, x, y, w, h);
+                // add it to the active Element array
+                this.addElement(name, objName, img, x, y, w, h);
+            }
+        }
+
+
     }
 };
 
@@ -380,11 +424,11 @@ Game.prototype.draw = function () {
 };
 
 /*
- * Move the gamer ship
+ * Move the player ship
  * @param {String} name - name of the element to move
  * @param {String} movestatus - Check if the element moving
  */
-Game.prototype.moveGamer = function (name, moveStatus) {
+Game.prototype.movePlayer = function (name, moveStatus) {
     var index,
         intervalID, // Save the Interval ID
         vm;
@@ -393,40 +437,40 @@ Game.prototype.moveGamer = function (name, moveStatus) {
     index = this.checkGetElement(name);
     vm = this;
 
-    if (name === "gamer") {
+    if (name === "player") {
         intervalID = window.setInterval(function () {
             if (vm.keyStatus.up && moveStatus) {
                 // Key up pressed
-                if (vm.checkMove("gamer", "up") === true) { // If move is authorized
+                if (vm.checkMove("player", "up") === true) { // If move is authorized
                     // Set new position, and draw spaceItems  
-                    if (vm.getY("gamer") >= (vm.height * 3 / 4)) {
+                    if (vm.getY("player") >= (vm.height * 3 / 4)) {
                         // if we do not go over 3/4 of the canvas, we can go up
-                        vm.moveY("gamer", -1);
+                        vm.moveY("player", -1);
                     }
                 };
             }
 
             if (vm.keyStatus.down && moveStatus) {
                 // Key up pressed                    
-                if (vm.checkMove("gamer", "down") === true) { // If move is authorized
+                if (vm.checkMove("player", "down") === true) { // If move is authorized
                     // Set new position, and draw spaceItems 
-                    vm.moveY("gamer", +1);
+                    vm.moveY("player", +1);
                 };
             }
 
             if (vm.keyStatus.left && moveStatus) {
                 // Key left pressed                    
-                if (vm.checkMove("gamer", "left") === true) { // If move is authorized
+                if (vm.checkMove("player", "left") === true) { // If move is authorized
                     // Set new position, and draw spaceItems     
-                    vm.moveX("gamer", -1);
+                    vm.moveX("player", -1);
                 };
             }
 
             if (vm.keyStatus.right && moveStatus) {
                 // Key right pressed
-                if (vm.checkMove("gamer", "right") === true) { // If move is authorized
+                if (vm.checkMove("player", "right") === true) { // If move is authorized
                     // Set new position, and draw spaceItems
-                    vm.moveX("gamer", +1);
+                    vm.moveX("player", +1);
                 };
             }
         }, 50);
@@ -436,7 +480,7 @@ Game.prototype.moveGamer = function (name, moveStatus) {
                 // Key up pressed
                 if (vm.checkMove(name, "up") === true) { // If move is authorized
                     // Set new position, and draw spaceItems                
-                    vm.moveY(name, -8);
+                    vm.moveY(name, -5);
                     vm.tabElement[index].direction.up = false;
                 };
             }
@@ -445,7 +489,7 @@ Game.prototype.moveGamer = function (name, moveStatus) {
                 // Key up pressed                    
                 if (vm.checkMove(name, "down") === true) { // If move is authorized
                     // Set new position, and draw spaceItems                
-                    vm.moveY(name, 8);
+                    vm.moveY(name, 5);
                     vm.tabElement[index].direction.down = false;
                 };
             }
@@ -454,7 +498,7 @@ Game.prototype.moveGamer = function (name, moveStatus) {
                 // Key left pressed                    
                 if (vm.checkMove(name, "left") === true) { // If move is authorized
                     // Set new position, and draw spaceItems                
-                    vm.moveY(name, -8);
+                    vm.moveX(name, -5);
                     vm.tabElement[index].direction.left = false;
                 };
             }
@@ -463,11 +507,11 @@ Game.prototype.moveGamer = function (name, moveStatus) {
                 // Key right pressed
                 if (vm.checkMove(name, "right") === true) { // If move is authorized
                     // Set new position, and draw spaceItems                
-                    vm.moveY(name, 8);
+                    vm.moveX(name, 5);
                     vm.tabElement[index].direction.right = false;
                 };
             }
-        }, 500);
+        }, 2);
     }
 };
 /*
@@ -489,7 +533,7 @@ Game.prototype.checkDirection = function () {
                 if (!moveOn) {
                     moveOn = true;
                     vm.keyStatus.left = true;
-                    intervalID = vm.moveGamer("gamer", moveOn);
+                    intervalID = vm.movePlayer("player", moveOn);
                 }
                 break;
             case 38:
@@ -497,7 +541,7 @@ Game.prototype.checkDirection = function () {
                 if (!moveOn) {
                     moveOn = true;
                     vm.keyStatus.up = true;
-                    intervalID = vm.moveGamer("gamer", moveOn);
+                    intervalID = vm.movePlayer("player", moveOn);
                 }
                 break;
             case 39:
@@ -505,7 +549,7 @@ Game.prototype.checkDirection = function () {
                 if (!moveOn) {
                     moveOn = true;
                     vm.keyStatus.right = true;
-                    intervalID = vm.moveGamer("gamer", moveOn);
+                    intervalID = vm.movePlayer("player", moveOn);
                 }
                 break;
             case 40:
@@ -513,7 +557,7 @@ Game.prototype.checkDirection = function () {
                 if (!moveOn) {
                     moveOn = true;
                     vm.keyStatus.down = true;
-                    intervalID = vm.moveGamer("gamer", moveOn);
+                    intervalID = vm.movePlayer("player", moveOn);
                 }
                 break;
             default:
@@ -582,6 +626,6 @@ Game.prototype.drawGamer = function (gamerX, gamerY) {
     img.src = this.spaceItems.ships.url;
 
     // Add the spaceship onto the table    
-    this.addElement("gamer", this.spaceItems.ships.spaceShips[this.userShip], img, gamerX, gamerY, dw, dh);
+    this.addElement("player", this.spaceItems.ships.spaceShips[this.userShip], img, gamerX, gamerY, dw, dh);
 
 };

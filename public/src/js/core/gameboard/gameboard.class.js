@@ -51,7 +51,7 @@ Gameboard.prototype.addElement = function (name, item, img, posX, posY, width, h
                 "down": false,
                 "right": false,
                 "left": false,
-                "space": false
+                "shoot": false
             }
         });
     } else { // update the value of the element
@@ -152,31 +152,29 @@ Gameboard.prototype.checkMove = function (name, direction) {
     var height = this.tabElement[id].h; // Get its height    
     var i; // Index of the element
 
-    if (name !== "gamer" && name !== "spaceTest" && name !== "spaceTest2" ) {
+    if (name !== "player" && name !== "spaceTest" && name !== "spaceTest2") {
+        // if (direction === "creation") {
+        // Check if the element touch the right of the canvas
+        // if ((posX + width + 1) > this.maxBoard) {
+        //     return false;
+        // }
 
-        // If we go to rigth
-        if (direction === "creation") {
-            // Check if the element touch the right of the canvas
-            if ((posX + width + 1) > this.maxBoard) {
-                return false;
-            }
+        // // Test element with its environment
+        // for (i = 1; this.tabElement[i]; i += 1) {
+        //     // If it is the calling element, do nothing            
 
-            // Test element with its environment
-            for (i = 1; this.tabElement[i]; i += 1) {
-                // If it is the calling element, do nothing            
-
-                if (i !== id && !this.tabElement[i].dead) { // It is the initial testing object called
-                    // We test the X and Y position
-                    if (this.testVerticalZone(posY, this.tabElement[i].y, height, this.tabElement[i].h) && this.testHorizontalZone(posX, this.tabElement[i].x, width, this.tabElement[i].w)) {
-                        return false; // We touch
-                    }
-                }
-            }
-            return true; // Nothing around
-        }
-        return true;
+        //     if (i !== id && !this.tabElement[i].dead) { // It is the initial testing object called
+        //         // We test the X and Y position
+        //         if (this.testVerticalZone(posY, this.tabElement[i].y, height, this.tabElement[i].h) && this.testHorizontalZone(posX, this.tabElement[i].x, width, this.tabElement[i].w)) {
+        //             return false; // We touch
+        //         }
+        //     }
+        // }
+        return true; // Nothing around
+        // }
+        // return true;
     } else {
-        // If we go to rigth
+        // If we go to right
         if (direction === "right") {
             // Check if the element touch the right of the canvas
             if ((posX + width + 1) > this.maxBoard) {
@@ -259,7 +257,6 @@ Gameboard.prototype.checkMove = function (name, direction) {
             return true; // Nothing around
         }
     }
-
 };
 
 /*
