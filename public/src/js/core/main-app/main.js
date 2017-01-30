@@ -21,7 +21,7 @@ var Game = function (width, height) {
     this.lastSpawnTime = false;
 
     // Time beetwen new planet spawn
-    this.minPlanetSpawnTime = 10000;
+    this.minPlanetSpawnTime = 4000;
     this.lastSpawnTimePlanet = false;
 
 
@@ -40,8 +40,8 @@ var Game = function (width, height) {
             "id": "ships",
             // "url": "dist/img/ships.png",
             "url": "dist/img/space_items.png",
-            "shipList": ["smallOctopus", "spaceMan", "bigOctopus", "blue", "red", "orange", "green", "pink", "bigBlueShip", "bigOrangeShip"],
-            "shipListInverted": ["blueInverted", "redInverted", "orangeInverted", "greenInverted", "pinkInverted", "smallOctopus", "spaceMan", "bigOctopus", "bigBlueShipInverted", "bigOrangeShipInverted"],
+            "shipList": ["blue", "red", "orange", "blue", "red", "orange", "green", "pink", "smallOctopus", "spaceMan", "bigOctopus", "bigBlueShip"],
+            "shipListInverted": ["blueInverted", "redInverted", "orangeInverted", "greenInverted", "pinkInverted", "smallOctopus", "spaceMan", "bigOctopus", "bigBlueShipInverted"],
             "spaceShips": {
                 "blue": { // Gros vaisseau
                     "srcX": 5,
@@ -386,7 +386,7 @@ var Game = function (width, height) {
                     "srcX": 671,
                     "srcY": 433,
                     "srcWidth": 42,
-                    "srcHeight": 40
+                    "srcHeight": 42
                 },
                 "meteor2": {
                     "srcX": 30,
@@ -608,24 +608,24 @@ Game.prototype.generateEnemy = function () {
 
     // generate the ennemy number
 
-    itemNum = this.random(this.spaceItems.ships.shipList.length - 1);
+    itemNum = this.random(this.spaceItems.ships.shipListInverted.length - 1);
 
     index = this.checkGetElement(this.spaceItems.ships.shipListInverted[itemNum]); // Check if the ship is already present
 
-    if (index !== -1 && itemNum !== this.spaceItems.ships.shipList.indexOf(this.userShip)) {
+    if (index !== -1 && itemNum !== this.spaceItems.ships.shipListInverted.indexOf(this.userShip + "Inverted")) {
         // Ship exists
         if (!this.tabElement[index].inlife) {
             // Ship exists but was killed
             this.tabElement[index].inlife = true;
         }
         //Generate a new direction for the move
-        direc = direcList[this.random(direcList.length)];
+        direc = direcList[this.random(direcList.length - 1)];
 
         // add the direction to the Element array
         switch (direc) {
-        case "up":
-            this.tabElement[index].direction[direc] = true;
-            break;
+        // case "up":
+            //     this.tabElement[index].direction[direc] = true;
+            //     break;
             // case "up-right":
             //     this.tabElement[index].direction.right = true;
             //     this.tabElement[index].direction.up = true;
@@ -659,7 +659,7 @@ Game.prototype.generateEnemy = function () {
         }
 
         // Move the element
-        this.movePlayer(this.spaceItems.ships.shipList[itemNum], direc);
+        this.movePlayer(this.spaceItems.ships.shipListInverted[itemNum], direc);
 
         // If the ship go over the max size of the canvas
         // We reset its y position, to place it
@@ -676,13 +676,13 @@ Game.prototype.generateEnemy = function () {
 
     }
     else {
-        if (itemNum !== this.spaceItems.ships.shipList.indexOf(this.userShip)) {
+        if (itemNum !== this.spaceItems.ships.shipListInverted.indexOf(this.userShip + "Inverted")) {
             if ((!this.lastSpawnTime) || ((Date.now() - this.lastSpawnTime) > this.minSpawnTime)) {
                 this.lastSpawnTime = Date.now();
                 // Ship doesn't not exists
                 // Define all carateristics of the ship
                 // It size, image, etc.
-                name = this.spaceItems.ships.shipList[itemNum];
+                name = this.spaceItems.ships.shipListInverted[itemNum];
                 img = new Image();
                 img.src = this.spaceItems.ships.url;
                 objName = this.spaceItems.ships.spaceShips[name];
@@ -699,8 +699,6 @@ Game.prototype.generateEnemy = function () {
                 this.addElement(name, objName, img, x, y, w, h);
             }
         }
-
-
     }
 };
 
@@ -713,9 +711,10 @@ Game.prototype.generatePlanets = function () {
         name, img, objName, x, y, h, w,
         direcList, direc;
 
+
     direcList = ["up", "up-right", "right", "down-right", "down", "down-left", "left", "up-left", "shoot"];
 
-    if ((!this.lastSpawnTimePlanet) || ((Date.now() - this.lastSpawnTime) > this.minPlanetSpawnTime)) {
+    if ((!this.lastSpawnTimePlanet) || ((Date.now() - this.lastSpawnTimePlanet) > this.minPlanetSpawnTime)) {
         this.lastSpawnTimePlanet = Date.now();
         // Choose the planet to move
 
@@ -723,12 +722,14 @@ Game.prototype.generatePlanets = function () {
 
         index = this.checkGetElement(this.spaceItems.planets.planetList[itemNum]); // Check if the ship is already present
 
+        console.log("generatePlanets - itemNum=", itemNum, " index=", index, " tabElement=", this.tabElement);
+
         if (index !== -1) {
             // Planets exists
 
             //Generate a new direction for the move
-            direc = direcList[this.random(direcList.length)];
-
+            direc = direcList[this.random(direcList.length - 1)];
+            console.log("generatePlanets | move - itemNum=", itemNum, " index=", index, " tabElement=", this.tabElement, " Direction=",direc);
             // add the direction to the Element array
             switch (direc) {
             case "up":
@@ -766,13 +767,9 @@ Game.prototype.generatePlanets = function () {
                 this.tabElement[index].direction.down = true;
             }
 
+            // Change the planet position
             // Move the element
-            this.movePlayer(this.spaceItems.ships.shipList[itemNum], direc);
-
-            // // Change the planeet position
-            // this.tabElement[index].y = this.random(this.width);
-
-            // this.tabElement[index].x = this.random(this.width);
+            this.movePlayer(this.spaceItems.planets.planetList[itemNum], direc);
         }
         else {
             // Planet doesn't not exists
@@ -786,7 +783,8 @@ Game.prototype.generatePlanets = function () {
             if ((x + this.spaceItems.planets.planet[name].srcWidth) > this.width) {
                 x = this.width - this.spaceItems.planets.planet[name].srcWidth;
             }
-            y = this.random(this.height);
+            y = this.random(this.height / 2) + this.random(this.height / 2);
+            console.log("generatePlanets - Y=", y, "height", this.height);
             y = this.spaceItems.planets.planet[name].srcHeight;
             h = this.spaceItems.planets.planet[name].srcHeight;
             w = this.spaceItems.planets.planet[name].srcWidth;
@@ -828,6 +826,7 @@ Game.prototype.draw = function () {
     for (i = 0; this.tabElement[i]; i += 1) {
         // Select all element present
         // draw each element
+
         this.ctx.drawImage(this.tabElement[i].img, this.tabElement[i].item.srcX, this.tabElement[i].item.srcY, this.tabElement[i].item.srcWidth, this.tabElement[i].item.srcHeight, this.tabElement[i].x, this.tabElement[i].y, this.tabElement[i].w, this.tabElement[i].h);
 
     }
