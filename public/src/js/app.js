@@ -12,7 +12,7 @@ window.addEventListener('load', function () {
         g,
         start;
 
-    // Initialize Game    
+    // Initialize Game
     g = new Game(width, height);
     g.init(width / 2, height - 100);
 
@@ -38,6 +38,7 @@ window.addEventListener('load', function () {
         g.enemyDirection();
         g.checkDirection();
         g.generateEnemy();
+        g.generatePlanets();
         g.draw();
         window.requestAnimationFrame(step);
         // }

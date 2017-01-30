@@ -12,12 +12,18 @@ var Game = function (width, height) {
     this.height = height || 800; // Set the main height
     Gameboard.call(this, width, height); // Call the Gameboard constructor
 
-    // spaceItems number for user ship 
+    // spaceItems number for user ship
     this.userShip = "orange";
 
-    // Time beetwen new spawn
-    this.minSpawnTime = 1500;
+
+    // Time beetwen new Ennemy ship spawn
+    this.minSpawnTime = 2000;
     this.lastSpawnTime = false;
+
+    // Time beetwen new planet spawn
+    this.minPlanetSpawnTime = 10000;
+    this.lastSpawnTimePlanet = false;
+
 
     // Save key press status ( up, down, right, left, space)
     this.keyStatus = {
@@ -32,91 +38,418 @@ var Game = function (width, height) {
     this.spaceItems = {
         "ships": { // All Ships
             "id": "ships",
-            "url": "dist/img/ships.png",
-            // "url": "dist/img/space_items.png",
-            "shipList": ["blue", "red", "orange", "green", "pink", "small", "spaceMan", "big", "bigBlueShip", "bigOrangeShip"],
+            // "url": "dist/img/ships.png",
+            "url": "dist/img/space_items.png",
+            "shipList": ["smallOctopus", "spaceMan", "bigOctopus", "blue", "red", "orange", "green", "pink", "bigBlueShip", "bigOrangeShip"],
+            "shipListInverted": ["blueInverted", "redInverted", "orangeInverted", "greenInverted", "pinkInverted", "smallOctopus", "spaceMan", "bigOctopus", "bigBlueShipInverted", "bigOrangeShipInverted"],
             "spaceShips": {
-                "blue": { // Gros vaisseau ligne 1
-                    "srcX": 17,
-                    "srcY": 2,
-                    "srcWidth": 63,
-                    "srcHeight": 51
+                "blue": { // Gros vaisseau
+                    "srcX": 5,
+                    "srcY": 5,
+                    "srcWidth": 62,
+                    "srcHeight": 51,
+                    "guns": [{ // Guns  Position
+                        "gX": 17,
+                        "gy": 0,
+                        "gw": 8,
+                        "gh": 0,
+                    }, {
+                        "gX": 39,
+                        "gy": 0,
+                        "gw": 8,
+                        "gh": 0
+                    }],
+                    "nozel": [{ // Nozel Position
+                        "nX": 14,
+                        "nY": 51,
+                        "nw": 7,
+                        "nh": 0
+                    }, { // Nozel Position
+                        "nX": 42,
+                        "nY": 51,
+                        "nw": 7,
+                        "nh": 0
+                    }]
                 },
-                "red": { // Vaisseau rouge ligne 2
-                    "srcX": 29,
-                    "srcY": 53,
+                "blueInverted": { // Gros vaisseau
+                    "srcX": 184,
+                    "srcY": 5,
+                    "srcWidth": 62,
+                    "srcHeight": 51,
+                    "guns": [{ // Guns  Position
+                        "gX": 17,
+                        "gy": 51,
+                        "gw": 8,
+                        "gh": 0,
+                    }, {
+                        "gX": 38,
+                        "gy": 51,
+                        "gw": 8,
+                        "gh": 0
+                    }],
+                    "nozel": [{ // Nozel Position
+                        "nX": 15,
+                        "nY": 0,
+                        "nw": 7,
+                        "nh": 0
+                    }, { // Nozel Position
+                        "nX": 42,
+                        "nY": 0,
+                        "nw": 7,
+                        "nh": 0
+                    }]
+                },
+                "red": { // Vaisseau rouge
+                    "srcX": 525,
+                    "srcY": 5,
+                    "srcWidth": 39,
+                    "srcHeight": 34,
+                    "guns": [{ // Guns  Position
+                        "gX": 2,
+                        "gy": 4,
+                        "gw": 10,
+                        "gh": 0,
+                    }, {
+                        "gX": 26,
+                        "gy": 4,
+                        "gw": 10,
+                        "gh": 0
+                    }],
+                    "nozel": [{ // Nozel Position
+                        "nX": 9,
+                        "nY": 34,
+                        "nw": 7,
+                        "nh": 0
+                    }, { // Nozel Position
+                        "nX": 22,
+                        "nY": 34,
+                        "nw": 7,
+                        "nh": 0
+                    }]
+                },
+                "redInverted": { // Vaisseau rouge
+                    "srcX": 573,
+                    "srcY": 5,
                     "srcWidth": 38,
-                    "srcHeight": 34
+                    "srcHeight": 34,
+                    "guns": [{ // Guns  Position
+                        "gX": 2,
+                        "gy": 30,
+                        "gw": 10,
+                        "gh": 0,
+                    }, {
+                        "gX": 27,
+                        "gy": 30,
+                        "gw": 10,
+                        "gh": 0
+                    }],
+                    "nozel": [{ // Nozel Position
+                        "nX": 9,
+                        "nY": 0,
+                        "nw": 7,
+                        "nh": 0
+                    }, { // Nozel Position
+                        "nX": 22,
+                        "nY": 0,
+                        "nw": 7,
+                        "nh": 0
+                    }]
                 },
-                "orange": { // Vaisseau orange ligne 3
-                    "srcX": 25,
-                    "srcY": 88,
+                "orange": { // Vaisseau orange
+                    "srcX": 5,
+                    "srcY": 69,
                     "srcWidth": 46,
-                    "srcHeight": 45
+                    "srcHeight": 45,
+                    "guns": [{ // Guns  Position
+                        "gX": 6,
+                        "gy": 6,
+                        "gw": 8,
+                        "gh": 0,
+                    }, {
+                        "gX": 27,
+                        "gy": 6,
+                        "gw": 8,
+                        "gh": 0
+                    }],
+                    "nozel": [{ // Nozel Position
+                        "nX": 10,
+                        "nY": 40,
+                        "nw": 5,
+                        "nh": 0
+                    }, { // Nozel Position
+                        "nX": 31,
+                        "nY": 40,
+                        "nw": 5,
+                        "nh": 0
+                    }]
                 },
-                "green": { // Vaisseau vert ligne 4
-                    "srcX": 16,
-                    "srcY": 133,
+                "orangeInverted": { // Vaisseau orange
+                    "srcX": 184,
+                    "srcY": 69,
+                    "srcWidth": 46,
+                    "srcHeight": 45,
+                    "guns": [{ // Guns  Position
+                        "gX": 6,
+                        "gy": 39,
+                        "gw": 8,
+                        "gh": 0,
+                    }, {
+                        "gX": 27,
+                        "gy": 39,
+                        "gw": 8,
+                        "gh": 0
+                    }],
+                    "nozel": [{ // Nozel Position
+                        "nX": 10,
+                        "nY": 5,
+                        "nw": 5,
+                        "nh": 0
+                    }, { // Nozel Position
+                        "nX": 31,
+                        "nY": 5,
+                        "nw": 5,
+                        "nh": 0
+                    }]
+                },
+                "green": { // Vaisseau vert
+                    "srcX": 240,
+                    "srcY": 69,
                     "srcWidth": 64,
-                    "srcHeight": 47
+                    "srcHeight": 47,
+                    "guns": [{ // Guns  Position
+                        "gX": 14,
+                        "gy": 0,
+                        "gw": 7,
+                        "gh": 0,
+                    }, {
+                        "gX": 43,
+                        "gy": 0,
+                        "gw": 7,
+                        "gh": 0
+                    }],
+                    "nozel": [{ // Nozel Position
+                        "nX": 25,
+                        "nY": 47,
+                        "nw": 14,
+                        "nh": 0
+                    }]
                 },
-                "pink": { // Vaisseau rose ligne 5
-                    "srcX": 27,
-                    "srcY": 181,
+                "greenInverted": { // Vaisseau vert
+                    "srcX": 499,
+                    "srcY": 69,
+                    "srcWidth": 64,
+                    "srcHeight": 47,
+                    "guns": [{ // Guns  Position
+                        "gX": 14,
+                        "gy": 47,
+                        "gw": 7,
+                        "gh": 0,
+                    }, {
+                        "gX": 43,
+                        "gy": 47,
+                        "gw": 7,
+                        "gh": 0
+                    }],
+                    "nozel": [{ // Nozel Position
+                        "nX": 25,
+                        "nY": 0,
+                        "nw": 14,
+                        "nh": 0
+                    }]
+                },
+                "pink": { // Vaisseau rose
+                    "srcX": 648,
+                    "srcY": 69,
                     "srcWidth": 44,
-                    "srcHeight": 36
+                    "srcHeight": 36,
+                    "guns": [{ // Guns  Position
+                        "gX": 7,
+                        "gy": 39,
+                        "gw": 8,
+                        "gh": 0,
+                    }, {
+                        "gX": 29,
+                        "gy": 39,
+                        "gw": 8,
+                        "gh": 0
+                    }],
+                    "nozel": [{ // Nozel Position
+                        "nX": 20,
+                        "nY": 36,
+                        "nw": 4,
+                        "nh": 0
+                    }]
                 },
-                "small": { // Pieuvre petite ligne 6
-                    "srcX": 35,
-                    "srcY": 218,
+                "pinkInverted": { // Vaisseau rose
+                    "srcX": 389,
+                    "srcY": 115,
+                    "srcWidth": 44,
+                    "srcHeight": 36,
+                    "guns": [{ // Guns  Position
+                        "gX": 7,
+                        "gy": 36,
+                        "gw": 8,
+                        "gh": 0,
+                    }, {
+                        "gX": 29,
+                        "gy": 36,
+                        "gw": 8,
+                        "gh": 0
+                    }],
+                    "nozel": [{ // Nozel Position
+                        "nX": 20,
+                        "nY": 0,
+                        "nw": 4,
+                        "nh": 0
+                    }]
+                },
+                "smallOctopus": { // Pieuvre petite
+                    "srcX": 257,
+                    "srcY": 5,
                     "srcWidth": 27,
-                    "srcHeight": 25
+                    "srcHeight": 25,
+                    "guns": [] // No guns
                 },
-                "spaceMan": { // Spacionnaute ligne 7
-                    "srcX": 39,
-                    "srcY": 249,
+                "spaceMan": { // Spacionnaute
+                    "srcX": 703,
+                    "srcY": 52,
                     "srcWidth": 22,
                     "srcHeight": 29
                 },
-                "big": { // Pieuvre grande ligne 8
-                    "srcX": 21,
-                    "srcY": 284,
-                    "srcHidth": 56,
-                    "srcHeight": 51
+                "bigOctopus": { // Pieuvre grande
+                    "srcX": 5,
+                    "srcY": 169,
+                    "srcWidth": 56,
+                    "srcHeight": 51,
+                    "guns": [] // No guns
                 },
-                "bigBlueShip": { // Grand vaisseau ligne 9
-                    "srcX": 0,
-                    "srcY": 338,
+                "bigBlueShip": { // Grand vaisseau
+                    "srcX": 443,
+                    "srcY": 144,
                     "srcWidth": 98,
-                    "srcHeight": 87
+                    "srcHeight": 87,
+                    "guns": [], // Guns position
+                    "nozel": [{ // Nozel Position
+                        "nX": 13,
+                        "nY": 82,
+                        "nw": 16,
+                        "nh": 0
+                    }, { // Nozel Position
+                        "nX": 35,
+                        "nY": 86,
+                        "nw": 28,
+                        "nh": 0
+                    }, { // Nozel Position
+                        "nX": 70,
+                        "nY": 84,
+                        "nw": 16,
+                        "nh": 0
+                    }]
                 },
-                "bigOrangeShip": { // Grand vaisseau ligne 10
-                    "srcX": 4,
-                    "srcY": 428,
-                    "srcWidth": 90,
-                    "srcHeight": 74
+                "bigBlueShipInverted": { // Grand vaisseau
+                    "srcX": 550,
+                    "srcY": 169,
+                    "srcWidth": 98,
+                    "srcHeight": 87,
+                    "guns": [], // Guns position
+                    "nozel": [{ // Nozel Position
+                        "nX": 14,
+                        "nY": 11,
+                        "nw": 16,
+                        "nh": 0
+                    }, { // Nozel Position
+                        "nX": 37,
+                        "nY": 0,
+                        "nw": 28,
+                        "nh": 0
+                    }, { // Nozel Position
+                        "nX": 72,
+                        "nY": 5,
+                        "nw": 16,
+                        "nh": 0
+                    }]
                 }
-            },
+            }
         },
-        "planet": { // All planets
-            "img": "",
-            "url": "",
-            "coord": [{
-                "posX": 0,
-                "posY": 0,
-                "width": 0,
-                "height": 0
-            }, {
-                "posX": 0,
-                "posY": 0,
-                "width": 0,
-                "height": 0
-            }, {
-                "posX": 0,
-                "posY": 0,
-                "width": 0,
-                "height": 0
-            }]
+        "planets": { // All planets
+            "id": "planets",
+            "url": "dist/img/space_items.png",
+            "planetList": ["blackhole", "meteor1", "meteor2", "meteor3", "meteor4", "meteor5", "moon", "planet1", "planet2", "star1", "star2", "stars"],
+            "planet": {
+                "blackhole": {
+                    "srcX": 5,
+                    "srcY": 266,
+                    "srcWidth": 97,
+                    "srcHeight": 75
+                },
+                "meteor1": {
+                    "srcX": 671,
+                    "srcY": 433,
+                    "srcWidth": 42,
+                    "srcHeight": 40
+                },
+                "meteor2": {
+                    "srcX": 30,
+                    "srcY": 232,
+                    "srcWidth": 22,
+                    "srcHeight": 20
+                },
+                "meteor3": {
+                    "srcX": 671,
+                    "srcY": 492,
+                    "srcWidth": 31,
+                    "srcHeight": 36
+                },
+                "meteor4": {
+                    "srcX": 5,
+                    "srcY": 538,
+                    "srcWidth": 26,
+                    "srcHeight": 27
+                },
+                "meteor5": {
+                    "srcX": 145,
+                    "srcY": 232,
+                    "srcWidth": 17,
+                    "srcHeight": 15
+                },
+                "moon": {
+                    "srcX": 41,
+                    "srcY": 537,
+                    "srcWidth": 44,
+                    "srcHeight": 42
+                },
+                "planet1": {
+                    "srcX": 96,
+                    "srcY": 520,
+                    "srcWidth": 64,
+                    "srcHeight": 68
+                },
+                "planet2": {
+                    "srcX": 169,
+                    "srcY": 522,
+                    "srcWidth": 64,
+                    "srcHeight": 62
+                },
+                "star1": {
+                    "srcX": 386,
+                    "srcY": 541,
+                    "srcWidth": 36,
+                    "srcHeight": 30
+                },
+                "star2": {
+                    "srcX": 659,
+                    "srcY": 233,
+                    "srcWidth": 21,
+                    "srcHeight": 20
+                },
+                "stars": {
+                    "srcX": 732,
+                    "srcY": 0,
+                    "srcWidth": 507,
+                    "srcHeight": 591
+                }
+            }
+
         },
         "background": { // background images
             "id": "backImg",
@@ -132,25 +465,23 @@ var Game = function (width, height) {
             }
         },
         "shoots": { // Shotting animation
-            "img": "backImg",
-            "id": "",
-            "shootLists": [],
-            "coord": [{
-                "posX": 0,
-                "posY": 0,
-                "width": 0,
-                "height": 0
-            }, {
-                "posX": 0,
-                "posY": 0,
-                "width": 0,
-                "height": 0
-            }, {
-                "posX": 0,
-                "posY": 0,
-                "width": 0,
-                "height": 0
-            }]
+            "id": "planets",
+            "url": "dist/img/space_items.png",
+            "shootItemList": ["rocket1", "rocket2"],
+            "shootItems": {
+                "rocket1": {
+                    "srcX": 705,
+                    "srcY": 232,
+                    "srcWidth": 17,
+                    "srcHeight": 26
+                },
+                "rocket2": {
+                    "srcX": 65,
+                    "srcY": 13,
+                    "srcWidth": 14,
+                    "srcHeight": 15
+                }
+            }
         }
     };
 
@@ -171,19 +502,14 @@ Game.prototype.random = function (maxval) {
  * setBackground - Position the background Image
  */
 Game.prototype.setBackground = function () {
-    var backImg,
-        w,
-        h;
-    // Create a new Image object    
+    var backImg;
+    // Create a new Image object
     backImg = new Image();
-    // Get the width and the height of the object
-    w = this.spaceItems.background.backImage.violet.width;
-    h = this.spaceItems.background.backImage.violet.height;
 
     // Set the backgound image
     backImg.src = this.spaceItems.background.url;
 
-    // Position the image    
+    // Position the image
     this.addElement("backimage", this.spaceItems.background.backImage.violet, backImg, 0, 0, this.width, this.height);
 };
 
@@ -284,11 +610,10 @@ Game.prototype.generateEnemy = function () {
 
     itemNum = this.random(this.spaceItems.ships.shipList.length - 1);
 
-
-    index = this.checkGetElement(this.spaceItems.ships.shipList[itemNum]); // Check if the ship is already present        
+    index = this.checkGetElement(this.spaceItems.ships.shipListInverted[itemNum]); // Check if the ship is already present
 
     if (index !== -1 && itemNum !== this.spaceItems.ships.shipList.indexOf(this.userShip)) {
-        // Ship exists        
+        // Ship exists
         if (!this.tabElement[index].inlife) {
             // Ship exists but was killed
             this.tabElement[index].inlife = true;
@@ -298,63 +623,64 @@ Game.prototype.generateEnemy = function () {
 
         // add the direction to the Element array
         switch (direc) {
-            // case "up":
-            //     this.tabElement[index].direction[direc] = true;
-            //     break;
+        case "up":
+            this.tabElement[index].direction[direc] = true;
+            break;
             // case "up-right":
             //     this.tabElement[index].direction.right = true;
             //     this.tabElement[index].direction.up = true;
             //     break;
-            case "right":
-                this.tabElement[index].direction.right = true;
-                break;
-            case "down-right":
-                this.tabElement[index].direction.down = true;
-                this.tabElement[index].direction.right = true;
-                break;
-            case "down":
-                this.tabElement[index].direction.down = true;
-                break;
-            case "down-left":
-                this.tabElement[index].direction.down = true;
-                this.tabElement[index].direction.left = true;
-                break;
-            case "left":
-                this.tabElement[index].direction.left = true;
-                break;
+        case "right":
+            this.tabElement[index].direction.right = true;
+            break;
+        case "down-right":
+            this.tabElement[index].direction.down = true;
+            this.tabElement[index].direction.right = true;
+            break;
+        case "down":
+            this.tabElement[index].direction.down = true;
+            break;
+        case "down-left":
+            this.tabElement[index].direction.down = true;
+            this.tabElement[index].direction.left = true;
+            break;
+        case "left":
+            this.tabElement[index].direction.left = true;
+            break;
             // case "up-left":
             //     this.tabElement[index].direction.left = true;
             //     this.tabElement[index].direction.up = true;
             //     break;
-            case "shoot":
-                this.tabElement[index].direction.shoot = true;
-                break;
-            default:
-                this.tabElement[index].direction.down = true;
+        case "shoot":
+            this.tabElement[index].direction.shoot = true;
+            break;
+        default:
+            this.tabElement[index].direction.down = true;
         }
-        
+
         // Move the element
         this.movePlayer(this.spaceItems.ships.shipList[itemNum], direc);
 
         // If the ship go over the max size of the canvas
-        // We reset its y position, to place it 
+        // We reset its y position, to place it
         // To the upper side
         if (this.tabElement[index].y > this.height) {
             this.tabElement[index].y = -1;
             x = this.random(this.width);
             // if ((x + this.spaceItems.ships.spaceShips[itemNum].srcWidth) > this.width) {
-                
+
             //     x = this.width - this.spaceItems.ships.spaceShips[itemNum].srcWidth;
             // }
             this.tabElement[index].x = x;
         }
 
-    } else {
+    }
+    else {
         if (itemNum !== this.spaceItems.ships.shipList.indexOf(this.userShip)) {
             if ((!this.lastSpawnTime) || ((Date.now() - this.lastSpawnTime) > this.minSpawnTime)) {
                 this.lastSpawnTime = Date.now();
                 // Ship doesn't not exists
-                // Define all acarateristics of the ship
+                // Define all carateristics of the ship
                 // It size, image, etc.
                 name = this.spaceItems.ships.shipList[itemNum];
                 img = new Image();
@@ -379,6 +705,99 @@ Game.prototype.generateEnemy = function () {
 };
 
 /*
+ * Generate Planets
+ */
+Game.prototype.generatePlanets = function () {
+    var itemNum,
+        index,
+        name, img, objName, x, y, h, w,
+        direcList, direc;
+
+    direcList = ["up", "up-right", "right", "down-right", "down", "down-left", "left", "up-left", "shoot"];
+
+    if ((!this.lastSpawnTimePlanet) || ((Date.now() - this.lastSpawnTime) > this.minPlanetSpawnTime)) {
+        this.lastSpawnTimePlanet = Date.now();
+        // Choose the planet to move
+
+        itemNum = this.random(this.spaceItems.planets.planetList.length - 1);
+
+        index = this.checkGetElement(this.spaceItems.planets.planetList[itemNum]); // Check if the ship is already present
+
+        if (index !== -1) {
+            // Planets exists
+
+            //Generate a new direction for the move
+            direc = direcList[this.random(direcList.length)];
+
+            // add the direction to the Element array
+            switch (direc) {
+            case "up":
+                this.tabElement[index].direction[direc] = true;
+                break;
+            case "up-right":
+                this.tabElement[index].direction.right = true;
+                this.tabElement[index].direction.up = true;
+                break;
+            case "right":
+                this.tabElement[index].direction.right = true;
+                break;
+            case "down-right":
+                this.tabElement[index].direction.down = true;
+                this.tabElement[index].direction.right = true;
+                break;
+            case "down":
+                this.tabElement[index].direction.down = true;
+                break;
+            case "down-left":
+                this.tabElement[index].direction.down = true;
+                this.tabElement[index].direction.left = true;
+                break;
+            case "left":
+                this.tabElement[index].direction.left = true;
+                break;
+            case "up-left":
+                this.tabElement[index].direction.left = true;
+                this.tabElement[index].direction.up = true;
+                break;
+            case "shoot":
+                this.tabElement[index].direction.shoot = true;
+                break;
+            default:
+                this.tabElement[index].direction.down = true;
+            }
+
+            // Move the element
+            this.movePlayer(this.spaceItems.ships.shipList[itemNum], direc);
+
+            // // Change the planeet position
+            // this.tabElement[index].y = this.random(this.width);
+
+            // this.tabElement[index].x = this.random(this.width);
+        }
+        else {
+            // Planet doesn't not exists
+            // Define all carateristics of the planet
+            // It size, image, etc.
+            name = this.spaceItems.planets.planetList[itemNum];
+            img = new Image();
+            img.src = this.spaceItems.planets.url;
+            objName = this.spaceItems.planets.planet[name];
+            x = this.random(this.width);
+            if ((x + this.spaceItems.planets.planet[name].srcWidth) > this.width) {
+                x = this.width - this.spaceItems.planets.planet[name].srcWidth;
+            }
+            y = this.random(this.height);
+            y = this.spaceItems.planets.planet[name].srcHeight;
+            h = this.spaceItems.planets.planet[name].srcHeight;
+            w = this.spaceItems.planets.planet[name].srcWidth;
+
+            // add it to the active Element array
+            this.addElement(name, objName, img, x, y, w, h);
+        }
+    }
+};
+
+/*
  * showScore - Print the score to the context
  * @return {void}
  */
@@ -398,25 +817,19 @@ Game.prototype.showScore = function () {
 }
 
 /*
- * Draw - Draw all elements on the canvas  
+ * Draw - Draw all elements on the canvas
  * @return {void}
  */
 Game.prototype.draw = function () {
-    // TODO Draw an item to the context
-    var x,
-        y,
-        w,
-        h,
-        i,
-        img;
-
+    var i;
     // Clear the canvas element
     this.clearScreen();
 
     for (i = 0; this.tabElement[i]; i += 1) {
         // Select all element present
-        // draw each element        
+        // draw each element
         this.ctx.drawImage(this.tabElement[i].img, this.tabElement[i].item.srcX, this.tabElement[i].item.srcY, this.tabElement[i].item.srcWidth, this.tabElement[i].item.srcHeight, this.tabElement[i].x, this.tabElement[i].y, this.tabElement[i].w, this.tabElement[i].h);
+
     }
 
     // Add the score element
@@ -442,7 +855,7 @@ Game.prototype.movePlayer = function (name, moveStatus) {
             if (vm.keyStatus.up && moveStatus) {
                 // Key up pressed
                 if (vm.checkMove("player", "up") === true) { // If move is authorized
-                    // Set new position, and draw spaceItems  
+                    // Set new position, and draw spaceItems
                     if (vm.getY("player") >= (vm.height * 3 / 4)) {
                         // if we do not go over 3/4 of the canvas, we can go up
                         vm.moveY("player", -1);
@@ -451,17 +864,17 @@ Game.prototype.movePlayer = function (name, moveStatus) {
             }
 
             if (vm.keyStatus.down && moveStatus) {
-                // Key up pressed                    
+                // Key up pressed
                 if (vm.checkMove("player", "down") === true) { // If move is authorized
-                    // Set new position, and draw spaceItems 
+                    // Set new position, and draw spaceItems
                     vm.moveY("player", +1);
                 };
             }
 
             if (vm.keyStatus.left && moveStatus) {
-                // Key left pressed                    
+                // Key left pressed
                 if (vm.checkMove("player", "left") === true) { // If move is authorized
-                    // Set new position, and draw spaceItems     
+                    // Set new position, and draw spaceItems
                     vm.moveX("player", -1);
                 };
             }
@@ -474,30 +887,31 @@ Game.prototype.movePlayer = function (name, moveStatus) {
                 };
             }
         }, 50);
-    } else {
+    }
+    else {
         window.setInterval(function () {
             if (vm.tabElement[index].direction.up) {
                 // Key up pressed
                 if (vm.checkMove(name, "up") === true) { // If move is authorized
-                    // Set new position, and draw spaceItems                
+                    // Set new position, and draw spaceItems
                     vm.moveY(name, -5);
                     vm.tabElement[index].direction.up = false;
                 };
             }
 
             if (vm.tabElement[index].direction.down) {
-                // Key up pressed                    
+                // Key up pressed
                 if (vm.checkMove(name, "down") === true) { // If move is authorized
-                    // Set new position, and draw spaceItems                
+                    // Set new position, and draw spaceItems
                     vm.moveY(name, 5);
                     vm.tabElement[index].direction.down = false;
                 };
             }
 
             if (vm.tabElement[index].direction.left) {
-                // Key left pressed                    
+                // Key left pressed
                 if (vm.checkMove(name, "left") === true) { // If move is authorized
-                    // Set new position, and draw spaceItems                
+                    // Set new position, and draw spaceItems
                     vm.moveX(name, -5);
                     vm.tabElement[index].direction.left = false;
                 };
@@ -506,7 +920,7 @@ Game.prototype.movePlayer = function (name, moveStatus) {
             if (vm.tabElement[index].direction.right) {
                 // Key right pressed
                 if (vm.checkMove(name, "right") === true) { // If move is authorized
-                    // Set new position, and draw spaceItems                
+                    // Set new position, and draw spaceItems
                     vm.moveX(name, 5);
                     vm.tabElement[index].direction.right = false;
                 };
@@ -529,39 +943,39 @@ Game.prototype.checkDirection = function () {
         var code = event.keyCode;
 
         switch (code) {
-            case 37: // Left key is pressed
-                if (!moveOn) {
-                    moveOn = true;
-                    vm.keyStatus.left = true;
-                    intervalID = vm.movePlayer("player", moveOn);
-                }
-                break;
-            case 38:
-                // Up key is pressed
-                if (!moveOn) {
-                    moveOn = true;
-                    vm.keyStatus.up = true;
-                    intervalID = vm.movePlayer("player", moveOn);
-                }
-                break;
-            case 39:
-                // Right key is pressed
-                if (!moveOn) {
-                    moveOn = true;
-                    vm.keyStatus.right = true;
-                    intervalID = vm.movePlayer("player", moveOn);
-                }
-                break;
-            case 40:
-                // Down key is pressed
-                if (!moveOn) {
-                    moveOn = true;
-                    vm.keyStatus.down = true;
-                    intervalID = vm.movePlayer("player", moveOn);
-                }
-                break;
-            default:
-                console.log(code);
+        case 37: // Left key is pressed
+            if (!moveOn) {
+                moveOn = true;
+                vm.keyStatus.left = true;
+                intervalID = vm.movePlayer("player", moveOn);
+            }
+            break;
+        case 38:
+            // Up key is pressed
+            if (!moveOn) {
+                moveOn = true;
+                vm.keyStatus.up = true;
+                intervalID = vm.movePlayer("player", moveOn);
+            }
+            break;
+        case 39:
+            // Right key is pressed
+            if (!moveOn) {
+                moveOn = true;
+                vm.keyStatus.right = true;
+                intervalID = vm.movePlayer("player", moveOn);
+            }
+            break;
+        case 40:
+            // Down key is pressed
+            if (!moveOn) {
+                moveOn = true;
+                vm.keyStatus.down = true;
+                intervalID = vm.movePlayer("player", moveOn);
+            }
+            break;
+        default:
+            console.log(code);
         }
     };
 
@@ -571,18 +985,18 @@ Game.prototype.checkDirection = function () {
         moveOn = false;
         var code = event.keyCode;
         switch (code) {
-            case 37: // Left key is released                
-                vm.keyStatus.left = false;
-                break;
-            case 38: // Up key is released                
-                vm.keyStatus.up = false;
-                break;
-            case 39: // Right key is released                     
-                vm.keyStatus.right = false;
-                break;
-            case 40: // Down key is released                
-                vm.keyStatus.down = false;
-                break;
+        case 37: // Left key is released
+            vm.keyStatus.left = false;
+            break;
+        case 38: // Up key is released
+            vm.keyStatus.up = false;
+            break;
+        case 39: // Right key is released
+            vm.keyStatus.right = false;
+            break;
+        case 40: // Down key is released
+            vm.keyStatus.down = false;
+            break;
         }
     };
 };
@@ -625,7 +1039,7 @@ Game.prototype.drawGamer = function (gamerX, gamerY) {
     img = new Image();
     img.src = this.spaceItems.ships.url;
 
-    // Add the spaceship onto the table    
+    // Add the spaceship onto the table
     this.addElement("player", this.spaceItems.ships.spaceShips[this.userShip], img, gamerX, gamerY, dw, dh);
 
 };
