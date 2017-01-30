@@ -35,10 +35,10 @@ window.addEventListener('load', function () {
         // }
         // else {
         // start = null;
-        g.enemyDirection();
         g.checkDirection();
-        g.generateEnemy();
         g.generatePlanets();
+        g.generateEnemy();
+        g.enemyDirection();
         g.draw();
         window.requestAnimationFrame(step);
         // }
