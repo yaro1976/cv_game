@@ -384,7 +384,7 @@ var Game = function (width, height) {
                 },
                 "meteor1": {
                     "srcX": 671,
-                    "srcY": 433,
+                    "srcY": 443,
                     "srcWidth": 42,
                     "srcHeight": 42
                 },
@@ -712,7 +712,7 @@ Game.prototype.generatePlanets = function () {
         direcList, direc;
 
 
-    direcList = ["up", "up-right", "right", "down-right", "down", "down-left", "left", "up-left", "shoot"];
+    direcList = ["up", "desapear", "up-right","desapear",  "right", "desapear", "down-right", "desapear", "down", "down-left", "desapear",  "left", "desapear",  "up-left", "desapear"];
 
     if ((!this.lastSpawnTimePlanet) || ((Date.now() - this.lastSpawnTimePlanet) > this.minPlanetSpawnTime)) {
         this.lastSpawnTimePlanet = Date.now();
@@ -722,14 +722,13 @@ Game.prototype.generatePlanets = function () {
 
         index = this.checkGetElement(this.spaceItems.planets.planetList[itemNum]); // Check if the ship is already present
 
-        console.log("generatePlanets - itemNum=", itemNum, " index=", index, " tabElement=", this.tabElement);
 
         if (index !== -1) {
             // Planets exists
 
             //Generate a new direction for the move
             direc = direcList[this.random(direcList.length - 1)];
-            console.log("generatePlanets | move - itemNum=", itemNum, " index=", index, " tabElement=", this.tabElement, " Direction=",direc);
+
             // add the direction to the Element array
             switch (direc) {
             case "up":
@@ -760,8 +759,9 @@ Game.prototype.generatePlanets = function () {
                 this.tabElement[index].direction.left = true;
                 this.tabElement[index].direction.up = true;
                 break;
-            case "shoot":
-                this.tabElement[index].direction.shoot = true;
+            case "desapear":
+                this.tabElement[index].x = -15;
+                this.tabElement[index].y = -15;
                 break;
             default:
                 this.tabElement[index].direction.down = true;
@@ -783,14 +783,14 @@ Game.prototype.generatePlanets = function () {
             if ((x + this.spaceItems.planets.planet[name].srcWidth) > this.width) {
                 x = this.width - this.spaceItems.planets.planet[name].srcWidth;
             }
-            y = this.random(this.height / 2) + this.random(this.height / 2);
-            console.log("generatePlanets - Y=", y, "height", this.height);
-            y = this.spaceItems.planets.planet[name].srcHeight;
+            y = this.random(this.height );
             h = this.spaceItems.planets.planet[name].srcHeight;
             w = this.spaceItems.planets.planet[name].srcWidth;
 
             // add it to the active Element array
             this.addElement(name, objName, img, x, y, w, h);
+            index = this.checkGetElement(this.spaceItems.planets.planetList[itemNum]); // Check if the ship is already present
+            this.tabElement[index].canBeTouch = false;
         }
     }
 };
@@ -971,6 +971,14 @@ Game.prototype.checkDirection = function () {
                 moveOn = true;
                 vm.keyStatus.down = true;
                 intervalID = vm.movePlayer("player", moveOn);
+            }
+            break;
+        case 32:
+            // Down key is pressed
+            if (!moveOn) {
+                moveOn = true;
+                vm.keyStatus.shoot = true;
+                // intervalID = vm.movePlayer("player", moveOn);
             }
             break;
         default:
