@@ -672,10 +672,10 @@ Game.prototype.generateEnemy = function () {
         if (this.tabElement[index].y > this.height) {
             this.tabElement[index].y = -10;
             x = this.random(this.width);
-            // if ((x + this.spaceItems.ships.spaceShips[itemNum].srcWidth) > this.width) {
+            if ((x + this.spaceItems.ships.spaceShips[itemNum].srcWidth) > this.width) {
 
-            //     x = this.width - this.spaceItems.ships.spaceShips[itemNum].srcWidth;
-            // }
+                x = this.width - this.spaceItems.ships.spaceShips[itemNum].srcWidth;
+            }
             this.tabElement[index].x = x;
         }
 
@@ -951,40 +951,51 @@ Game.prototype.moveRocket = function (name, moveStatus) {
         index,
         re,
         vm,
-        playerId;
+        playerId, n;
 
+    // Save the calling function
     vm = this;
+
     index = this.checkGetElement(name);
     playerId = this.tabElement[index];
-    console.log(playerId)
 
+    // To check if the item name "rocket*"
     re = /rocket/gi;
     // Check if shoot is active
     if (this.keyStatus.shoot && playerId.shootOn === true) {
         this.intervalIDRocket = window.setInterval(function () {
             // Get all targets
             for (i = 0; vm.tabElement[i]; i += 1) {
+                // Get position of rockets
                 if (vm.tabElement[i].name.match(re)) {
+                    // If it is the player who shoot
                     if (name === "player") {
-                        // For Player target, change its position, to go up
-                        vm.moveY(vm.tabElement[i].name, -1);
+                        vm.checkGetElementXY(vm.tabElement[i].x - 1, vm.tabElement[i].y - 1)
+                        if (vm.spaceItems.ships.shipListInverted.indexOf(vm.checkGetElementXY(vm.tabElement[i].x, vm.tabElement[i].y)) !== -1) {
+                            // We touch an ennemy
 
-                        // if its position is not on canvas, stop the animation
-                        if (vm.tabElement[i].y === -40) {
-                            console.log("Stop animation");
-                            playerId.shootOn = false;
-                            vm.keyStatus.shoot = false;
-                            
-                            vm.removeElement(vm.tabElement[i].name);
 
+                        } else {
+                            // nothing arround, the rocket move
+                            vm.moveY(vm.tabElement[i].name, -1);
                         }
+
+                    }
+
+                    // if its position is not on canvas, stop the animation
+                    if (vm.tabElement[i].y === -40) {
+                        console.log("Stop animation");
+                        playerId.shootOn = false;
+                        vm.keyStatus.shoot = false;
+
+                        vm.removeElement(vm.tabElement[i].name);
                     }
                 }
             }
 
         }, 5)
 
-    }    
+    }
 }
 
 /*
@@ -1134,7 +1145,7 @@ Game.prototype.shoot = function (name) {
 
         // get the position of the guns
 
-        console.log(this.tabElement[index])
+        // console.log(this.tabElement[index])
 
         for (i = 0; this.tabElement[index].item.guns[i]; i += 1) {
             img = new Image();

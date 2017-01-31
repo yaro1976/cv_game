@@ -86,21 +86,10 @@ Gameboard.prototype.addElement = function (name, item, img, posX, posY, width, h
  */
 
 Gameboard.prototype.removeElement = function (name) {
-    var index,
-        i,
-        tempArray = [];
+    var index;
 
     index = this.checkGetElement(name);
-    if (index !== -1) { // If element exists, we can remove it
-
-        for (i = 0; this.tabElement[i]; i += 1) {
-            if (i !== index) {
-                tempArray.push(this.tabElement[i]);
-            }
-        }
-        this.tabElement = tempArray;
-    }
-    return this.tabElement;
+    return this.tabElement.splice(index, 1);
 };
 
 /*
@@ -202,6 +191,7 @@ Gameboard.prototype.checkMove = function (name, direction) {
     //     // }
     //     // return true;
     // } else {
+
     // If we go to right
     if (direction === "right") {
         // Check if the element touch the right of the canvas
@@ -408,11 +398,16 @@ Gameboard.prototype.checkGetElementXY = function (x, y) {
 
     for (i = 0; this.tabElement[i]; i += 1) {
         // Test if the coordonates are in an object
-        if ((x >= this.tabElement[i].x) && (x <= this.tabElement[i].x + this.tabElement[i].w)) {
-            if ((y >= this.tabElement[i].y) && (y <= this.tabElement[i].y + this.tabElement[i].h)) {
+
+        if ((x >= this.tabElement[i].x) && (x <= (this.tabElement[i].x + this.tabElement[i].w))) {
+            if ((y >= this.tabElement[i].y) && (y <= (this.tabElement[i].y + this.tabElement[i].h))) {
                 // Return the name of the element found
-                return this.tabElement[i].name;
+                if (this.tabElement[i].name !== "backimage") {
+                    return this.tabElement[i].name;
+                }
+
             }
+
         }
     }
 };
