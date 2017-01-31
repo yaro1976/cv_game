@@ -23,6 +23,15 @@ describe('#Gameboard', function () {
                 expect(gameboard.tabElement[0].x).to.equal(10);
             });
         });
+        describe('Remove element to game', function () {
+            it('should remove an element on gameboard', function () {
+                var gameboard = new Gameboard();
+                gameboard.addElement('spaceTest', " ", " ", 10, 15, 50, 50);
+                gameboard.addElement('spaceTest2', " ", " ", 10, 15, 50, 50);
+                gameboard.removeElement('spaceTest2', " ", " ", 10, 15, 50, 50);
+                expect(gameboard.checkGetElement("spaceTest2")).to.equal(-1);
+            });
+        });
         it('should retreive the X position', function () {
             var gameboard = new Gameboard();
             gameboard.addElement('spaceTest', " ", " ", 10, 15, 50, 50);
@@ -32,6 +41,22 @@ describe('#Gameboard', function () {
             var gameboard = new Gameboard();
             gameboard.addElement('spaceTest', " ", " ", 10, 15, 50, 50);
             expect(gameboard.getY("spaceTest")).to.equal(15);
+        });
+        describe('Find an element', function () {
+            describe('Find an element by its name', function () {
+                it('Should find an element by its name', function () {
+                    var gameboard = new Gameboard();
+                    gameboard.addElement('spaceTest', " ", " ", 10, 15, 50, 50);
+                    expect(gameboard.checkGetElement("spaceTest")).to.not.equal(-1);
+                });
+            });
+             describe('Find an element by its position', function () {
+                it('Should find an element by its x position', function () {
+                    var gameboard = new Gameboard();
+                    gameboard.addElement('spaceTest', " ", " ", 10, 15, 50, 50);
+                    expect(gameboard.checkGetElementXY(10,15)).to.equal("spaceTest");
+                });
+            });
         });
 
     });

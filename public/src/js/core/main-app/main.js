@@ -134,25 +134,25 @@ var Game = function (width, height) {
                     "srcHeight": 34,
                     "guns": [{ // Guns  Position
                         "gX": 2,
-                        "gy": 30,
-                        "gw": 10,
-                        "gh": 0,
+                        "gY": 30,
+                        "gW": 10,
+                        "gH": 0,
                     }, {
                         "gX": 27,
-                        "gy": 30,
-                        "gw": 10,
-                        "gh": 0
+                        "gY": 30,
+                        "gW": 10,
+                        "gH": 0
                     }],
                     "nozel": [{ // Nozel Position
                         "nX": 9,
                         "nY": 0,
-                        "nw": 7,
-                        "nh": 0
+                        "nW": 7,
+                        "nH": 0
                     }, { // Nozel Position
                         "nX": 22,
                         "nY": 0,
-                        "nw": 7,
-                        "nh": 0
+                        "nW": 7,
+                        "nH": 0
                     }]
                 },
                 "orange": { // Vaisseau orange
@@ -162,25 +162,25 @@ var Game = function (width, height) {
                     "srcHeight": 45,
                     "guns": [{ // Guns  Position
                         "gX": 6,
-                        "gy": 6,
-                        "gw": 8,
-                        "gh": 0,
+                        "gY": 6,
+                        "gW": 8,
+                        "gH": 0,
                     }, {
-                        "gX": 27,
-                        "gy": 6,
-                        "gw": 8,
-                        "gh": 0
+                        "gX": 32, //27
+                        "gY": 6,
+                        "gW": 8,
+                        "gH": 0
                     }],
                     "nozel": [{ // Nozel Position
                         "nX": 10,
                         "nY": 40,
-                        "nw": 5,
-                        "nh": 0
+                        "nW": 5,
+                        "nH": 0
                     }, { // Nozel Position
                         "nX": 31,
                         "nY": 40,
-                        "nw": 5,
-                        "nh": 0
+                        "nW": 5,
+                        "nH": 0
                     }]
                 },
                 "orangeInverted": { // Vaisseau orange
@@ -190,25 +190,25 @@ var Game = function (width, height) {
                     "srcHeight": 45,
                     "guns": [{ // Guns  Position
                         "gX": 6,
-                        "gy": 39,
-                        "gw": 8,
-                        "gh": 0,
+                        "gY": 39,
+                        "gW": 8,
+                        "gH": 0,
                     }, {
                         "gX": 27,
-                        "gy": 39,
-                        "gw": 8,
-                        "gh": 0
+                        "gY": 39,
+                        "gW": 8,
+                        "gH": 0
                     }],
                     "nozel": [{ // Nozel Position
                         "nX": 10,
                         "nY": 5,
-                        "nw": 5,
-                        "nh": 0
+                        "nW": 5,
+                        "nH": 0
                     }, { // Nozel Position
                         "nX": 31,
                         "nY": 5,
-                        "nw": 5,
-                        "nh": 0
+                        "nW": 5,
+                        "nH": 0
                     }]
                 },
                 "green": { // Vaisseau vert
@@ -218,20 +218,20 @@ var Game = function (width, height) {
                     "srcHeight": 47,
                     "guns": [{ // Guns  Position
                         "gX": 14,
-                        "gy": 0,
-                        "gw": 7,
-                        "gh": 0,
+                        "gY": 0,
+                        "gW": 7,
+                        "gH": 0,
                     }, {
                         "gX": 43,
-                        "gy": 0,
-                        "gw": 7,
-                        "gh": 0
+                        "gY": 0,
+                        "gW": 7,
+                        "gH": 0
                     }],
                     "nozel": [{ // Nozel Position
                         "nX": 25,
                         "nY": 47,
-                        "nw": 14,
-                        "nh": 0
+                        "nW": 14,
+                        "nH": 0
                     }]
                 },
                 "greenInverted": { // Vaisseau vert
@@ -241,20 +241,20 @@ var Game = function (width, height) {
                     "srcHeight": 47,
                     "guns": [{ // Guns  Position
                         "gX": 14,
-                        "gy": 47,
-                        "gw": 7,
-                        "gh": 0,
+                        "gY": 47,
+                        "gW": 7,
+                        "gH": 0,
                     }, {
                         "gX": 43,
-                        "gy": 47,
-                        "gw": 7,
-                        "gh": 0
+                        "gY": 47,
+                        "gW": 7,
+                        "gH": 0
                     }],
                     "nozel": [{ // Nozel Position
                         "nX": 25,
                         "nY": 0,
-                        "nw": 14,
-                        "nh": 0
+                        "nW": 14,
+                        "nH": 0
                     }]
                 },
                 "pink": { // Vaisseau rose
@@ -265,19 +265,19 @@ var Game = function (width, height) {
                     "guns": [{ // Guns  Position
                         "gX": 7,
                         "gy": 39,
-                        "gw": 8,
-                        "gh": 0,
+                        "gW": 8,
+                        "gH": 0,
                     }, {
                         "gX": 29,
-                        "gy": 39,
-                        "gw": 8,
-                        "gh": 0
+                        "gY": 39,
+                        "gW": 8,
+                        "gH": 0
                     }],
                     "nozel": [{ // Nozel Position
                         "nX": 20,
                         "nY": 36,
-                        "nw": 4,
-                        "nh": 0
+                        "nW": 4,
+                        "nH": 0
                     }]
                 },
                 "pinkInverted": { // Vaisseau rose
@@ -287,20 +287,20 @@ var Game = function (width, height) {
                     "srcHeight": 36,
                     "guns": [{ // Guns  Position
                         "gX": 7,
-                        "gy": 36,
-                        "gw": 8,
-                        "gh": 0,
+                        "gY": 36,
+                        "gW": 8,
+                        "gH": 0,
                     }, {
                         "gX": 29,
-                        "gy": 36,
-                        "gw": 8,
-                        "gh": 0
+                        "gY": 36,
+                        "gW": 8,
+                        "gH": 0
                     }],
                     "nozel": [{ // Nozel Position
                         "nX": 20,
                         "nY": 0,
-                        "nw": 4,
-                        "nh": 0
+                        "nW": 4,
+                        "nH": 0
                     }]
                 },
                 "smallOctopus": { // Pieuvre petite
@@ -332,18 +332,18 @@ var Game = function (width, height) {
                     "nozel": [{ // Nozel Position
                         "nX": 13,
                         "nY": 82,
-                        "nw": 16,
-                        "nh": 0
+                        "nW": 16,
+                        "nH": 0
                     }, { // Nozel Position
                         "nX": 35,
                         "nY": 86,
-                        "nw": 28,
-                        "nh": 0
+                        "nW": 28,
+                        "nH": 0
                     }, { // Nozel Position
                         "nX": 70,
                         "nY": 84,
-                        "nw": 16,
-                        "nh": 0
+                        "nW": 16,
+                        "nH": 0
                     }]
                 },
                 "bigBlueShipInverted": { // Grand vaisseau
@@ -355,18 +355,18 @@ var Game = function (width, height) {
                     "nozel": [{ // Nozel Position
                         "nX": 14,
                         "nY": 11,
-                        "nw": 16,
-                        "nh": 0
+                        "nW": 16,
+                        "nH": 0
                     }, { // Nozel Position
                         "nX": 37,
                         "nY": 0,
-                        "nw": 28,
-                        "nh": 0
+                        "nW": 28,
+                        "nH": 0
                     }, { // Nozel Position
                         "nX": 72,
                         "nY": 5,
-                        "nw": 16,
-                        "nh": 0
+                        "nW": 16,
+                        "nH": 0
                     }]
                 }
             }
@@ -623,7 +623,7 @@ Game.prototype.generateEnemy = function () {
 
         // add the direction to the Element array
         switch (direc) {
-        // case "up":
+            // case "up":
             //     this.tabElement[index].direction[direc] = true;
             //     break;
             // case "up-right":
@@ -662,10 +662,12 @@ Game.prototype.generateEnemy = function () {
         this.movePlayer(this.spaceItems.ships.shipListInverted[itemNum], direc);
 
         // If the ship go over the max size of the canvas
+
+
         // We reset its y position, to place it
         // To the upper side
         if (this.tabElement[index].y > this.height) {
-            this.tabElement[index].y = -1;
+            this.tabElement[index].y = -10;
             x = this.random(this.width);
             // if ((x + this.spaceItems.ships.spaceShips[itemNum].srcWidth) > this.width) {
 
@@ -712,7 +714,7 @@ Game.prototype.generatePlanets = function () {
         direcList, direc;
 
 
-    direcList = ["up", "desapear", "up-right","desapear",  "right", "desapear", "down-right", "desapear", "down", "down-left", "desapear",  "left", "desapear",  "up-left", "desapear"];
+    direcList = ["up", "desapear", "up-right", "desapear", "right", "desapear", "down-right", "desapear", "down", "down-left", "desapear", "left", "desapear", "up-left", "desapear"];
 
     if ((!this.lastSpawnTimePlanet) || ((Date.now() - this.lastSpawnTimePlanet) > this.minPlanetSpawnTime)) {
         this.lastSpawnTimePlanet = Date.now();
@@ -783,7 +785,7 @@ Game.prototype.generatePlanets = function () {
             if ((x + this.spaceItems.planets.planet[name].srcWidth) > this.width) {
                 x = this.width - this.spaceItems.planets.planet[name].srcWidth;
             }
-            y = this.random(this.height );
+            y = this.random(this.height);
             h = this.spaceItems.planets.planet[name].srcHeight;
             w = this.spaceItems.planets.planet[name].srcWidth;
 
@@ -885,6 +887,16 @@ Game.prototype.movePlayer = function (name, moveStatus) {
                     vm.moveX("player", +1);
                 };
             }
+
+            if (vm.keyStatus.shoot && moveStatus) {
+                // Key space pressed
+                // if (vm.checkMove("player", "shoot") === true) { // If move is authorized
+                // Set new position, and draw spaceItems
+                // vm.moveX("player", +1);
+                vm.shoot("player");
+                vm.keyStatus.shoot = false;
+                // };
+            }
         }, 50);
     }
     else {
@@ -978,7 +990,7 @@ Game.prototype.checkDirection = function () {
             if (!moveOn) {
                 moveOn = true;
                 vm.keyStatus.shoot = true;
-                // intervalID = vm.movePlayer("player", moveOn);
+                intervalID = vm.movePlayer("player", moveOn);
             }
             break;
         default:
@@ -1048,5 +1060,53 @@ Game.prototype.drawGamer = function (gamerX, gamerY) {
 
     // Add the spaceship onto the table
     this.addElement("player", this.spaceItems.ships.spaceShips[this.userShip], img, gamerX, gamerY, dw, dh);
+
+};
+
+/*
+ * Function to activate the shoot
+ * @param {String} name - name of the shooting fly
+ */
+Game.prototype.shoot = function (name) {
+    var index,
+        gunsX,
+        gunsY,
+        i,
+        img;
+
+
+    // If shoot, get the element caracteristics
+    index = this.checkGetElement(name);
+
+    if (!this.tabElement[index].shootOn){
+        this.tabElement[index].shootOn = true;
+        // Get the image of rockets
+    img = new Image();
+    img.src = this.spaceItems.shoots.url;
+
+    // get the position of the guns
+
+    console.log(this.tabElement[index])
+
+    for (i = 0; this.tabElement[index].item.guns[i]; i += 1) {
+        img = new Image();
+        img.src = this.spaceItems.shoots.url;
+        gunsX = this.tabElement[index].x + this.tabElement[index].item.guns[i].gX;
+        gunsY = this.tabElement[index].y + this.tabElement[index].item.guns[i].gY  - this.spaceItems.shoots.shootItems.rocket1.srcHeight;
+
+        this.addElement('rocket1' + i, this.spaceItems.shoots.shootItems.rocket1, img, gunsX, gunsY, this.tabElement[index].item.guns[i].gW, this.spaceItems.shoots.shootItems.rocket1.srcHeight);
+    }
+console.log(this.tabElement);
+    console.log("shoot - index=", index);
+    // Get the calling fly position
+
+    // Set the rocket since the fly
+
+    // Call the moving rocket
+
+    // if we touch a fly
+    // Activate the animation
+    // move out the fly
+    }
 
 };

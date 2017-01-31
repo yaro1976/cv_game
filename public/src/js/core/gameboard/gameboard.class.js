@@ -53,9 +53,11 @@ Gameboard.prototype.addElement = function (name, item, img, posX, posY, width, h
                 "left": false,
                 "shoot": false
             },
-            "canBeTouch": true
+            "canBeTouch": true,
+            "shootOn": false
         });
-    } else { // update the value of the element
+    }
+    else { // update the value of the element
         this.tabElement[index] = {
             "name": name, // Name of the object
             "item": item, // item Object
@@ -72,9 +74,34 @@ Gameboard.prototype.addElement = function (name, item, img, posX, posY, width, h
                 "shoot": false
             },
             "speed": 0,
-            "canBeTouch": true
+            "canBeTouch": true,
+            "shootOn": false
         };
     }
+};
+
+/*
+ * removeElement - addElement onto the gameboard
+ * @param {String} name - Item Object
+ * @return {null}
+ */
+
+Gameboard.prototype.removeElement = function (name) {
+    var index,
+        i,
+        tempArray = [];
+
+    index = this.checkGetElement(name);
+    if (index !== -1) { // If element exists, we can remove it
+
+        for (i = 0; this.tabElement[i]; i += 1) {
+            if (i !== index) {
+                tempArray.push(this.tabElement[i]);
+            }
+        }
+        this.tabElement = tempArray;
+    }
+    return this.tabElement;
 };
 
 /*
@@ -175,7 +202,8 @@ Gameboard.prototype.checkMove = function (name, direction) {
         return true; // Nothing around
         // }
         // return true;
-    } else {
+    }
+    else {
         // If we go to right
         if (direction === "right") {
             // Check if the element touch the right of the canvas
@@ -187,7 +215,7 @@ Gameboard.prototype.checkMove = function (name, direction) {
             for (i = 1; this.tabElement[i]; i += 1) {
                 // If it is the calling element, do nothing
 
-                if (i !== id && !this.tabElement[i].dead && this.tabElement[i].canBeTouch ) { // It is the initial testing object called
+                if (i !== id && !this.tabElement[i].dead && this.tabElement[i].canBeTouch) { // It is the initial testing object called
                     // We test the X and Y position
                     if (this.testVerticalZone(posY, this.tabElement[i].y, height, this.tabElement[i].h) && this.testHorizontalZone(posX + 1, this.tabElement[i].x, width, this.tabElement[i].w)) {
                         return false; // We touch
@@ -207,7 +235,7 @@ Gameboard.prototype.checkMove = function (name, direction) {
             // Test element with its environment
             for (i = 1; this.tabElement[i]; i += 1) {
                 // If it is the calling element, do nothing
-                if (i !== id && !this.tabElement[i].dead && this.tabElement[i].canBeTouch ) { // It is the initial testing object called
+                if (i !== id && !this.tabElement[i].dead && this.tabElement[i].canBeTouch) { // It is the initial testing object called
                     // We test the X and Y position
                     if (this.testVerticalZone(posY, this.tabElement[i].y, height, this.tabElement[i].h) && this.testHorizontalZone(posX - 1, this.tabElement[i].x, width, this.tabElement[i].w)) {
                         return false; // We touch
@@ -228,7 +256,7 @@ Gameboard.prototype.checkMove = function (name, direction) {
             for (i = 1; this.tabElement[i]; i += 1) {
                 // If it is the calling element, do nothing
 
-                if (i !== id && !this.tabElement[i].dead && this.tabElement[i].canBeTouch ) { // It is the initial testing object called
+                if (i !== id && !this.tabElement[i].dead && this.tabElement[i].canBeTouch) { // It is the initial testing object called
                     // We test the X and Y position
                     if (this.testVerticalZone(posY - 1, this.tabElement[i].y, height, this.tabElement[i].h) && this.testHorizontalZone(posX, this.tabElement[i].x, width, this.tabElement[i].w)) {
                         return false; // We touch
@@ -249,7 +277,7 @@ Gameboard.prototype.checkMove = function (name, direction) {
             for (i = 1; this.tabElement[i]; i += 1) {
                 // If it is the calling element, do nothing
 
-                if (i !== id && !this.tabElement[i].dead && this.tabElement[i].canBeTouch ) { // It is the initial testing object called
+                if (i !== id && !this.tabElement[i].dead && this.tabElement[i].canBeTouch) { // It is the initial testing object called
                     // We test the X and Y position
                     if (this.testVerticalZone(posY + 1, this.tabElement[i].y, height, this.tabElement[i].h) && this.testHorizontalZone(posX, this.tabElement[i].x, width, this.tabElement[i].w)) {
                         return false; // We touch
@@ -369,5 +397,19 @@ Gameboard.prototype.incScore = function () {
     }
 
     return -1; // The game is finished
-
 };
+
+/*
+ * Retreve the element presents at a position
+ */
+Gameboard.prototype.checkGetElementXY = function (x, y) {
+    var i;
+
+    for (i = 0; this.tabElement[i]; i += 1) {
+        if ((x >= this.tabElement[i].x) && (x <= this.tabElement[i].x + this.tabElement[i].w)) {
+            if ((y >= this.tabElement[i].y) && (y <= this.tabElement[i].y + this.tabElement[i].h)) {
+                return this.tabElement[i].name;
+            }
+        }
+    }
+}
