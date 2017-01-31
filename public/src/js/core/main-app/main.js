@@ -13,7 +13,8 @@ var Game = function (width, height) {
     Gameboard.call(this, width, height); // Call the Gameboard constructor
 
     // Save the end of the game
-    this.lost = false
+    this.lost = false;
+    this.gamewin = true;
 
     // spaceItems number for user ship
     this.userShip = "orange";
@@ -546,6 +547,34 @@ var Game = function (width, height) {
         },
     };
 
+    // List of skills to find
+    this.skills = {
+        "skillList": ["htmlCss", "", "javascript", "", "Angularjs", "", "nodejs", "", "express", "", "mongodb", "", "meteor", "", "jquery", "", ],
+        "htmlCss": {
+            "found": false
+        },
+        "javascript": {
+            "found": false
+        },
+        "Angularjs": {
+            "found": false
+        },
+        "nodejs": {
+            "found": false
+        },
+        "express": {
+            "found": false
+        },
+        "mongodb": {
+            "found": false
+        },
+        "meteor": {
+            "found": false
+        },
+        "jquery": {
+            "found": false
+        }
+    }
 };
 
 // Define the parent Object
@@ -627,8 +656,6 @@ Game.prototype.clearScreen = function () {
  *        Position the elements
  */
 Game.prototype.init = function (w, h) {
-    var i,
-        maxEnemy = 5;
 
     if (this.createGameZone()) {
         // Get the canvas context
@@ -954,7 +981,7 @@ Game.prototype.movePlayer = function (name, moveStatus) {
                 vm.moveRocket("player");
                 // vm.keyStatus.shoot = false;
             }
-        }, 20);
+        }, 30);
     }
 };
 
@@ -1029,7 +1056,6 @@ Game.prototype.killEnnemy = function (name) {
 
     var start = null;
 
-
     vm = this;
     // find the object caracteristics
     index = this.checkGetElement(name);
@@ -1059,7 +1085,7 @@ Game.prototype.killEnnemy = function (name) {
             if (i < 7) { // animate the shooting animation frame
                 i += 1;
                 item = vm.spaceItems.effects.effectItemList[i];
-                console.log(item);
+
                 vm.addElement('effect', vm.spaceItems.effects.effectItems[item], img, posX, posY, vm.spaceItems.effects.effectItems[item].srcWidth, vm.spaceItems.effects.effectItems[item].srcHeight);
                 vm.draw(); // draw the animation
                 // Remove the image
@@ -1075,7 +1101,8 @@ Game.prototype.killEnnemy = function (name) {
 
         id = window.requestAnimationFrame(anim);
     }
-    id = window.requestAnimationFrame(anim)
+    id = window.requestAnimationFrame(anim);
+    this.activateSkills();
 }
 /*
  *   Delete the rocket
@@ -1098,7 +1125,6 @@ Game.prototype.removeRocket = function () {
     }
     this.tabElement[this.checkGetElement("player")].shootOn = false;
     this.keyStatus.shoot = false;
-    console.log("removeRocket", this.tabElement[this.checkGetElement("player")].shootOn);
 };
 
 /*
@@ -1155,7 +1181,7 @@ Game.prototype.moveRocket = function (name, moveStatus) {
                     }
                 }
             }
-        }, 30)
+        }, 60)
     }
 }
 
@@ -1329,5 +1355,51 @@ Game.prototype.shoot = function (name) {
                 this.addElement('rocket2' + i, this.spaceItems.shoots.shootItems.rocket2, img, gunsX, gunsY, this.tabElement[index].item.guns[i].gW, this.spaceItems.shoots.shootItems.rocket2.srcHeight);
             }
         }
+    }
+};
+
+/*
+ * activate the skill if found
+ */
+Game.prototype.activateSkills = function () {
+    var skillChoose,
+    status;
+
+    // adjust the score Max
+    this.maxScore = this.skills.skillList.length;
+    //Choose a skill
+    skillChoose = this.skills.skillList[this.random(this.skills.skillList.length)];
+    
+    if (skillChoose !== "") {
+        switch (skillChoose) {
+            case "htmlCss":
+                status = this.incScore(); // increment the score
+                break;
+            case "javascript":
+                status = this.incScore(); // increment the score
+                break;
+            case "Angularjs":
+                status = this.incScore(); // increment the score
+                break;
+            case "nodejs":
+                status = this.incScore(); // increment the score
+                break;
+            case "express":
+                status = this.incScore(); // increment the score
+                break;
+            case "mongodb":
+                status = this.incScore(); // increment the score
+                break;
+            case "meteor":
+                status = this.incScore(); // increment the score
+                break;
+            case "jquery":
+                status = this.incScore(); // increment the score
+                break;
+        }
+    }
+
+    if (status === -1 ){
+        this.gameWin = true;
     }
 };
