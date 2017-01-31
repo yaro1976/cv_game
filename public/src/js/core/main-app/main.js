@@ -15,7 +15,6 @@ var Game = function (width, height) {
     // spaceItems number for user ship
     this.userShip = "orange";
 
-
     // Time beetwen new Ennemy ship spawn
     this.minSpawnTime = 2000;
     this.lastSpawnTime = false;
@@ -23,6 +22,10 @@ var Game = function (width, height) {
     // Time beetwen new planet spawn
     this.minPlanetSpawnTime = 4000;
     this.lastSpawnTimePlanet = false;
+
+    // Rocket
+    // Save Move actions of the rocket
+    this.intervalIDRocket = false;
 
 
     // Save key press status ( up, down, right, left, space)
@@ -630,32 +633,32 @@ Game.prototype.generateEnemy = function () {
             //     this.tabElement[index].direction.right = true;
             //     this.tabElement[index].direction.up = true;
             //     break;
-        case "right":
-            this.tabElement[index].direction.right = true;
-            break;
-        case "down-right":
-            this.tabElement[index].direction.down = true;
-            this.tabElement[index].direction.right = true;
-            break;
-        case "down":
-            this.tabElement[index].direction.down = true;
-            break;
-        case "down-left":
-            this.tabElement[index].direction.down = true;
-            this.tabElement[index].direction.left = true;
-            break;
-        case "left":
-            this.tabElement[index].direction.left = true;
-            break;
-            // case "up-left":
-            //     this.tabElement[index].direction.left = true;
-            //     this.tabElement[index].direction.up = true;
-            //     break;
-        case "shoot":
-            this.tabElement[index].direction.shoot = true;
-            break;
-        default:
-            this.tabElement[index].direction.down = true;
+            case "right":
+                this.tabElement[index].direction.right = true;
+                break;
+            case "down-right":
+                this.tabElement[index].direction.down = true;
+                this.tabElement[index].direction.right = true;
+                break;
+            case "down":
+                this.tabElement[index].direction.down = true;
+                break;
+            case "down-left":
+                this.tabElement[index].direction.down = true;
+                this.tabElement[index].direction.left = true;
+                break;
+            case "left":
+                this.tabElement[index].direction.left = true;
+                break;
+                // case "up-left":
+                //     this.tabElement[index].direction.left = true;
+                //     this.tabElement[index].direction.up = true;
+                //     break;
+            case "shoot":
+                this.tabElement[index].direction.shoot = true;
+                break;
+            default:
+                this.tabElement[index].direction.down = true;
         }
 
         // Move the element
@@ -676,8 +679,7 @@ Game.prototype.generateEnemy = function () {
             this.tabElement[index].x = x;
         }
 
-    }
-    else {
+    } else {
         if (itemNum !== this.spaceItems.ships.shipListInverted.indexOf(this.userShip + "Inverted")) {
             if ((!this.lastSpawnTime) || ((Date.now() - this.lastSpawnTime) > this.minSpawnTime)) {
                 this.lastSpawnTime = Date.now();
@@ -733,47 +735,46 @@ Game.prototype.generatePlanets = function () {
 
             // add the direction to the Element array
             switch (direc) {
-            case "up":
-                this.tabElement[index].direction[direc] = true;
-                break;
-            case "up-right":
-                this.tabElement[index].direction.right = true;
-                this.tabElement[index].direction.up = true;
-                break;
-            case "right":
-                this.tabElement[index].direction.right = true;
-                break;
-            case "down-right":
-                this.tabElement[index].direction.down = true;
-                this.tabElement[index].direction.right = true;
-                break;
-            case "down":
-                this.tabElement[index].direction.down = true;
-                break;
-            case "down-left":
-                this.tabElement[index].direction.down = true;
-                this.tabElement[index].direction.left = true;
-                break;
-            case "left":
-                this.tabElement[index].direction.left = true;
-                break;
-            case "up-left":
-                this.tabElement[index].direction.left = true;
-                this.tabElement[index].direction.up = true;
-                break;
-            case "desapear":
-                this.tabElement[index].x = -15;
-                this.tabElement[index].y = -15;
-                break;
-            default:
-                this.tabElement[index].direction.down = true;
+                case "up":
+                    this.tabElement[index].direction[direc] = true;
+                    break;
+                case "up-right":
+                    this.tabElement[index].direction.right = true;
+                    this.tabElement[index].direction.up = true;
+                    break;
+                case "right":
+                    this.tabElement[index].direction.right = true;
+                    break;
+                case "down-right":
+                    this.tabElement[index].direction.down = true;
+                    this.tabElement[index].direction.right = true;
+                    break;
+                case "down":
+                    this.tabElement[index].direction.down = true;
+                    break;
+                case "down-left":
+                    this.tabElement[index].direction.down = true;
+                    this.tabElement[index].direction.left = true;
+                    break;
+                case "left":
+                    this.tabElement[index].direction.left = true;
+                    break;
+                case "up-left":
+                    this.tabElement[index].direction.left = true;
+                    this.tabElement[index].direction.up = true;
+                    break;
+                case "desapear":
+                    this.tabElement[index].x = -15;
+                    this.tabElement[index].y = -15;
+                    break;
+                default:
+                    this.tabElement[index].direction.down = true;
             }
 
             // Change the planet position
             // Move the element
             this.movePlayer(this.spaceItems.planets.planetList[itemNum], direc);
-        }
-        else {
+        } else {
             // Planet doesn't not exists
             // Define all carateristics of the planet
             // It size, image, etc.
@@ -828,8 +829,9 @@ Game.prototype.draw = function () {
     for (i = 0; this.tabElement[i]; i += 1) {
         // Select all element present
         // draw each element
-
-        this.ctx.drawImage(this.tabElement[i].img, this.tabElement[i].item.srcX, this.tabElement[i].item.srcY, this.tabElement[i].item.srcWidth, this.tabElement[i].item.srcHeight, this.tabElement[i].x, this.tabElement[i].y, this.tabElement[i].w, this.tabElement[i].h);
+        if (this.tabElement[i].img) {
+            this.ctx.drawImage(this.tabElement[i].img, this.tabElement[i].item.srcX, this.tabElement[i].item.srcY, this.tabElement[i].item.srcWidth, this.tabElement[i].item.srcHeight, this.tabElement[i].x, this.tabElement[i].y, this.tabElement[i].w, this.tabElement[i].h);
+        }
 
     }
 
@@ -889,56 +891,102 @@ Game.prototype.movePlayer = function (name, moveStatus) {
             }
 
             if (vm.keyStatus.shoot && moveStatus) {
-                // Key space pressed
-                // if (vm.checkMove("player", "shoot") === true) { // If move is authorized
-                // Set new position, and draw spaceItems
-                // vm.moveX("player", +1);
+                // Key space pressed               
                 vm.shoot("player");
+                vm.moveRocket("player");
                 vm.keyStatus.shoot = false;
-                // };
             }
         }, 50);
-    }
-    else {
+    } else {
         window.setInterval(function () {
-            if (vm.tabElement[index].direction.up) {
-                // Key up pressed
-                if (vm.checkMove(name, "up") === true) { // If move is authorized
-                    // Set new position, and draw spaceItems
-                    vm.moveY(name, -5);
-                    vm.tabElement[index].direction.up = false;
-                };
+            if (vm.tabElement[index]) {
+                if (vm.tabElement[index].direction.up) {
+                    // Key up pressed
+                    if (vm.checkMove(name, "up") === true) { // If move is authorized
+                        // Set new position, and draw spaceItems
+                        vm.moveY(name, -5);
+                        vm.tabElement[index].direction.up = false;
+                    };
+                }
+
+                if (vm.tabElement[index].direction.down) {
+                    // Key up pressed
+                    if (vm.checkMove(name, "down") === true) { // If move is authorized
+                        // Set new position, and draw spaceItems
+                        vm.moveY(name, 5);
+                        vm.tabElement[index].direction.down = false;
+                    };
+                }
+
+                if (vm.tabElement[index].direction.left) {
+                    // Key left pressed
+                    if (vm.checkMove(name, "left") === true) { // If move is authorized
+                        // Set new position, and draw spaceItems
+                        vm.moveX(name, -5);
+                        vm.tabElement[index].direction.left = false;
+                    };
+                }
+
+                if (vm.tabElement[index].direction.right) {
+                    // Key right pressed
+                    if (vm.checkMove(name, "right") === true) { // If move is authorized
+                        // Set new position, and draw spaceItems
+                        vm.moveX(name, 5);
+                        vm.tabElement[index].direction.right = false;
+                    };
+                }
             }
 
-            if (vm.tabElement[index].direction.down) {
-                // Key up pressed
-                if (vm.checkMove(name, "down") === true) { // If move is authorized
-                    // Set new position, and draw spaceItems
-                    vm.moveY(name, 5);
-                    vm.tabElement[index].direction.down = false;
-                };
-            }
-
-            if (vm.tabElement[index].direction.left) {
-                // Key left pressed
-                if (vm.checkMove(name, "left") === true) { // If move is authorized
-                    // Set new position, and draw spaceItems
-                    vm.moveX(name, -5);
-                    vm.tabElement[index].direction.left = false;
-                };
-            }
-
-            if (vm.tabElement[index].direction.right) {
-                // Key right pressed
-                if (vm.checkMove(name, "right") === true) { // If move is authorized
-                    // Set new position, and draw spaceItems
-                    vm.moveX(name, 5);
-                    vm.tabElement[index].direction.right = false;
-                };
-            }
         }, 2);
     }
 };
+
+/*
+ * Move the rocket
+ * @param {String} name - Name of the player who shoot
+ * @param {String} moveStatus - Check if the status 
+ */
+Game.prototype.moveRocket = function (name, moveStatus) {
+    var i,
+        index,
+        re,
+        vm,
+        playerId;
+
+    vm = this;
+    index = this.checkGetElement(name);
+    playerId = this.tabElement[index];
+    console.log(playerId)
+
+    re = /rocket/gi;
+    // Check if shoot is active
+    if (this.keyStatus.shoot && playerId.shootOn === true) {
+        this.intervalIDRocket = window.setInterval(function () {
+            // Get all targets
+            for (i = 0; vm.tabElement[i]; i += 1) {
+                if (vm.tabElement[i].name.match(re)) {
+                    if (name === "player") {
+                        // For Player target, change its position, to go up
+                        vm.moveY(vm.tabElement[i].name, -1);
+
+                        // if its position is not on canvas, stop the animation
+                        if (vm.tabElement[i].y === -40) {
+                            console.log("Stop animation");
+                            playerId.shootOn = false;
+                            vm.keyStatus.shoot = false;
+                            
+                            vm.removeElement(vm.tabElement[i].name);
+
+                        }
+                    }
+                }
+            }
+
+        }, 5)
+
+    }    
+}
+
 /*
  * checkDirection - Read keyboard and move the user ship
  */
@@ -954,47 +1002,47 @@ Game.prototype.checkDirection = function () {
         var code = event.keyCode;
 
         switch (code) {
-        case 37: // Left key is pressed
-            if (!moveOn) {
-                moveOn = true;
-                vm.keyStatus.left = true;
-                intervalID = vm.movePlayer("player", moveOn);
-            }
-            break;
-        case 38:
-            // Up key is pressed
-            if (!moveOn) {
-                moveOn = true;
-                vm.keyStatus.up = true;
-                intervalID = vm.movePlayer("player", moveOn);
-            }
-            break;
-        case 39:
-            // Right key is pressed
-            if (!moveOn) {
-                moveOn = true;
-                vm.keyStatus.right = true;
-                intervalID = vm.movePlayer("player", moveOn);
-            }
-            break;
-        case 40:
-            // Down key is pressed
-            if (!moveOn) {
-                moveOn = true;
-                vm.keyStatus.down = true;
-                intervalID = vm.movePlayer("player", moveOn);
-            }
-            break;
-        case 32:
-            // Down key is pressed
-            if (!moveOn) {
-                moveOn = true;
-                vm.keyStatus.shoot = true;
-                intervalID = vm.movePlayer("player", moveOn);
-            }
-            break;
-        default:
-            console.log(code);
+            case 37: // Left key is pressed
+                if (!moveOn) {
+                    moveOn = true;
+                    vm.keyStatus.left = true;
+                    intervalID = vm.movePlayer("player", moveOn);
+                }
+                break;
+            case 38:
+                // Up key is pressed
+                if (!moveOn) {
+                    moveOn = true;
+                    vm.keyStatus.up = true;
+                    intervalID = vm.movePlayer("player", moveOn);
+                }
+                break;
+            case 39:
+                // Right key is pressed
+                if (!moveOn) {
+                    moveOn = true;
+                    vm.keyStatus.right = true;
+                    intervalID = vm.movePlayer("player", moveOn);
+                }
+                break;
+            case 40:
+                // Down key is pressed
+                if (!moveOn) {
+                    moveOn = true;
+                    vm.keyStatus.down = true;
+                    intervalID = vm.movePlayer("player", moveOn);
+                }
+                break;
+            case 32:
+                // Down key is pressed
+                if (!moveOn) {
+                    moveOn = true;
+                    vm.keyStatus.shoot = true;
+                    intervalID = vm.movePlayer("player", moveOn);
+                }
+                break;
+            default:
+                console.log(code);
         }
     };
 
@@ -1004,18 +1052,18 @@ Game.prototype.checkDirection = function () {
         moveOn = false;
         var code = event.keyCode;
         switch (code) {
-        case 37: // Left key is released
-            vm.keyStatus.left = false;
-            break;
-        case 38: // Up key is released
-            vm.keyStatus.up = false;
-            break;
-        case 39: // Right key is released
-            vm.keyStatus.right = false;
-            break;
-        case 40: // Down key is released
-            vm.keyStatus.down = false;
-            break;
+            case 37: // Left key is released
+                vm.keyStatus.left = false;
+                break;
+            case 38: // Up key is released
+                vm.keyStatus.up = false;
+                break;
+            case 39: // Right key is released
+                vm.keyStatus.right = false;
+                break;
+            case 40: // Down key is released
+                vm.keyStatus.down = false;
+                break;
         }
     };
 };
@@ -1078,35 +1126,37 @@ Game.prototype.shoot = function (name) {
     // If shoot, get the element caracteristics
     index = this.checkGetElement(name);
 
-    if (!this.tabElement[index].shootOn){
+    if (!this.tabElement[index].shootOn) {
         this.tabElement[index].shootOn = true;
         // Get the image of rockets
-    img = new Image();
-    img.src = this.spaceItems.shoots.url;
-
-    // get the position of the guns
-
-    console.log(this.tabElement[index])
-
-    for (i = 0; this.tabElement[index].item.guns[i]; i += 1) {
         img = new Image();
         img.src = this.spaceItems.shoots.url;
-        gunsX = this.tabElement[index].x + this.tabElement[index].item.guns[i].gX;
-        gunsY = this.tabElement[index].y + this.tabElement[index].item.guns[i].gY  - this.spaceItems.shoots.shootItems.rocket1.srcHeight;
 
-        this.addElement('rocket1' + i, this.spaceItems.shoots.shootItems.rocket1, img, gunsX, gunsY, this.tabElement[index].item.guns[i].gW, this.spaceItems.shoots.shootItems.rocket1.srcHeight);
-    }
-console.log(this.tabElement);
-    console.log("shoot - index=", index);
-    // Get the calling fly position
+        // get the position of the guns
 
-    // Set the rocket since the fly
+        console.log(this.tabElement[index])
 
-    // Call the moving rocket
+        for (i = 0; this.tabElement[index].item.guns[i]; i += 1) {
+            img = new Image();
+            img.src = this.spaceItems.shoots.url;
+            gunsX = this.tabElement[index].x + this.tabElement[index].item.guns[i].gX;
+            gunsY = this.tabElement[index].y + this.tabElement[index].item.guns[i].gY - this.spaceItems.shoots.shootItems.rocket1.srcHeight;
 
-    // if we touch a fly
-    // Activate the animation
-    // move out the fly
+            this.addElement('rocket1' + i, this.spaceItems.shoots.shootItems.rocket1, img, gunsX, gunsY, this.tabElement[index].item.guns[i].gW, this.spaceItems.shoots.shootItems.rocket1.srcHeight);
+        }
+        // console.log(this.tabElement);
+        // console.log("shoot - index=", index);
+        // Get the calling fly position
+
+        // Set the rocket since the fly
+
+        // Call the moving rocket
+
+        // if we touch a fly
+        // Activate the animation
+        // move out the fly
+    } else {
+        clearInterval(this.intervalIDRocket);
     }
 
 };
