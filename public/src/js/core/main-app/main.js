@@ -12,6 +12,9 @@ var Game = function (width, height) {
     this.height = height || 800; // Set the main height
     Gameboard.call(this, width, height); // Call the Gameboard constructor
 
+    // Save the end of the game
+    this.lost = false
+
     // spaceItems number for user ship
     this.userShip = "orange";
 
@@ -480,12 +483,67 @@ var Game = function (width, height) {
                 },
                 "rocket2": {
                     "srcX": 65,
-                    "srcY": 13,
+                    "srcY": 137,
                     "srcWidth": 14,
                     "srcHeight": 15
                 }
             }
-        }
+        },
+        "effects": { // Shotting animation
+            "id": "effects",
+            "url": "dist/img/space_items.png",
+            "effectItemList": ["effect1", "effect2", "effect3", "effect4", "effect5", "effect6", "effect7", "effect8"],
+            "effectItems": {
+                "effect1": {
+                    "srcX": 34,
+                    "srcY": 465,
+                    "srcWidth": 26,
+                    "srcHeight": 25
+                },
+                "effect2": {
+                    "srcX": 107,
+                    "srcY": 457,
+                    "srcWidth": 44,
+                    "srcHeight": 43
+                },
+                "effect3": {
+                    "srcX": 181,
+                    "srcY": 450,
+                    "srcWidth": 63,
+                    "srcHeight": 55
+                },
+                "effect4": {
+                    "srcX": 252,
+                    "srcY": 449,
+                    "srcWidth": 82,
+                    "srcHeight": 61
+                },
+                "effect5": {
+                    "srcX": 346,
+                    "srcY": 448,
+                    "srcWidth": 55,
+                    "srcHeight": 58
+                },
+                "effect6": {
+                    "srcX": 421,
+                    "srcY": 439,
+                    "srcWidth": 63,
+                    "srcHeight": 63
+                },
+                "effect7": {
+                    "srcX": 502,
+                    "srcY": 444,
+                    "srcWidth": 66,
+                    "srcHeight": 67
+                },
+                "effect8": {
+                    "srcX": 579,
+                    "srcY": 439,
+                    "srcWidth": 76,
+                    "srcHeight": 66
+                }
+            }
+        },
     };
 
 };
@@ -857,31 +915,37 @@ Game.prototype.movePlayer = function (name, moveStatus) {
                         // if we do not go over 3/4 of the canvas, we can go up
                         vm.moveY("player", -1);
                     }
-                };
+                } else {
+                    this.lost = true; // We are touch => game over
+                }
             }
 
             if (vm.keyStatus.down && moveStatus) {
                 // Key up pressed
                 if (vm.checkMove("player", "down") === true) { // If move is authorized
-                    // Set new position, and draw spaceItems
+                    // Set new position, and draw spaceItems                   
                     vm.moveY("player", +1);
-                };
+                }
             }
 
             if (vm.keyStatus.left && moveStatus) {
                 // Key left pressed
                 if (vm.checkMove("player", "left") === true) { // If move is authorized
-                    // Set new position, and draw spaceItems
+                    // Set new position, and draw spaceItems                    
                     vm.moveX("player", -1);
-                };
+                } else {
+                    this.lost = true; // We are touch => game over
+                }
             }
 
             if (vm.keyStatus.right && moveStatus) {
                 // Key right pressed
                 if (vm.checkMove("player", "right") === true) { // If move is authorized
-                    // Set new position, and draw spaceItems
+                    // Set new position, and draw spaceItems                    
                     vm.moveX("player", +1);
-                };
+                } else {
+                    this.lost = true; // We are touch => game over
+                }
             }
 
             if (vm.keyStatus.shoot && moveStatus) {
@@ -890,7 +954,7 @@ Game.prototype.movePlayer = function (name, moveStatus) {
                 vm.moveRocket("player");
                 // vm.keyStatus.shoot = false;
             }
-        }, 50);
+        }, 20);
     }
 };
 
@@ -947,25 +1011,88 @@ Game.prototype.moveEnnemy = function (name, moveStatus) {
             }
         }
 
-    }, 2);
+    }, 20);
+}
+
+/*
+ * Animation when ennemy is killed
+ * @param {String} name - name of the ennemy touch
+ */
+Game.prototype.killEnnemy = function (name) {
+    var i, id,
+        index,
+        posX,
+        posY,
+        img,
+        item,
+        vm;
+
+    var start = null;
+
+
+    vm = this;
+    // find the object caracteristics
+    index = this.checkGetElement(name);
+
+    // Get the original image
+    img = new Image();
+    img.src = this.spaceItems.effects.url;
+    // Find the original position
+    posX = this.tabElement[index].x;
+    posY = this.tabElement[index].y;
+
+    // Delete the ennemy
+    this.removeElement(name);
+    // And the rocket
+    this.removeRocket();
+    i = 0;
+
+    // create the animation
+    var anim = function (timestamp) {
+        if (!start) { // Save the start time of the animation
+            start = timestamp;
+            i = 0;
+        }
+        var progress = timestamp - start;
+
+        if (progress > 200) { // If more than 200µs            
+            if (i < 7) { // animate the shooting animation frame
+                i += 1;
+                item = vm.spaceItems.effects.effectItemList[i];
+                console.log(item);
+                vm.addElement('effect', vm.spaceItems.effects.effectItems[item], img, posX, posY, vm.spaceItems.effects.effectItems[item].srcWidth, vm.spaceItems.effects.effectItems[item].srcHeight);
+                vm.draw(); // draw the animation
+                // Remove the image
+                vm.removeElement('effect');
+            }
+
+            if (i >= 7) {
+                // All frame has been shawn 
+                // So so the animation
+                window.cancelAnimationFrame(id);
+            }
+        }
+
+        id = window.requestAnimationFrame(anim);
+    }
+    id = window.requestAnimationFrame(anim)
 }
 /*
  *   Delete the rocket
  */
 Game.prototype.removeRocket = function () {
     var i,
-        re,
         vm;
 
     vm = this;
-    // To check if the item name "rocket*"
-    re = /rocket/gi;
+
 
     // Get all targets
     for (i = 0; vm.tabElement[i]; i += 1) {
-        // Get position of rockets
-        if (vm.tabElement[i].name.match(re)) {
-            console.log(vm.tabElement);
+        if (vm.tabElement[i].name === "rocket10" || vm.tabElement[i].name === "rocket20") {
+            vm.removeElement(vm.tabElement[i].name);
+        }
+        if (vm.tabElement[i].name === "rocket11" || vm.tabElement[i].name === "rocket21") {
             vm.removeElement(vm.tabElement[i].name);
         }
     }
@@ -984,7 +1111,8 @@ Game.prototype.moveRocket = function (name, moveStatus) {
         index,
         re,
         vm,
-        playerId;
+        playerId,
+        ennemyTouch;
 
     // Save the calling function
     vm = this;
@@ -1004,36 +1132,30 @@ Game.prototype.moveRocket = function (name, moveStatus) {
                 if (vm.tabElement[i].name.match(re)) {
                     // If it is the player who shoot
                     if (name === "player" && playerId.shootOn) {
-                        vm.checkGetElementXY(vm.tabElement[i].x - 1, vm.tabElement[i].y - 1)
+                        ennemyTouch = vm.checkGetElementXY(vm.tabElement[i].x - 1, vm.tabElement[i].y - 1)
                         if (vm.spaceItems.ships.shipListInverted.indexOf(vm.checkGetElementXY(vm.tabElement[i].x, vm.tabElement[i].y)) !== -1) {
-                            // We touch an ennemy
-                            // playerId.shootOn = false;
-                            // vm.keyStatus.shoot = false;
-                            // if (this.intervalIDRocket) {
-                            //     clearInterval(this.intervalIDRocket);
-                            // }
-                            // vm.removeRocket();
+                            // We touch an ennemy         // Call the animation                  
+                            vm.killEnnemy(ennemyTouch);
+
+
 
                         } else {
                             // nothing arround, the rocket move
                             vm.moveY(vm.tabElement[i].name, -1);
-                        }
+                            // if its position is not on canvas, stop the animation
+                            if (vm.tabElement[i].y === -40) {
+                                //Stop the animation
+                                // And autorize the new shoot
+                                playerId.shootOn = false;
+                                vm.keyStatus.shoot = false;
+                                vm.removeRocket();
 
-                        // if its position is not on canvas, stop the animation
-                        if (vm.tabElement[i].y === -40) {
-                            console.log("Stop animation");
-                            playerId.shootOn = false;
-                            vm.keyStatus.shoot = false;
-
-                            vm.removeRocket();
-                            // vm.removeElement(vm.tabElement[i].name);
-                            console.log(vm.tabElement)
+                            }
                         }
                     }
                 }
             }
-
-        }, 1)
+        }, 30)
     }
 }
 
@@ -1092,7 +1214,7 @@ Game.prototype.checkDirection = function () {
                 }
                 break;
             default:
-                console.log(code);
+
         }
     };
 
@@ -1170,7 +1292,8 @@ Game.prototype.shoot = function (name) {
         gunsX,
         gunsY,
         i,
-        img;
+        img,
+        rocket;
 
 
     // If shoot, get the element caracteristics
@@ -1182,34 +1305,29 @@ Game.prototype.shoot = function (name) {
         img = new Image();
         img.src = this.spaceItems.shoots.url;
 
-        // get the position of the guns
+        // Choose which rocket to use
+        rocket = this.random(2);
 
-        // console.log(this.tabElement[index])
+        // get the position of the guns   
 
         for (i = 0; this.tabElement[index].item.guns[i]; i += 1) {
-            img = new Image();
-            img.src = this.spaceItems.shoots.url;
-            gunsX = this.tabElement[index].x + this.tabElement[index].item.guns[i].gX;
-            gunsY = this.tabElement[index].y + this.tabElement[index].item.guns[i].gY - this.spaceItems.shoots.shootItems.rocket1.srcHeight;
+            if (rocket = 0) {
+                // the rocket n°1 is selected
+                img = new Image();
+                img.src = this.spaceItems.shoots.url;
+                gunsX = this.tabElement[index].x + this.tabElement[index].item.guns[i].gX;
+                gunsY = this.tabElement[index].y + this.tabElement[index].item.guns[i].gY - this.spaceItems.shoots.shootItems.rocket1.srcHeight;
 
-            this.addElement('rocket1' + i, this.spaceItems.shoots.shootItems.rocket1, img, gunsX, gunsY, this.tabElement[index].item.guns[i].gW, this.spaceItems.shoots.shootItems.rocket1.srcHeight);
+                this.addElement('rocket1' + i, this.spaceItems.shoots.shootItems.rocket1, img, gunsX, gunsY, this.tabElement[index].item.guns[i].gW, this.spaceItems.shoots.shootItems.rocket1.srcHeight);
+            } else {
+                // the rocket n°2 is selected
+                img = new Image();
+                img.src = this.spaceItems.shoots.url;
+                gunsX = this.tabElement[index].x + this.tabElement[index].item.guns[i].gX;
+                gunsY = this.tabElement[index].y + this.tabElement[index].item.guns[i].gY - this.spaceItems.shoots.shootItems.rocket2.srcHeight;
+
+                this.addElement('rocket2' + i, this.spaceItems.shoots.shootItems.rocket2, img, gunsX, gunsY, this.tabElement[index].item.guns[i].gW, this.spaceItems.shoots.shootItems.rocket2.srcHeight);
+            }
         }
-        // console.log(this.tabElement);
-        // console.log("shoot - index=", index);
-        // Get the calling fly position
-
-        // Set the rocket since the fly
-
-        // Call the moving rocket
-
-        // if we touch a fly
-        // Activate the animation
-        // move out the fly
-    } else {
-        if (this.intervalIDRocket) {
-            clearInterval(this.intervalIDRocket);
-        }
-
     }
-
 };
