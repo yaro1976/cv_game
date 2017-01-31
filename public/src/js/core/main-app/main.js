@@ -670,12 +670,7 @@ Game.prototype.generateEnemy = function () {
         // We reset its y position, to place it
         // To the upper side
         if (this.tabElement[index].y > this.height) {
-            this.tabElement[index].y = -10;
-            x = this.random(this.width);
-            if ((x + this.spaceItems.ships.spaceShips[itemNum].srcWidth) > this.width) {
-                x = this.width - this.spaceItems.ships.spaceShips[itemNum].srcWidth;
-            }
-            this.tabElement[index].x = x;
+            this.removeElement(this.tabElement[index].name);
         }
 
     } else {
@@ -904,7 +899,7 @@ Game.prototype.movePlayer = function (name, moveStatus) {
  * @param {String} name - name of the element to move
  * @param {String} movestatus - Check if the element moving
  */
-Game.prototype.moveEnnemy = function (name, moveStatus) { 
+Game.prototype.moveEnnemy = function (name, moveStatus) {
     var index,
         intervalID, // Save the Interval ID
         vm;
@@ -914,45 +909,45 @@ Game.prototype.moveEnnemy = function (name, moveStatus) {
     vm = this;
 
     window.setInterval(function () {
-            if (vm.tabElement[index]) {
-                if (vm.tabElement[index].direction.up) {
-                    // Key up pressed
-                    // if (vm.checkMove(name, "up") === true) { // If move is authorized
-                        // Set new position, and draw spaceItems
-                        vm.moveY(name, -5);
-                        vm.tabElement[index].direction.up = false;
-                    // };
-                }
-
-                if (vm.tabElement[index].direction.down) {
-                    // Key up pressed
-                    // if (vm.checkMove(name, "down") === true) { // If move is authorized
-                        // Set new position, and draw spaceItems
-                        vm.moveY(name, 5);
-                        vm.tabElement[index].direction.down = false;
-                    // };
-                }
-
-                if (vm.tabElement[index].direction.left) {
-                    // Key left pressed
-                    // if (vm.checkMove(name, "left") === true) { // If move is authorized
-                        // Set new position, and draw spaceItems
-                        vm.moveX(name, -5);
-                        vm.tabElement[index].direction.left = false;
-                    // };
-                }
-
-                if (vm.tabElement[index].direction.right) {
-                    // Key right pressed
-                    // if (vm.checkMove(name, "right") === true) { // If move is authorized
-                        // Set new position, and draw spaceItems
-                        vm.moveX(name, 5);
-                        vm.tabElement[index].direction.right = false;
-                    // };
-                }
+        if (vm.tabElement[index]) {
+            if (vm.tabElement[index].direction.up) {
+                // Key up pressed
+                // if (vm.checkMove(name, "up") === true) { // If move is authorized
+                // Set new position, and draw spaceItems
+                vm.moveY(name, -5);
+                vm.tabElement[index].direction.up = false;
+                // };
             }
 
-        }, 2);
+            if (vm.tabElement[index].direction.down) {
+                // Key up pressed
+                // if (vm.checkMove(name, "down") === true) { // If move is authorized
+                // Set new position, and draw spaceItems
+                vm.moveY(name, 5);
+                vm.tabElement[index].direction.down = false;
+                // };
+            }
+
+            if (vm.tabElement[index].direction.left) {
+                // Key left pressed
+                // if (vm.checkMove(name, "left") === true) { // If move is authorized
+                // Set new position, and draw spaceItems
+                vm.moveX(name, -5);
+                vm.tabElement[index].direction.left = false;
+                // };
+            }
+
+            if (vm.tabElement[index].direction.right) {
+                // Key right pressed
+                // if (vm.checkMove(name, "right") === true) { // If move is authorized
+                // Set new position, and draw spaceItems
+                vm.moveX(name, 5);
+                vm.tabElement[index].direction.right = false;
+                // };
+            }
+        }
+
+    }, 2);
 }
 /*
  *   Delete the rocket
@@ -961,7 +956,7 @@ Game.prototype.removeRocket = function () {
     var i,
         re,
         vm;
-    
+
     vm = this;
     // To check if the item name "rocket*"
     re = /rocket/gi;
@@ -976,7 +971,7 @@ Game.prototype.removeRocket = function () {
     }
     this.tabElement[this.checkGetElement("player")].shootOn = false;
     this.keyStatus.shoot = false;
-    console.log("removeRocket",this.tabElement[this.checkGetElement("player")].shootOn);
+    console.log("removeRocket", this.tabElement[this.checkGetElement("player")].shootOn);
 };
 
 /*
@@ -995,8 +990,8 @@ Game.prototype.moveRocket = function (name, moveStatus) {
     vm = this;
 
     index = this.checkGetElement(name);
-    playerId = this.tabElement[index];   
-    
+    playerId = this.tabElement[index];
+
 
     // To check if the item name "rocket*"
     re = /rocket/gi;
