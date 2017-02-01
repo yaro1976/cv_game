@@ -465,7 +465,7 @@ var Game = function (width, height) {
         },
         "background": { // background images
             "id": "backImg",
-            "url": "dist/img/background/1.png",
+            "url": "dist/img/background/1.png",            
             "backList": ["violet"],
             "backImage": {
                 "violet": {
@@ -989,7 +989,8 @@ Game.prototype.showScore = function () {
     textPosX = this.width - 50;
     textPosY = 50;
     // Add score
-    this.ctx.font = '48px serif';
+    // this.ctx.font = '48px serif';
+    this.ctx.font = '48px VT323, monospace';
     // Set color
     this.ctx.fillStyle = "rgba(236, 240, 241,1.0)";
     // Get the score item, and write it to the canvas
@@ -1043,7 +1044,7 @@ Game.prototype.movePlayer = function (name, moveStatus) {
                     // if we do not go over 3/4 of the canvas, we can go up
                     vm.moveY("player", -1);
                 }
-            } else {                
+            } else {
                 vm.lost = true; // We are touch => game over                
             }
         }
@@ -1350,7 +1351,7 @@ Game.prototype.checkDirection = function () {
                 vm.lost = true;
                 break;
             default:
-                console.log(event)
+                // console.log(event)
         }
     };
 

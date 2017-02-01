@@ -14,19 +14,55 @@ var start = null;
 window.addEventListener('load', function () {
     var width = 600,
         height = 800,
-        party;
+        ratio,
+        party,
+        containerWidth,
+        containerHeight,
+        start;
+
+    ratio = width / height;
+
+    // Get the container initial size
+    var container = document.getElementsByClassName("container")[0];
+    containerWidth = container.offsetWidth;
+    containerHeight = container.offsetHeight;
+
+    console.log(container);
+
+    if (containerWidth > 600) {
+        width = 600;
+        height = width / ratio;
+    } else {
+        width = containerWidth;
+        height = width / ratio;
+    }
+
+    if (containerHeight > 800) {
+        height = 800;
+        width = height * ratio;
+    } else {
+        height = containerHeight;
+        width = height * ratio;
+    }
+    console.log(containerWidth, containerHeight);
+    console.log(width, height);
+
+
+// height = 800;
 
     // Initialize Game
     party = new Game(width, height);
     party.init(width / 2, height - 100);
+    
 
     // Play the party
     // party.start();
 
-    var vm,
-        start,
+    start = null;
 
-        start = null;
+    // Initialize Game
+    // party = new Game(width, height);
+    // party.init(width, height)
 
     var play = function (timestamp) {
         // Main step        
@@ -50,8 +86,8 @@ window.addEventListener('load', function () {
         if (party.gameWin || party.lost) {
             window.cancelAnimationFrame(party.animation.main);
             party.ended();
-            console.log("app cycle", party.tabElement)
-            console.log(party.lost)
+            console.log("app cycle", party.tabElement);
+            console.log(party.lost);
 
             // Verify, if party is ended
             if (party.gameWin || party.lost) {
@@ -67,5 +103,5 @@ window.addEventListener('load', function () {
         }
     };
 
-    this.animation.main = window.requestAnimationFrame(play);
+    party.animation.main = window.requestAnimationFrame(play);
 });

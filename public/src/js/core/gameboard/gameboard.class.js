@@ -1,6 +1,6 @@
 /*
-*   Functions to set positions, test collisions
-*/
+ *   Functions to set positions, test collisions
+ */
 
 'use strict';
 
@@ -254,7 +254,7 @@ Gameboard.prototype.checkMove = function (name, direction) {
             }
         }
         return true; // Nothing around
-    }    
+    }
 };
 
 /*
