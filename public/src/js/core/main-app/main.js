@@ -1,7 +1,7 @@
 /*
-* Core functions of the game
-* Move, ennemy creation, and player actions are checked
-*/
+ * Core functions of the game
+ * Move, ennemy creation, and player actions are checked
+ */
 
 'use strict';
 var SpaceElement;
@@ -19,7 +19,7 @@ var Game = function (width, height) {
 
     // Save the end of the game
     this.lost = false;
-    this.gamewin = true;
+    this.gameWin = false;
 
     // spaceItems number for user ship
     this.userShip = "orange";
@@ -553,7 +553,12 @@ var Game = function (width, height) {
     };
 
     // In order to save active animation.        
-    this.animation = {};
+    this.animation = {
+        "planet": null,
+        "ennemy": null,
+        "player": null,
+        "main": null
+    };
 
     // List of skills to find
     this.skills = {
@@ -755,51 +760,23 @@ Game.prototype.init = function (w, h) {
 };
 
 /*
- * Start the game
- */
-Game.prototype.start = function () {
-    var vm,
-        start;
-    
-    start = null;
-    vm = this;
-    
-    
-    var play = function (timestamp) {
-        // Main step        
-            if (!start) {
-                start = timestamp;
-            }            
-            // Check keyboard
-            vm.checkDirection();
-            // Show Planets and generate it
-            vm.generatePlanets();
-            // Show and generate Ennemies
-            vm.generateEnemy();
-            // Move ennemies ship
-            vm.enemyDirection();
-            // Draw all active elements
-            vm.draw();
-
-            if (!vm.gameWin || !vm.lost ){
-                window.requestAnimationFrame(play);   
-            }
-    };    
-
-    window.requestAnimationFrame(play);
-    
-    
-}
-
-/*
  * End game
  */
-Game.prototype.end = function () {
+Game.prototype.ended = function () {
+
     // Remove all element
     if (this.tabElement.length >= 1) {
         this.tabElement = []
     }
 
+    if (this.animation.player) {
+        window.clearInterval(this.animation.player);
+    }
+
+    if (this.animation.ennemy) {
+        window.clearInterval(this.animation.ennemy);
+    }
+    return -1;
 }
 
 /*
@@ -1035,10 +1012,10 @@ Game.prototype.draw = function () {
             this.ctx.drawImage(this.tabElement[i].img, this.tabElement[i].item.srcX, this.tabElement[i].item.srcY, this.tabElement[i].item.srcWidth, this.tabElement[i].item.srcHeight, this.tabElement[i].x, this.tabElement[i].y, this.tabElement[i].w, this.tabElement[i].h);
         }
 
+        // Add the score element
+        this.showScore();
     }
 
-    // Add the score element
-    this.showScore();
 };
 
 /*
@@ -1055,57 +1032,57 @@ Game.prototype.movePlayer = function (name, moveStatus) {
     index = this.checkGetElement(name);
     vm = this;
 
-    if (name === "player") {
 
-        intervalID = window.setInterval(function () {            
-            if (vm.keyStatus.up && moveStatus) {
-                // Key up pressed
-                if (vm.checkMove("player", "up") === true) { // If move is authorized
-                    // Set new position, and draw spaceItems
-                    if (vm.getY("player") >= (vm.height * 3 / 4)) {
-                        // if we do not go over 3/4 of the canvas, we can go up
-                        vm.moveY("player", -1);
-                    }
-                } else {
-                    this.lost = true; // We are touch => game over
+
+    this.animation.player = window.setInterval(function () {
+        if (vm.keyStatus.up && moveStatus) {
+            // Key up pressed
+            if (vm.checkMove("player", "up") === true) { // If move is authorized
+                // Set new position, and draw spaceItems
+                if (vm.getY("player") >= (vm.height * 3 / 4)) {
+                    // if we do not go over 3/4 of the canvas, we can go up
+                    vm.moveY("player", -1);
                 }
+            } else {
+                vm.lost = true; // We are touch => game over
             }
+        }
 
-            if (vm.keyStatus.down && moveStatus) {
-                // Key down pressed
-                if (vm.checkMove("player", "down") === true) { // If move is authorized
-                    // Set new position, and draw spaceItems                   
-                    vm.moveY("player", +1);
-                }
+        if (vm.keyStatus.down && moveStatus) {
+            // Key down pressed
+            if (vm.checkMove("player", "down") === true) { // If move is authorized
+                // Set new position, and draw spaceItems                   
+                vm.moveY("player", +1);
             }
+        }
 
-            if (vm.keyStatus.left && moveStatus) {
-                // Key left pressed
-                if (vm.checkMove("player", "left") === true) { // If move is authorized
-                    // Set new position, and draw spaceItems                    
-                    vm.moveX("player", -1);
-                } else {
-                    this.lost = true; // We are touch => game over
-                }
+        if (vm.keyStatus.left && moveStatus) {
+            // Key left pressed
+            if (vm.checkMove("player", "left") === true) { // If move is authorized
+                // Set new position, and draw spaceItems                    
+                vm.moveX("player", -1);
+            } else {
+                vm.lost = true; // We are touch => game over
             }
+        }
 
-            if (vm.keyStatus.right && moveStatus) {
-                // Key right pressed
-                if (vm.checkMove("player", "right") === true) { // If move is authorized
-                    // Set new position, and draw spaceItems                    
-                    vm.moveX("player", +1);
-                } else {
-                    this.lost = true; // We are touch => game over
-                }
+        if (vm.keyStatus.right && moveStatus) {
+            // Key right pressed
+            if (vm.checkMove("player", "right") === true) { // If move is authorized
+                // Set new position, and draw spaceItems                    
+                vm.moveX("player", +1);
+            } else {
+                vm.lost = true; // We are touch => game over
             }
+        }
 
-            if (vm.keyStatus.shoot && moveStatus) {
-                // Key space pressed               
-                vm.shoot("player");
-                vm.moveRocket("player");                
-            }
-        }, 30);
-    }
+        if (vm.keyStatus.shoot && moveStatus) {
+            // Key space pressed               
+            vm.shoot("player");
+            vm.moveRocket("player");
+        }
+    }, 30);
+
 };
 
 /*
@@ -1123,7 +1100,7 @@ Game.prototype.moveEnnemy = function (name, moveStatus) {
     vm = this;
 
 
-    window.setInterval(function () {
+    this.animation.ennemy = window.setInterval(function () {
         if (vm.tabElement[index]) {
             if (vm.tabElement[index].direction.up) {
                 // Go up pressed              
@@ -1136,26 +1113,27 @@ Game.prototype.moveEnnemy = function (name, moveStatus) {
                 // Go down pressed                
                 // Set new position, and draw spaceItems
                 vm.moveY(name, 5);
-                vm.tabElement[index].direction.down = false;                
+                vm.tabElement[index].direction.down = false;
             }
 
             if (vm.tabElement[index].direction.left) {
                 // Go left pressed                
                 // Set new position, and draw spaceItems
                 vm.moveX(name, -5);
-                vm.tabElement[index].direction.left = false;                
+                vm.tabElement[index].direction.left = false;
             }
 
             if (vm.tabElement[index].direction.right) {
                 // Go right pressed                
                 // Set new position, and draw spaceItems
                 vm.moveX(name, 5);
-                vm.tabElement[index].direction.right = false;                
+                vm.tabElement[index].direction.right = false;
             }
         }
-
     }, 20);
-}
+
+};
+
 
 /*
  * Animation when ennemy is killed
@@ -1268,6 +1246,7 @@ Game.prototype.moveRocket = function (name, moveStatus) {
     re = /rocket/gi;
     // Check if shoot is active
     if (this.keyStatus.shoot && playerId.shootOn === true) {
+
         this.intervalIDRocket = window.setInterval(function () {
             // Get all targets
             for (i = 0; vm.tabElement[i]; i += 1) {
@@ -1298,7 +1277,7 @@ Game.prototype.moveRocket = function (name, moveStatus) {
                     }
                 }
             }
-        }, 60)
+        }, 240);
     }
 }
 
@@ -1358,7 +1337,7 @@ Game.prototype.checkDirection = function () {
                 break;
             case 27: // Key Esc is pressed
             case 81: // key `Q`is pressed
-                vm.lost = true;    
+                vm.lost = true;
                 break;
             default:
                 console.log(event)
@@ -1453,7 +1432,7 @@ Game.prototype.shoot = function (name) {
         img.src = this.spaceItems.shoots.url;
 
         // Choose which rocket to use
-        rocket = this.random(2);
+        rocket = this.random(2);        
 
         // get the position of the guns   
 
