@@ -765,9 +765,9 @@ Game.prototype.init = function (w, h) {
 Game.prototype.ended = function () {
 
     // Remove all element
-    if (this.tabElement.length >= 1) {
-        this.tabElement = []
-    }
+    // if (this.tabElement.length >= 1) {
+    //     this.tabElement = []
+    // }
 
     if (this.animation.player) {
         window.clearInterval(this.animation.player);
@@ -1043,8 +1043,8 @@ Game.prototype.movePlayer = function (name, moveStatus) {
                     // if we do not go over 3/4 of the canvas, we can go up
                     vm.moveY("player", -1);
                 }
-            } else {
-                vm.lost = true; // We are touch => game over
+            } else {                
+                vm.lost = true; // We are touch => game over                
             }
         }
 
@@ -1053,6 +1053,10 @@ Game.prototype.movePlayer = function (name, moveStatus) {
             if (vm.checkMove("player", "down") === true) { // If move is authorized
                 // Set new position, and draw spaceItems                   
                 vm.moveY("player", +1);
+            } else {
+                if (vm.getX() + vm.tabElement[vm.checkGetElement("player")].item.srcHeight <= vm.height) {
+                    vm.lost = true; // We are touch => game over
+                }
             }
         }
 
@@ -1062,7 +1066,9 @@ Game.prototype.movePlayer = function (name, moveStatus) {
                 // Set new position, and draw spaceItems                    
                 vm.moveX("player", -1);
             } else {
-                vm.lost = true; // We are touch => game over
+                if (vm.getX("player") > 0) {
+                    vm.lost = true; // We are touch => game over
+                }
             }
         }
 
@@ -1072,7 +1078,9 @@ Game.prototype.movePlayer = function (name, moveStatus) {
                 // Set new position, and draw spaceItems                    
                 vm.moveX("player", +1);
             } else {
-                vm.lost = true; // We are touch => game over
+                if (vm.getX() + vm.tabElement[vm.checkGetElement("player")].item.srcWidth < vm.width) {
+                    vm.lost = true; // We are touch => game over
+                }
             }
         }
 
@@ -1153,52 +1161,54 @@ Game.prototype.killEnnemy = function (name) {
     vm = this;
     // find the object caracteristics
     index = this.checkGetElement(name);
+    if (index !== -1) {
+        // Get the original image
+        img = new Image();
+        img.src = this.spaceItems.effects.url;
+        // Find the original position
+        posX = this.tabElement[index].x;
+        posY = this.tabElement[index].y;
 
-    // Get the original image
-    img = new Image();
-    img.src = this.spaceItems.effects.url;
-    // Find the original position
-    posX = this.tabElement[index].x;
-    posY = this.tabElement[index].y;
+        // Delete the ennemy
+        this.removeElement(name);
+        // And the rocket
+        this.removeRocket();
+        i = 0;
 
-    // Delete the ennemy
-    this.removeElement(name);
-    // And the rocket
-    this.removeRocket();
-    i = 0;
+        // create the animation
+        var anim = function (timestamp) {
+            if (!start) { // Save the start time of the animation
+                start = timestamp;
+                i = 0;
+            }
+            var progress = timestamp - start;
 
-    // create the animation
-    var anim = function (timestamp) {
-        if (!start) { // Save the start time of the animation
-            start = timestamp;
-            i = 0;
-        }
-        var progress = timestamp - start;
+            if (progress > 200) { // If more than 200µs            
+                if (i < 7) { // animate the shooting animation frame
+                    i += 1;
+                    item = vm.spaceItems.effects.effectItemList[i];
 
-        if (progress > 200) { // If more than 200µs            
-            if (i < 7) { // animate the shooting animation frame
-                i += 1;
-                item = vm.spaceItems.effects.effectItemList[i];
+                    vm.addElement('effect', vm.spaceItems.effects.effectItems[item], img, posX, posY, vm.spaceItems.effects.effectItems[item].srcWidth, vm.spaceItems.effects.effectItems[item].srcHeight);
+                    vm.draw(); // draw the animation
+                    // Remove the image
+                    vm.removeElement('effect');
+                }
 
-                vm.addElement('effect', vm.spaceItems.effects.effectItems[item], img, posX, posY, vm.spaceItems.effects.effectItems[item].srcWidth, vm.spaceItems.effects.effectItems[item].srcHeight);
-                vm.draw(); // draw the animation
-                // Remove the image
-                vm.removeElement('effect');
+                if (i >= 7) {
+                    // All frame has been shawn 
+                    // So so the animation
+                    window.cancelAnimationFrame(id);
+                }
             }
 
-            if (i >= 7) {
-                // All frame has been shawn 
-                // So so the animation
-                window.cancelAnimationFrame(id);
-            }
+            id = window.requestAnimationFrame(anim);
         }
-
         id = window.requestAnimationFrame(anim);
+        // Find if we found a new skill item
+        this.activateSkills(posX, posY);
     }
-    id = window.requestAnimationFrame(anim);
-    // Find if we found a new skill item
-    this.activateSkills(posX, posY);
-}
+};
+
 /*
  *   Delete the rocket
  */
@@ -1279,7 +1289,7 @@ Game.prototype.moveRocket = function (name, moveStatus) {
             }
         }, 240);
     }
-}
+};
 
 /*
  * checkDirection - Read keyboard and move the user ship
@@ -1432,7 +1442,7 @@ Game.prototype.shoot = function (name) {
         img.src = this.spaceItems.shoots.url;
 
         // Choose which rocket to use
-        rocket = this.random(2);        
+        rocket = this.random(2);
 
         // get the position of the guns   
 
@@ -1532,7 +1542,7 @@ Game.prototype.animationSkills = function (name, posX, posY) {
 
                 // Add the skills to active object      
 
-                vm.addElement('skills', vm.skills[name].position, img, posX, posY, (30 * ratio), 30);
+                vm.addElement('skills', vm.skills[name].position, img, posX, posY, (40 * ratio), 40);
                 vm.draw(); // draw the animation
                 // Remove the image
                 vm.removeElement('skills');
@@ -1548,6 +1558,4 @@ Game.prototype.animationSkills = function (name, posX, posY) {
         }
         id = window.requestAnimationFrame(anim);
     }
-
-
 };

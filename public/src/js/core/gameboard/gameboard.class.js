@@ -254,8 +254,7 @@ Gameboard.prototype.checkMove = function (name, direction) {
             }
         }
         return true; // Nothing around
-    }
-    // }
+    }    
 };
 
 /*
