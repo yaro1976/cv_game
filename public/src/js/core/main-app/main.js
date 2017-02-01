@@ -1,3 +1,8 @@
+/*
+* Core functions of the game
+* Move, ennemy creation, and player actions are checked
+*/
+
 'use strict';
 var SpaceElement;
 
@@ -544,35 +549,105 @@ var Game = function (width, height) {
                     "srcHeight": 66
                 }
             }
-        },
+        }
     };
+
+    // In order to save active animation.        
+    this.animation = {};
 
     // List of skills to find
     this.skills = {
-        "skillList": ["htmlCss", "", "javascript", "", "Angularjs", "", "nodejs", "", "express", "", "mongodb", "", "meteor", "", "jquery", "", ],
-        "htmlCss": {
-            "found": false
+        "skillList": ["", "html", "", "css3", "", "javascript", "", "Angularjs", "", "nodejs", "", "express", "", "mongodb", "", "meteor", "", "jquery", "", "bootstrap", ""],
+        "url": "dist/img/skills.png",
+        "html": {
+            "found": false,
+            "position": {
+                "srcX": 1260,
+                "srcY": 157,
+                "srcWidth": 452,
+                "srcHeight": 510
+            }
+        },
+        "css3": {
+            "found": false,
+            "position": {
+                "srcX": 34,
+                "srcY": 656,
+                "srcWidth": 456,
+                "srcHeight": 514
+            }
         },
         "javascript": {
-            "found": false
+            "found": false,
+            "position": {
+                "srcX": 446,
+                "srcY": 12,
+                "srcWidth": 200,
+                "srcHeight": 284
+            }
         },
         "Angularjs": {
-            "found": false
+            "found": false,
+            "position": {
+                "srcX": 5,
+                "srcY": 5,
+                "srcWidth": 382,
+                "srcHeight": 99
+            }
         },
         "nodejs": {
-            "found": false
+            "found": false,
+            "position": {
+                "srcX": 707,
+                "srcY": 5,
+                "srcWidth": 200,
+                "srcHeight": 123
+            }
         },
         "express": {
-            "found": false
+            "found": false,
+            "position": {
+                "srcX": 1229,
+                "srcY": 5,
+                "srcWidth": 465,
+                "srcHeight": 141
+            }
         },
         "mongodb": {
-            "found": false
+            "found": false,
+            "position": {
+                "srcX": 667,
+                "srcY": 658,
+                "srcWidth": 231,
+                "srcHeight": 510
+            }
         },
         "meteor": {
-            "found": false
+            "found": false,
+            "position": {
+                "srcX": 5,
+                "srcY": 316,
+                "srcWidth": 605,
+                "srcHeight": 142
+            }
         },
         "jquery": {
-            "found": false
+            "found": false,
+            "position": {
+                "srcX": 1060,
+                "srcY": 681,
+                "srcWidth": 488,
+                "srcHeight": 508
+            }
+        },
+        "bootstrap": {
+            "found": false,
+            "position": {
+                "srcX": 704,
+                "srcY": 145,
+                "srcWidth": 516,
+                "srcHeight": 512
+            }
         }
     }
 };
@@ -678,6 +753,54 @@ Game.prototype.init = function (w, h) {
         }
     }
 };
+
+/*
+ * Start the game
+ */
+Game.prototype.start = function () {
+    var vm,
+        start;
+    
+    start = null;
+    vm = this;
+    
+    
+    var play = function (timestamp) {
+        // Main step        
+            if (!start) {
+                start = timestamp;
+            }            
+            // Check keyboard
+            vm.checkDirection();
+            // Show Planets and generate it
+            vm.generatePlanets();
+            // Show and generate Ennemies
+            vm.generateEnemy();
+            // Move ennemies ship
+            vm.enemyDirection();
+            // Draw all active elements
+            vm.draw();
+
+            if (!vm.gameWin || !vm.lost ){
+                window.requestAnimationFrame(play);   
+            }
+    };    
+
+    window.requestAnimationFrame(play);
+    
+    
+}
+
+/*
+ * End game
+ */
+Game.prototype.end = function () {
+    // Remove all element
+    if (this.tabElement.length >= 1) {
+        this.tabElement = []
+    }
+
+}
 
 /*
  * Generate ennemy
@@ -933,7 +1056,8 @@ Game.prototype.movePlayer = function (name, moveStatus) {
     vm = this;
 
     if (name === "player") {
-        intervalID = window.setInterval(function () {
+
+        intervalID = window.setInterval(function () {            
             if (vm.keyStatus.up && moveStatus) {
                 // Key up pressed
                 if (vm.checkMove("player", "up") === true) { // If move is authorized
@@ -948,7 +1072,7 @@ Game.prototype.movePlayer = function (name, moveStatus) {
             }
 
             if (vm.keyStatus.down && moveStatus) {
-                // Key up pressed
+                // Key down pressed
                 if (vm.checkMove("player", "down") === true) { // If move is authorized
                     // Set new position, and draw spaceItems                   
                     vm.moveY("player", +1);
@@ -978,8 +1102,7 @@ Game.prototype.movePlayer = function (name, moveStatus) {
             if (vm.keyStatus.shoot && moveStatus) {
                 // Key space pressed               
                 vm.shoot("player");
-                vm.moveRocket("player");
-                // vm.keyStatus.shoot = false;
+                vm.moveRocket("player");                
             }
         }, 30);
     }
@@ -999,42 +1122,35 @@ Game.prototype.moveEnnemy = function (name, moveStatus) {
     index = this.checkGetElement(name);
     vm = this;
 
+
     window.setInterval(function () {
         if (vm.tabElement[index]) {
             if (vm.tabElement[index].direction.up) {
-                // Key up pressed
-                // if (vm.checkMove(name, "up") === true) { // If move is authorized
+                // Go up pressed              
                 // Set new position, and draw spaceItems
                 vm.moveY(name, -5);
                 vm.tabElement[index].direction.up = false;
-                // };
             }
 
             if (vm.tabElement[index].direction.down) {
-                // Key up pressed
-                // if (vm.checkMove(name, "down") === true) { // If move is authorized
+                // Go down pressed                
                 // Set new position, and draw spaceItems
                 vm.moveY(name, 5);
-                vm.tabElement[index].direction.down = false;
-                // };
+                vm.tabElement[index].direction.down = false;                
             }
 
             if (vm.tabElement[index].direction.left) {
-                // Key left pressed
-                // if (vm.checkMove(name, "left") === true) { // If move is authorized
+                // Go left pressed                
                 // Set new position, and draw spaceItems
                 vm.moveX(name, -5);
-                vm.tabElement[index].direction.left = false;
-                // };
+                vm.tabElement[index].direction.left = false;                
             }
 
             if (vm.tabElement[index].direction.right) {
-                // Key right pressed
-                // if (vm.checkMove(name, "right") === true) { // If move is authorized
+                // Go right pressed                
                 // Set new position, and draw spaceItems
                 vm.moveX(name, 5);
-                vm.tabElement[index].direction.right = false;
-                // };
+                vm.tabElement[index].direction.right = false;                
             }
         }
 
@@ -1102,7 +1218,8 @@ Game.prototype.killEnnemy = function (name) {
         id = window.requestAnimationFrame(anim);
     }
     id = window.requestAnimationFrame(anim);
-    this.activateSkills();
+    // Find if we found a new skill item
+    this.activateSkills(posX, posY);
 }
 /*
  *   Delete the rocket
@@ -1117,10 +1234,10 @@ Game.prototype.removeRocket = function () {
     // Get all targets
     for (i = 0; vm.tabElement[i]; i += 1) {
         if (vm.tabElement[i].name === "rocket10" || vm.tabElement[i].name === "rocket20") {
-            vm.removeElement(vm.tabElement[i].name);
+            vm.removeElement(vm.tabElement[i].name); // Remove it from the active list object
         }
         if (vm.tabElement[i].name === "rocket11" || vm.tabElement[i].name === "rocket21") {
-            vm.removeElement(vm.tabElement[i].name);
+            vm.removeElement(vm.tabElement[i].name); // Remove it from the active list object
         }
     }
     this.tabElement[this.checkGetElement("player")].shootOn = false;
@@ -1239,8 +1356,12 @@ Game.prototype.checkDirection = function () {
                     intervalID = vm.movePlayer("player", moveOn);
                 }
                 break;
+            case 27: // Key Esc is pressed
+            case 81: // key `Q`is pressed
+                vm.lost = true;    
+                break;
             default:
-
+                console.log(event)
         }
     };
 
@@ -1360,46 +1481,94 @@ Game.prototype.shoot = function (name) {
 
 /*
  * activate the skill if found
+ * @param {Number} posX - X position of the skill
+ * @param {Number} posY - Y position of the skill
  */
-Game.prototype.activateSkills = function () {
+Game.prototype.activateSkills = function (posX, posY) {
     var skillChoose,
-    status;
+        status;
 
     // adjust the score Max
     this.maxScore = this.skills.skillList.length;
     //Choose a skill
     skillChoose = this.skills.skillList[this.random(this.skills.skillList.length)];
-    
+
     if (skillChoose !== "") {
-        switch (skillChoose) {
-            case "htmlCss":
-                status = this.incScore(); // increment the score
-                break;
-            case "javascript":
-                status = this.incScore(); // increment the score
-                break;
-            case "Angularjs":
-                status = this.incScore(); // increment the score
-                break;
-            case "nodejs":
-                status = this.incScore(); // increment the score
-                break;
-            case "express":
-                status = this.incScore(); // increment the score
-                break;
-            case "mongodb":
-                status = this.incScore(); // increment the score
-                break;
-            case "meteor":
-                status = this.incScore(); // increment the score
-                break;
-            case "jquery":
-                status = this.incScore(); // increment the score
-                break;
+        if (!this.skills[skillChoose].found) {
+            status = this.incScore(); // increment the score
+            // Set the trigger to found
+            this.skills[skillChoose].found = true;
+            // Show and animate the skil
+            this.animationSkills(skillChoose, posX, posY);
         }
     }
-
-    if (status === -1 ){
+    // Check if all items are found
+    if (status === -1) {
+        // End Game => Player wins
         this.gameWin = true;
     }
+};
+
+/*
+ * Show animate the skill found
+ * @param {String} name - name of the skill found
+ * @param {Number} posX - X Position of the skill
+ * @param {Number} posY - Y Position of the skill
+ */
+Game.prototype.animationSkills = function (name, posX, posY) {
+    var start,
+        vm,
+        img,
+        id,
+        ratio; // To keep the image ratio
+    start = null;
+
+    img = new Image();
+    img.src = this.skills.url;
+
+    vm = this;
+
+    //  Get the ratio width per height, to keep original images size
+    ratio = vm.skills[name].position.srcWidth / vm.skills[name].position.srcHeight;
+
+
+    if (name !== "") {
+        // create the animation
+        var anim = function (timestamp) {
+            if (!start) { // Save the start time of the animation
+                start = timestamp;
+            }
+            var progress = timestamp - start;
+
+            if (progress > 2) { // If more than 2000µs
+
+
+                if (posX < vm.width) {
+                    posX += 1;
+                }
+
+                if (posY > 0) {
+                    posY -= 1;
+                }
+
+                // Add the skills to active object      
+
+                vm.addElement('skills', vm.skills[name].position, img, posX, posY, (30 * ratio), 30);
+                vm.draw(); // draw the animation
+                // Remove the image
+                vm.removeElement('skills');
+
+            }
+            if (posX <= 0 || posY <= 0) {
+                // All frame has been shawn 
+                // So so the animation
+                window.cancelAnimationFrame(id);
+            }
+
+            id = window.requestAnimationFrame(anim);
+        }
+        id = window.requestAnimationFrame(anim);
+    }
+
+
 };

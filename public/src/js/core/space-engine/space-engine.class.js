@@ -1,3 +1,9 @@
+/*
+* Initialize the ship element
+* Some few common caracteristics are defined
+*/
+
+
 'use strict';
 var Image;
 

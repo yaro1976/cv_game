@@ -1,3 +1,7 @@
+/*
+*   Functions to set positions, test collisions
+*/
+
 'use strict';
 
 var SpaceElement;
