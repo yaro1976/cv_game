@@ -465,14 +465,17 @@ var Game = function (width, height) {
         },
         "background": { // background images
             "id": "backImg",
-            "url": "dist/img/background/1.png",            
+            // "url": "dist/img/background/1.png",            
+            "url": "dist/img/background/bg_game.jpg",
             "backList": ["violet"],
             "backImage": {
                 "violet": {
                     "srcX": 0,
                     "srcY": 0,
-                    "srcWidth": 640,
-                    "srcHeight": 480
+                    // "srcWidth": 640,
+                    "srcWidth": 1920,
+                    "srcHeight": 1080
+                    // "srcHeight": 480
                 }
             }
         },
@@ -1090,7 +1093,7 @@ Game.prototype.movePlayer = function (name, moveStatus) {
             vm.shoot("player");
             vm.moveRocket("player");
         }
-    }, 30);
+    }, 1000 / 60);
 
 };
 
@@ -1139,7 +1142,7 @@ Game.prototype.moveEnnemy = function (name, moveStatus) {
                 vm.tabElement[index].direction.right = false;
             }
         }
-    }, 20);
+    }, 1000 / 60);
 
 };
 
@@ -1485,11 +1488,12 @@ Game.prototype.activateSkills = function (posX, posY) {
 
     if (skillChoose !== "") {
         if (!this.skills[skillChoose].found) {
-            status = this.incScore(); // increment the score
             // Set the trigger to found
             this.skills[skillChoose].found = true;
             // Show and animate the skil
             this.animationSkills(skillChoose, posX, posY);
+            // increment the score
+            status = this.incScore();
         }
     }
     // Check if all items are found

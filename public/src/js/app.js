@@ -4,6 +4,7 @@
  */
 
 "use strict";
+var document;
 
 var Gameboard,
     Game,
@@ -12,10 +13,17 @@ var Gameboard,
 var start = null;
 
 window.addEventListener('load', function () {
+    // Get Html elements
 
-/*
-* Call when game starts
-*/
+
+    var btnPlay = document.getElementById("play");
+    var intro = document.getElementById("intro");
+    var gameOver = document.getElementById("gameover");
+    var win = document.getElementById("win");
+
+    /*
+     * Call when game starts
+     */
     var playGame = function () {
         var width = 600,
             height = 800,
@@ -29,10 +37,8 @@ window.addEventListener('load', function () {
 
         // Get the container initial size
         var container = document.getElementsByClassName("container")[0];
-        containerWidth = container.offsetWidth;
-        containerHeight = container.offsetHeight;
-
-        console.log(container);
+        containerWidth = container.offsetWidth - 60;
+        containerHeight = container.offsetHeight - 60;
 
         if (containerWidth > 600) {
             width = 600;
@@ -49,13 +55,11 @@ window.addEventListener('load', function () {
             height = containerHeight;
             width = height * ratio;
         }
-        console.log(containerWidth, containerHeight);
-        console.log(width, height);
 
         // Initialize Game
         party = new Game(width, height);
         party.init(width / 2, height - 100);
-    
+        var gamezone = document.getElementById("gameZone");
 
         // Play the party   
 
@@ -80,28 +84,36 @@ window.addEventListener('load', function () {
             if (!party.gameWin && !party.lost) {
                 party.animation.main = window.requestAnimationFrame(play);
             }
-            if (party.gameWin || party.lost) {
-                window.cancelAnimationFrame(party.animation.main);
+
+            if (party.gameWin) {
+                // User win the game                
+                // Hide the canvas
+                gamezone.classList.add("hide");
+                // Show the message
+                win.classList.remove("hide");
+                win.classList.add("show");
+
                 party.ended();
-                console.log("app cycle", party.tabElement);
-                console.log(party.lost);
-
-                // Verify, if party is ended
-                if (party.gameWin || party.lost) {
-                    party.ended();
-                }
-
-                if (party.gameWin) {
-                    // User win the game
-                }
-                if (party.lost) {
-                    // User lost the game
-                }
+                return;
             }
+            if (party.lost) {
+                // User lost the game                                
+                // Hide the canvas
+                gamezone.classList.add("hide");
+                // Show the message
+                gameOver.classList.remove("hide");
+                gameOver.classList.add("show");
+                party.ended();
+                return;
+            }
+            // }
         };
         party.animation.main = window.requestAnimationFrame(play);
     };
-    
-    playGame();
-   
+
+    btnPlay.addEventListener("click", function () {
+        intro.classList.remove("show");
+        intro.classList.add("hide");
+        playGame();
+    });
 });

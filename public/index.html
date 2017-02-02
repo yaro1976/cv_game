@@ -27,47 +27,70 @@
         </div>
     </header>
     <div class="main">
-    
-    <div class="container">
-        
-        <!--Partie Jeu-->
-        <div class="game" id="game">
-            <!--<canvas width="800" height="600" id="gameZone">-->
-            <!--<p>Votre navigateur ne prend pas en charge la balise canvas</p>-->
-            <!--</canvas>-->
+        <div class="container">
+            <!--Partie Jeu-->
+            <div class="game" id="game">
+                <!--<canvas width="800" height="600" id="gameZone">-->
+                <!--<p>Votre navigateur ne prend pas en charge la balise canvas</p>-->
+                <!--</canvas>-->
+            </div>
+            <!--Fin de la partie jeu-->
+            <section class="introduction slide show" id="intro">
+                <h3>Introduction</h3>
+                <p>Bonjour,</p>
+                <p>Découvrez, à travers ce jeu, mes différentes compétences techniques</p>
+                <h4>Commandes :</h4>
+                <p>Les touches 'haut', 'bas','gauche' et 'droite' servent à déplacer le vasseau</p>
+                <p>La touche 'espace' permet de tirer sur les ennemies.</p>
+                <button id="play" class="btn btn-primary">Jouer</button>
+            </section>
+            <!-- - -->
+            <section class="GameOver slide hide" id="gameover">
+                <h3>Game Over</h3>
+                <p>Vous avez perdu.</p>
+                <p>Mais vous pouvez voir le détail de mes expériences en cliquant sur le lien ci-dessous</p>
+                <!--Link to the CV-->
+                <button class="btn btn-primary"><div class="decoration">
+                    <image src="dist/img/space_items.png" alt="Orange Space ship" class="ship" />
+                </div>
+                <a href="#" class="link-cv">Mon Cv</a>
+                </button>
+            </section>
+            <!-- - -->
+            <section class="win slide hide" id="win">
+                <h3>Gagné</h3>
+                <p>Vous avez gagner la partie.</p>
+                <p>Vous pouvez voir le détail de mes expériences en cliquant sur le lien ci-dessous</p>
+                <!--Link to the CV-->
+                <button class="btn btn-primary"><div class="decoration">
+                    <image src="dist/img/space_items.png" alt="Orange Space ship" class="ship" />
+                </div>
+                <a href="#" class="link-cv">Mon Cv</a>
+                </button>
+            </section>
+            <div>
+                <button class="btn btn-primary"><div class="decoration">
+                    <image src="dist/img/space_items.png" alt="Orange Space ship" class="ship" />
+                </div>
+                <a href="#" class="link-cv">Mon Cv</a>
+                </button></div>
         </div>
-        <!--Fin de la partie jeu-->
-
-        <div class="introduction">
-            <h3>Introduction</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi molestiae, nulla eos, sit vel unde tenetur velit
-                deleniti, voluptatum omnis cum quibusdam enim eligendi soluta aliquam quidem ipsam incidunt facilis.</p>
-        </div>
-
-        <div class="GameOver">
-            <h3>Game Over</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi molestiae, nulla eos, sit vel unde tenetur velit
-                deleniti, voluptatum omnis cum quibusdam enim eligendi soluta aliquam quidem ipsam incidunt facilis.</p>
-        </div>
-        <div class="gagne">
-            <h3>Gagné</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi molestiae, nulla eos, sit vel unde tenetur velit
-                deleniti, voluptatum omnis cum quibusdam enim eligendi soluta aliquam quidem ipsam incidunt facilis.</p>
-        </div>
-    </div>
     </div>
     <footer>
         <p>Copyright &copy; 2017 Thierry ARONOFF</p>
     </footer>
-    <!--Bootstrap files-->
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+    <!--JQuery files-->
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
         crossorigin="anonymous"></script>
-        <!--End of Bootstrap files-->
-        <script src="src/js/core/space-engine/space-engine.class.js"></script>
-        <script src="src/js/core/gameboard/gameboard.class.js"></script>
-        <script src="src/js/core/main-app/main.js"></script>
-        <script type="text/javascript" src="src/js/app.js"></script>
+        <!--Bootstrap files-->
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+            <!--End of Bootstrap files-->
+            <script src="src/js/core/space-engine/space-engine.class.js"></script>
+            <script src="src/js/core/gameboard/gameboard.class.js"></script>
+            <script src="src/js/core/main-app/main.js"></script>
+            <script type="text/javascript" src="src/js/app.js"></script>
 </body>
 
 </html>
