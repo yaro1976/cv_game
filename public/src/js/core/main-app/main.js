@@ -739,7 +739,7 @@ Game.prototype.clearScreen = function () {
  *        Position the elements
  */
 Game.prototype.init = function (w, h) {
-
+    var i;
     if (this.createGameZone()) {
         // Get the canvas context
         this.getContext();
@@ -756,6 +756,15 @@ Game.prototype.init = function (w, h) {
             // Draw spaceItems
             this.draw();
 
+
+            // adjust the score Max
+            this.maxScore = 0;
+
+            for (i = 0; i < this.skills.skillList.length; i += 1) {
+                if (this.skills.skillList[i] !== "") {
+                    this.maxScore += 1;
+                }
+            }            
             // Write the score to the screen
             this.showScore();
         }
@@ -767,10 +776,7 @@ Game.prototype.init = function (w, h) {
  */
 Game.prototype.ended = function () {
 
-    // Remove all element
-    // if (this.tabElement.length >= 1) {
-    //     this.tabElement = []
-    // }
+    // Remove all element    
 
     if (this.animation.player) {
         window.clearInterval(this.animation.player);
@@ -791,11 +797,8 @@ Game.prototype.generateEnemy = function () {
         name, img, objName, x, y, h, w,
         direcList, direc;
 
-    // List of the possible actions
-    // direcList = ["up", "down", "right", "left", "shoot"];
+    // List of the possible actions    
     direcList = ["up", "up-right", "right", "down-right", "down", "down-left", "left", "up-left", "shoot"];
-    // direcList = ["down", "right", "left", "shoot"];
-    // direcList = ["down", "shoot"];
 
     // generate the ennemy number
 
@@ -814,13 +817,6 @@ Game.prototype.generateEnemy = function () {
 
         // add the direction to the Element array
         switch (direc) {
-            // case "up":
-            //     this.tabElement[index].direction[direc] = true;
-            //     break;
-            // case "up-right":
-            //     this.tabElement[index].direction.right = true;
-            //     this.tabElement[index].direction.up = true;
-            //     break;
             case "right":
                 this.tabElement[index].direction.right = true;
                 break;
@@ -838,10 +834,6 @@ Game.prototype.generateEnemy = function () {
             case "left":
                 this.tabElement[index].direction.left = true;
                 break;
-                // case "up-left":
-                //     this.tabElement[index].direction.left = true;
-                //     this.tabElement[index].direction.up = true;
-                //     break;
             case "shoot":
                 this.tabElement[index].direction.shoot = true;
                 break;
@@ -986,18 +978,21 @@ Game.prototype.generatePlanets = function () {
  */
 Game.prototype.showScore = function () {
     var textPosX, // X position
-        textPosY; // y position
-
+        textPosY, // y position
+        text;
     // Set position of the text element
-    textPosX = this.width - 50;
+    textPosX = this.width - 100;
     textPosY = 50;
     // Add score
     // this.ctx.font = '48px serif';
     this.ctx.font = '48px VT323, monospace';
     // Set color
     this.ctx.fillStyle = "rgba(236, 240, 241,1.0)";
+
+    text = "" + this.score + "/" + this.maxScore;
+
     // Get the score item, and write it to the canvas
-    this.ctx.fillText(this.score, textPosX, textPosY);
+    this.ctx.fillText(text, textPosX, textPosY);
 }
 
 /*
@@ -1036,12 +1031,10 @@ Game.prototype.movePlayer = function (name, moveStatus) {
     index = this.checkGetElement(name);
     vm = this;
 
-
-
     this.animation.player = window.setInterval(function () {
         if (vm.keyStatus.up && moveStatus) {
             // Key up pressed
-            if (vm.checkMove("player", "up") === true) { // If move is authorized
+            if (vm.checkMove("player", "up")) { // If move is authorized
                 // Set new position, and draw spaceItems
                 if (vm.getY("player") >= (vm.height * 3 / 4)) {
                     // if we do not go over 3/4 of the canvas, we can go up
@@ -1054,7 +1047,7 @@ Game.prototype.movePlayer = function (name, moveStatus) {
 
         if (vm.keyStatus.down && moveStatus) {
             // Key down pressed
-            if (vm.checkMove("player", "down") === true) { // If move is authorized
+            if (vm.checkMove("player", "down")) { // If move is authorized
                 // Set new position, and draw spaceItems                   
                 vm.moveY("player", +1);
             } else {
@@ -1066,19 +1059,20 @@ Game.prototype.movePlayer = function (name, moveStatus) {
 
         if (vm.keyStatus.left && moveStatus) {
             // Key left pressed
-            if (vm.checkMove("player", "left") === true) { // If move is authorized
+            if (vm.checkMove("player", "left")) { // If move is authorized
                 // Set new position, and draw spaceItems                    
                 vm.moveX("player", -1);
             } else {
-                if (vm.getX("player") > 0) {
+                if (vm.getX("player") < 0) {
                     vm.lost = true; // We are touch => game over
+                    console.log("GO", vm.getX("player"))
                 }
             }
         }
 
         if (vm.keyStatus.right && moveStatus) {
             // Key right pressed
-            if (vm.checkMove("player", "right") === true) { // If move is authorized
+            if (vm.checkMove("player", "right")) { // If move is authorized
                 // Set new position, and draw spaceItems                    
                 vm.moveX("player", +1);
             } else {
@@ -1093,7 +1087,7 @@ Game.prototype.movePlayer = function (name, moveStatus) {
             vm.shoot("player");
             vm.moveRocket("player");
         }
-    }, 1000 / 60);
+    }, 1);
 
 };
 
@@ -1142,8 +1136,7 @@ Game.prototype.moveEnnemy = function (name, moveStatus) {
                 vm.tabElement[index].direction.right = false;
             }
         }
-    }, 1000 / 60);
-
+    }, 1);
 };
 
 
@@ -1453,19 +1446,22 @@ Game.prototype.shoot = function (name) {
         for (i = 0; this.tabElement[index].item.guns[i]; i += 1) {
             if (rocket = 0) {
                 // the rocket n°1 is selected
+                // Set image and position
                 img = new Image();
                 img.src = this.spaceItems.shoots.url;
                 gunsX = this.tabElement[index].x + this.tabElement[index].item.guns[i].gX;
                 gunsY = this.tabElement[index].y + this.tabElement[index].item.guns[i].gY - this.spaceItems.shoots.shootItems.rocket1.srcHeight;
 
+                // Add it to the active Elements array
                 this.addElement('rocket1' + i, this.spaceItems.shoots.shootItems.rocket1, img, gunsX, gunsY, this.tabElement[index].item.guns[i].gW, this.spaceItems.shoots.shootItems.rocket1.srcHeight);
             } else {
                 // the rocket n°2 is selected
+                // Set image and position
                 img = new Image();
                 img.src = this.spaceItems.shoots.url;
                 gunsX = this.tabElement[index].x + this.tabElement[index].item.guns[i].gX;
                 gunsY = this.tabElement[index].y + this.tabElement[index].item.guns[i].gY - this.spaceItems.shoots.shootItems.rocket2.srcHeight;
-
+                // Add it to the active Elements array
                 this.addElement('rocket2' + i, this.spaceItems.shoots.shootItems.rocket2, img, gunsX, gunsY, this.tabElement[index].item.guns[i].gW, this.spaceItems.shoots.shootItems.rocket2.srcHeight);
             }
         }
@@ -1481,8 +1477,6 @@ Game.prototype.activateSkills = function (posX, posY) {
     var skillChoose,
         status;
 
-    // adjust the score Max
-    this.maxScore = this.skills.skillList.length;
     //Choose a skill
     skillChoose = this.skills.skillList[this.random(this.skills.skillList.length)];
 
@@ -1496,8 +1490,9 @@ Game.prototype.activateSkills = function (posX, posY) {
             status = this.incScore();
         }
     }
+    
     // Check if all items are found
-    if (status === -1) {
+    if (this.score >= this.maxScore) {
         // End Game => Player wins
         this.gameWin = true;
     }
@@ -1547,7 +1542,7 @@ Game.prototype.animationSkills = function (name, posX, posY) {
 
                 // Add the skills to active object      
 
-                vm.addElement('skills', vm.skills[name].position, img, posX, posY, (40 * ratio), 40);
+                vm.addElement('skills', vm.skills[name].position, img, posX, posY, (50 * ratio), 50);
                 vm.draw(); // draw the animation
                 // Remove the image
                 vm.removeElement('skills');

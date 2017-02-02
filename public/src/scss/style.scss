@@ -13,53 +13,41 @@ body {
 }
 
 body {
-    // background-image: url('../img/background/bg_game.jpg');
-    // background-size: cover;
-    // background-repeat: no-repeat;    
+    background-image: url('../img/background/bg_game.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;    
     color: $text-color;
+    font-family: 'VT323', monospace;
 }
 
 header {
     width: 100%;
-    height: 70px;
-    // border: 1px solid blue;
-    // margin-bottom: 20px;
-    background-image: url("../img/background/header_bkg.jpg");
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    // background-color: $header-color;
+    height: 90px;
+    
     .title {
         margin-left: auto;
         margin-right: auto;
         width: 70%;
-        // position: relative;
-        // top: 10px;
-        // display: inline-block;
+        
         text-align: center;
-        h1 {
-            background-color: $header-color;
-            border-bottom: 1px solid $border-color;
+        h1 {            
+            
             display: inline-block;
             padding-left: 40px;
             padding-right: 40px;
-            font-family: 'Lobster', cursive;
+            // font-family: 'Lobster', cursive;
             text-transform: uppercase;
             font-size: 4rem;
         }
     }
 }
 
-.main {
-    background-image: url('../img/background/bg_game.jpg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    height: calc(100% - 100px);
+.main {    
+    height: calc(100% - 160px);
 }
 
 .container {
-    padding-top: 20px;
-    border: 1px solid red;
+    padding-top: 20px;    
     margin-left: auto;
     margin-right: auto;
     height: 100%;
@@ -72,10 +60,10 @@ header {
     #gameZone {
         margin-left: auto;
         margin-right: auto;
-        // border: 1px solid $border-color;
+        
         position: relative;
-        left: 30%;
-        // display: inline-block;
+        left: 25%;
+        
         // Border Radius
         border-radius: 10px 10px 10px 10px;
         -moz-border-radius: 10px 10px 10px 10px;
@@ -93,8 +81,8 @@ header {
         text-align: center;
         position: relative;
         top: calc(30px - 75%);
-        left: 40%;
-        left h3 {
+        left: 35%;
+         h3 {
             font-family: 'Lobster', cursive;
         }
     }
@@ -121,23 +109,15 @@ button {
 
 a {
     text-decoration: none;
-    color: $text-color;
-    .Modal:after {
-        content: url('../dist/img/space_items.png');
-        /* with class ModalCarrot ??*/
-        position: relative;
-        /*or absolute*/
-        z-index: 10;
-        /*a number that's more than the modal box*/
-        left: 5px;
-        top: 68px;
-    }
-    .ModalCarrot {
-        position: absolute;
-        left: 50%;
-        margin-left: -8px;
-        top: -16px;
-    }
+    color: $text-color;  
+}
+
+h3 {
+    font-size: 2.4rem;
+}
+
+p {
+    font-size: 2rem;
 }
 
 .GameOver {
@@ -147,8 +127,8 @@ a {
     text-align: center;
     position: relative;
     top: calc(30px - 75%);
-    left: 40%;
-    left h3 {
+    left: 35%;
+     h3 {
         font-family: 'Lobster', cursive;
     }
 }
@@ -160,18 +140,18 @@ a {
     text-align: center;
     position: relative;
     top: calc(30px - 75%);
-    left: 40%;
-    left h3 {
+    left: 35%;
+     h3 {
         font-family: 'Lobster', cursive;
     }
 }
 
+.btn-custom {
+    background-color: $btn-color;
+}
+
 footer {
-    text-align: center;
-    background-image: url("../img/background/header_bkg.jpg");
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
+    text-align: center;    
     min-height: 100%;
 }
 

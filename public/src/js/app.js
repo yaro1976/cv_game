@@ -16,7 +16,7 @@ window.addEventListener('load', function () {
     // Get Html elements
 
 
-    var btnPlay = document.getElementById("play");
+    var btnPlay = document.getElementById("play");    
     var intro = document.getElementById("intro");
     var gameOver = document.getElementById("gameover");
     var win = document.getElementById("win");
@@ -85,7 +85,7 @@ window.addEventListener('load', function () {
                 party.animation.main = window.requestAnimationFrame(play);
             }
 
-            if (party.gameWin) {
+            if (party.gameWin) {                
                 // User win the game                
                 // Hide the canvas
                 gamezone.classList.add("hide");
@@ -115,5 +115,5 @@ window.addEventListener('load', function () {
         intro.classList.remove("show");
         intro.classList.add("hide");
         playGame();
-    });
+    });    
 });

@@ -20,7 +20,7 @@ var Gameboard = function (width, height) {
     this.minBoard = 0; // Min position to draw items
     this.maxBoard = this.gameboardWidth; // Max position to draw items
     this.score = 0; // to Save the score
-    this.maxScore = 9; // Score Maximum
+    this.maxScore = 10; // Score Maximum
 };
 Gameboard.prototype = Object.create(SpaceElement.prototype);
 
@@ -176,8 +176,8 @@ Gameboard.prototype.checkMove = function (name, direction) {
     // If we go to right
     if (direction === "right") {
         // Check if the element touch the right of the canvas
-        if ((posX + width + 1) > this.maxBoard) {
-            return false;
+        if ((posX + width + 1) >= this.maxBoard) {
+            return false; // We touch
         }
 
         // Test element with its environment
@@ -198,7 +198,7 @@ Gameboard.prototype.checkMove = function (name, direction) {
     if (direction === "left") {
         // Check if the element touch the left of the canvas
         if ((posX - 1) < this.minBoard) {
-            return false;
+            return false; // We touch
         }
 
         // Test element with its environment
@@ -217,8 +217,8 @@ Gameboard.prototype.checkMove = function (name, direction) {
     // if we go to up direction
     if (direction === "up") {
         // Check if the element touch the top of the canvas
-        if ((posY - 1) < 0) {
-            return false;
+        if ((posY - 1) <= 0) {
+            return false; // We touch
         }
 
         // Test element with its environment
@@ -239,7 +239,7 @@ Gameboard.prototype.checkMove = function (name, direction) {
     if (direction === "down") {
         // Check if the element touch the bottom of the canvas
         if ((posY + height + 1) >= this.gameboardHeight) {
-            return false;
+            return false; // We touch
         }
 
         // Test element with its environment
@@ -358,12 +358,11 @@ Gameboard.prototype.moveY = function (name, step) {
  * @return {Number} - Score value, or -1 if games is finished
  */
 Gameboard.prototype.incScore = function () {
-    if (this.score < this.maxScore - 1) { // If not element found
-        // Increment the score value
+    if (this.score < this.maxScore) { // If not element found
+        // Increment the score value        
         this.score += 1;
         return this.score;
     }
-
     return -1; // The game is finished
 };
 
