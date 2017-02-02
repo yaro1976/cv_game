@@ -4,23 +4,32 @@
 <head>
     <meta charset="UTF-8">
     <title>CV Gamification</title>
-    <!--<link type="stylesheet" href="css/style.css" />-->
-    <link rel="stylesheet" href="dist/css/style.min.css" />
     <link href="https://fonts.googleapis.com/css?family=VT323" rel="stylesheet">
     <script src="src/js/modernizr-custom.js"></script>
-
+    <!-- Bootstrap files -->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+            crossorigin="anonymous">
+            <!--Personnal stylesheet-->
+            <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
+            <!--<link type="stylesheet" href="css/style.css" />-->
+            <link rel="stylesheet" href="dist/css/style.min.css" />
 </head>
 
 <body>
     <header>
         <!--Header part-->
+        <div class="title">
+            <h1>Jeu CV</h1>
+        </div>
     </header>
+    <div class="main">
     
     <div class="container">
-        <div class="introduction">
-            <h3>introduction</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi molestiae, nulla eos, sit vel unde tenetur velit deleniti, voluptatum omnis cum quibusdam enim eligendi soluta aliquam quidem ipsam incidunt facilis.</p>
-        </div>
+        
         <!--Partie Jeu-->
         <div class="game" id="game">
             <!--<canvas width="800" height="600" id="gameZone">-->
@@ -28,24 +37,37 @@
             <!--</canvas>-->
         </div>
         <!--Fin de la partie jeu-->
+
+        <div class="introduction">
+            <h3>Introduction</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi molestiae, nulla eos, sit vel unde tenetur velit
+                deleniti, voluptatum omnis cum quibusdam enim eligendi soluta aliquam quidem ipsam incidunt facilis.</p>
+        </div>
+
         <div class="GameOver">
             <h3>Game Over</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi molestiae, nulla eos, sit vel unde tenetur velit deleniti, voluptatum omnis cum quibusdam enim eligendi soluta aliquam quidem ipsam incidunt facilis.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi molestiae, nulla eos, sit vel unde tenetur velit
+                deleniti, voluptatum omnis cum quibusdam enim eligendi soluta aliquam quidem ipsam incidunt facilis.</p>
         </div>
         <div class="gagne">
             <h3>Gagné</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi molestiae, nulla eos, sit vel unde tenetur velit deleniti, voluptatum omnis cum quibusdam enim eligendi soluta aliquam quidem ipsam incidunt facilis.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi molestiae, nulla eos, sit vel unde tenetur velit
+                deleniti, voluptatum omnis cum quibusdam enim eligendi soluta aliquam quidem ipsam incidunt facilis.</p>
         </div>
     </div>
-
+    </div>
     <footer>
-        <p>Copyright &copy 2017 Thierry ARONOFF</p>
-    </footer>    
-    
-    <script src="src/js/core/space-engine/space-engine.class.js"></script>
-    <script src="src/js/core/gameboard/gameboard.class.js"></script>
-    <script src="src/js/core/main-app/main.js"></script>
-    <script type="text/javascript" src="src/js/app.js"></script>
+        <p>Copyright &copy; 2017 Thierry ARONOFF</p>
+    </footer>
+    <!--Bootstrap files-->
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+        <!--End of Bootstrap files-->
+        <script src="src/js/core/space-engine/space-engine.class.js"></script>
+        <script src="src/js/core/gameboard/gameboard.class.js"></script>
+        <script src="src/js/core/main-app/main.js"></script>
+        <script type="text/javascript" src="src/js/app.js"></script>
 </body>
 
 </html>
