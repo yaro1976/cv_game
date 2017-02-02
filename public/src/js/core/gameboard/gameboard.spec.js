@@ -401,7 +401,8 @@ describe('#Gameboard', function () {
         describe('Testing end of the party', function () {
             it('Should detect the end of the party', function () {
                 var gameboard = new Gameboard();
-                gameboard.score = gameboard.maxScore - 1;
+                gameboard.maxScore = 5;
+                gameboard.score = gameboard.maxScore;
                 expect(gameboard.incScore()).to.equal(-1);
             });
         });
