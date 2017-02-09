@@ -60,7 +60,7 @@ Testé sur :
 
 - Fluidifier les mouvements du vaisseau du joueur
 
-- Ajouter d'effets sonores
+- Ajouter les effets sonores
 
 - Améliorer la compatibilité avec d'anciens navigateurs
 
