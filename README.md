@@ -1,7 +1,7 @@
 # Jeu CV 
 
 ## Description
-ce jeu est un jeu dy type "Space Inviders" amélioré.
+ce jeu est un jeu du type "Space Inviders" amélioré.
 Ce projet est la représentation de mon CV, de manière ludique.
 L'ensemble de mes compétences doit être découvert, en tirant sur des vaisseaux ennemis.
 
@@ -18,7 +18,7 @@ Structure du site
 
 - dist : le site destiné à la production
 
-Le répertoire nommé `tests` est utilisé pour tester le moteur du jeu, à l'aide de  Mocha / Chai
+- tests : utilisé pour tester le moteur du jeu, à l'aide de  Mocha / Chai
 
 # Technologies utilisées
 ## Frontend
@@ -28,7 +28,9 @@ Le répertoire nommé `tests` est utilisé pour tester le moteur du jeu, à l'ai
 - Canvas
 
 ## Tests unitaires
-Les outils de test Mocha / Chai
+- Mocha 
+
+- Chai
 
 ## Backend
 
@@ -37,10 +39,16 @@ Les outils de test Mocha / Chai
 - Express JS
 
 ## Intégration Continue
-Les outils d'intégration continue GitLab et Jenkins ont été utilisés pour valider l'ensemble sur une base Ubuntu 16.04.
+- GitLab
+
+- Docker 
+
+- Jenkins 
+
+- Validé sur une base Ubuntu 16.04.
 
 # Environnement 
-Le jeu fonctionne sur les navigateurs suivant :
+Testé sur :
 
 - Internet Explorer 9 et 10
 
@@ -50,8 +58,12 @@ Le jeu fonctionne sur les navigateurs suivant :
 
 # Axes d'amélioration
 
-- Fluidifier ls mouvement du vaisseau du joueur
+- Fluidifier les mouvements du vaisseau du joueur
 
-- Ajout d'effets sonores
+- Ajouter d'effets sonores
 
-- compatibilité avec des navigateurs anciens
+- Améliorer la compatibilité avec d'anciens navigateurs
+
+- Ajouter des tests fonctionnels (Tests End-to-End)
+
+
