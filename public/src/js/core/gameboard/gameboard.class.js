@@ -49,7 +49,7 @@ Gameboard.prototype.addElement = function (name, item, img, posX, posY, width, h
             "y": posY, // Source Y position
             "w": width, // Source width
             "h": height, // Source height
-            "inlife": true, // is inlife ?
+            "alive": true, // is alive ?
             "direction": { // Store the direction of the move
                 "up": false,
                 "down": false,
@@ -68,7 +68,7 @@ Gameboard.prototype.addElement = function (name, item, img, posX, posY, width, h
             "y": posY, // Source Y position
             "w": width, // Source width
             "h": height, // Source height
-            "inlife": true, // is inlife ?
+            "alive": true, // is alive ?
             "direction": { // Store the direction of the move
                 "up": false,
                 "down": false,
